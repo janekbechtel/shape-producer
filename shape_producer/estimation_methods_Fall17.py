@@ -526,9 +526,9 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                 Weight("generatorWeight",
                        "simulation_sf"),
                 Weight("muonEffTrgWeight*muonEffIDWeight_1*muonEffIDWeight_2", "scale_factor"),
-                Weight("(pt_1>=28)+((pt_1>=25 && pt_1<28)*(1.29079*(pt_2>=30 && pt_2<35) + 1.06504*(pt_2>=35 && pt_2<40) + 0.93972*(pt_2>=40 && pt_2<45) + 0.91923*(pt_2>=45 && pt_2<50) + 0.89598*(pt_2>=50 && pt_2<60) + 0.90597*(pt_2>=60 && pt_2<80) + 0.88761*(pt_2>=80 && pt_2<100) + 0.90210*(pt_2>=100 && pt_2<150) + 0.84939*(pt_2>=150 && pt_2<200) + (pt_2>=200)))","tau_leg_weight"),
-                Weight("(pt_1>=28)+(pt_1<28)*(0.39*(pt_1>=25 && pt_1<26) + 0.46*(pt_1>=26 && pt_1<27) + 0.48*(pt_1>=27 && pt_1<28))","lepton_leg_weight"),
-                Weight("idWeight_1*(trigger_27_32_35_Weight_1*(pt_1>=28)*(trigger_27_32_35_Weight_1<2)+(pt_1<28)+((pt_1>=28)*(trigger_27_32_35_Weight_1>2)))*isoWeight_1", "lepton_sf"),
+                Weight("(pt_1>=28)+(pt_1<28)*(crossTriggerDataEfficiencyWeight_tight_MVA_2*(abs(eta_1)>1.5)+((1.29079*(pt_2>=30 && pt_2<35) + 1.06504*(pt_2>=35 && pt_2<40) + 0.93972*(pt_2>=40 && pt_2<45) + 0.91923*(pt_2>=45 && pt_2<50) + 0.89598*(pt_2>=50 && pt_2<60) + 0.90597*(pt_2>=60 && pt_2<80) + 0.88761*(pt_2>=80 && pt_2<100) + 0.90210*(pt_2>=100 && pt_2<150) + 0.84939*(pt_2>=150 && pt_2<200) + (pt_2>=200))*(abs(eta_1)<1.5)))","tau_leg_weight"),
+                Weight("(pt_1>=28)+(pt_1<28)*(crossTriggerDataEfficiencyWeight_1*(abs(eta_1)>1.5)+((0.39*(pt_1>=25 && pt_1<26) + 0.46*(pt_1>=26 && pt_1<27) + 0.48*(pt_1>=27 && pt_1<28))*(abs(eta_1)<1.5)))","lepton_leg_weight"),
+                Weight("idWeight_1*((trigger_27_32_35_Weight_1*(pt_1>=28)*(abs(eta_1) < 1.5) + singleTriggerDataEfficiencyWeightKIT_1*(abs(eta_1)>=1.5))+(pt_1<28)+((pt_1>=28) && (trigger_27_32_35_Weight_1>9 && abs(eta_1)<1.5)))*isoWeight_1", "lepton_sf"),
                 Weight("(gen_match_2==5)*0.97+(gen_match_2!=5)", "emb_tau_id"),
                 Weight("embeddedDecayModeWeight", "decayMode_SF"))
         elif self.channel.name == "tt":
