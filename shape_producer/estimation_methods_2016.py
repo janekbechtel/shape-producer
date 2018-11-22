@@ -1212,10 +1212,10 @@ class WEstimationWithQCD(EstimationMethod):
         high_mt_ss_control_region.name = "wjets_high_mt_ss_cr"
         high_mt_ss_control_region._variable = None
 
-        high_mt_ss_control_region.cuts.remove("mt")
+        high_mt_ss_control_region.cuts.remove("m_t")
         high_mt_ss_control_region.cuts.remove("os")
 
-        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "mt"))
+        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "m_t"))
         high_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
 
         # create control regions for W high mt to low mt extrapolation factor
@@ -1224,9 +1224,9 @@ class WEstimationWithQCD(EstimationMethod):
         high_mt_os_control_region.name = "wjets_high_mt_os_cr"
         high_mt_os_control_region._variable = None
 
-        high_mt_os_control_region.cuts.remove("mt")
+        high_mt_os_control_region.cuts.remove("m_t")
 
-        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "mt"))
+        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "m_t"))
 
         low_mt_os_control_region = copy.deepcopy(systematic.category)
         low_mt_os_control_region.name = "wjets_low_mt_os_cr"
@@ -1245,13 +1245,13 @@ class WEstimationWithQCD(EstimationMethod):
         inclusive_os_control_region.name = "wjets_os_cr"
         inclusive_os_control_region._variable = None
 
-        inclusive_os_control_region.cuts.remove("mt")
+        inclusive_os_control_region.cuts.remove("m_t")
 
         inclusive_ss_control_region = copy.deepcopy(systematic.category)
         inclusive_ss_control_region.name = "wjets_ss_cr"
         inclusive_ss_control_region._variable = None
 
-        inclusive_ss_control_region.cuts.remove("mt")
+        inclusive_ss_control_region.cuts.remove("m_t")
         inclusive_ss_control_region.cuts.remove("os")
 
         inclusive_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
@@ -1461,10 +1461,10 @@ class QCDEstimationWithW(EstimationMethod):
         high_mt_ss_control_region.name = "wjets_high_mt_ss_cr"
         high_mt_ss_control_region._variable = None
 
-        high_mt_ss_control_region.cuts.remove("mt")
+        high_mt_ss_control_region.cuts.remove("m_t")
         high_mt_ss_control_region.cuts.remove("os")
 
-        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "mt"))
+        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "m_t"))
         high_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
 
         # create control regions for W high mt to low mt extrapolation factor
@@ -1473,9 +1473,9 @@ class QCDEstimationWithW(EstimationMethod):
         high_mt_os_control_region.name = "wjets_high_mt_os_cr"
         high_mt_os_control_region._variable = None
 
-        high_mt_os_control_region.cuts.remove("mt")
+        high_mt_os_control_region.cuts.remove("m_t")
 
-        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "mt"))
+        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "m_t"))
 
         low_mt_os_control_region = copy.deepcopy(systematic.category)
         low_mt_os_control_region.name = "wjets_low_mt_os_cr"
@@ -1494,13 +1494,13 @@ class QCDEstimationWithW(EstimationMethod):
         inclusive_os_control_region.name = "wjets_os_cr"
         inclusive_os_control_region._variable = None
 
-        inclusive_os_control_region.cuts.remove("mt")
+        inclusive_os_control_region.cuts.remove("m_t")
 
         inclusive_ss_control_region = copy.deepcopy(systematic.category)
         inclusive_ss_control_region.name = "wjets_ss_cr"
         inclusive_ss_control_region._variable = None
 
-        inclusive_ss_control_region.cuts.remove("mt")
+        inclusive_ss_control_region.cuts.remove("m_t")
         inclusive_ss_control_region.cuts.remove("os")
 
         inclusive_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
