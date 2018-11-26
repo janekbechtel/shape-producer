@@ -1,9 +1,10 @@
+
 # -*- coding: utf-8 -*-
 
 import copy
 import os
 
-from estimation_methods import EstimationMethod, SStoOSEstimationMethod, ABCDEstimationMethod, SumUpEstimationMethod
+from estimation_methods import EstimationMethod, SStoOSEstimationMethod, ABCDEstimationMethod, SumUpEstimationMethod, NewFakeEstimationMethodLT, NewFakeEstimationMethodTT
 from histogram import *
 from cutstring import *
 from process import *
@@ -58,6 +59,129 @@ class FakeEstimationLT(DataEstimation):
                 "tau_aiso"))
         return super(FakeEstimationLT,
                      self).create_root_objects(aiso_systematic)
+
+
+'''class AntiFakeEstimationLT(DataEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(DataEstimation, self).__init__(
+            name="antifakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign=None)
+        self._channel = channel
+
+    def get_weights(self):
+        return Weights(Weight("(1.0-ff2_nom)", "anti_fake_factor"))
+
+    def create_root_objects(self, systematic):
+        aiso_systematic = copy.deepcopy(systematic)
+        aiso_systematic.category.cuts.remove("tau_iso")
+        aiso_systematic.category.cuts.add(
+            Cut(
+                "byTightIsolationMVArun2v1DBoldDMwLT_2<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_2>0.5",
+                "tau_aiso"))
+        return super(AntiFakeEstimationLT,
+                     self).create_root_objects(aiso_systematic)
+
+
+class DataFakeEstimationLT(DataEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(DataEstimation, self).__init__(
+            name="datafakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign=None)
+        self._channel = channel
+
+    def create_root_objects(self, systematic):
+        aiso_systematic = copy.deepcopy(systematic)
+        aiso_systematic.category.cuts.remove("tau_iso")
+        aiso_systematic.category.cuts.add(
+            Cut(
+                "byTightIsolationMVArun2v1DBoldDMwLT_2<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_2>0.5",
+                "tau_aiso"))
+        return super(DataFakeEstimationLT,
+                     self).create_root_objects(aiso_systematic)
+
+
+class NewFakeEstimationLT(SumUpEstimationMethod):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(NewFakeEstimationLT, self).__init__(
+            name="fakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            factors=[1.0,-1.0],
+            processes=[
+                Process(
+                    "dataFakes",
+                    DataFakeEstimationLT(
+                        era,
+                        directory,
+                        channel,
+                        friend_directory=friend_directory)),
+                Process(
+                    "antiFakes",
+                    AntiFakeEstimationLT(
+                        era,
+                        directory,
+                        channel,
+                        friend_directory=friend_directory))
+            ])'''
+
+
+class NewFakeEstimationLT(NewFakeEstimationMethodLT):
+    def __init__(self, 
+                 era,
+                 directory,
+                 channel,
+                 nofake_processes,
+                 data_process,
+                 friend_directory=None):
+        super(NewFakeEstimationLT, self).__init__(
+            name="jetFakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            nofake_processes=nofake_processes,
+            data_process=data_process,
+            aisoCut=Cut(
+                "byTightIsolationMVArun2v1DBoldDMwLT_2<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_2>0.5",
+                "tau_aiso"),
+            fakeWeightstring="ff2_nom")
+
+
+class NewFakeEstimationTT(NewFakeEstimationMethodTT):
+    def __init__(self,
+                 era,
+                 directory,
+                 channel,
+                 nofake_processes,
+                 data_process,
+                 friend_directory=None):
+        super(NewFakeEstimationTT, self).__init__(
+            name="jetFakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            nofake_processes=nofake_processes,
+            data_process=data_process,
+            aisoCut=Cut(
+                "(byTightIsolationMVArun2v1DBoldDMwLT_2>0.5&&byTightIsolationMVArun2v1DBoldDMwLT_1<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_1>0.5)||(byTightIsolationMVArun2v1DBoldDMwLT_1>0.5&&byTightIsolationMVArun2v1DBoldDMwLT_2<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_2>0.5)",
+                "tau_aiso"),
+            fakeWeightstring="(0.5*ff1_nom*(byTightIsolationMVArun2017v2DBoldDMwLT2017_1<0.5)+0.5*ff2_nom*(byTightIsolationMVArun2017v2DBoldDMwLT2017_2<0.5))")
 
 
 class FakeEstimationTT(DataEstimation):
