@@ -181,7 +181,7 @@ class NewFakeEstimationTT(NewFakeEstimationMethodTT):
             aisoCut=Cut(
                 "(byTightIsolationMVArun2v1DBoldDMwLT_2>0.5&&byTightIsolationMVArun2v1DBoldDMwLT_1<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_1>0.5)||(byTightIsolationMVArun2v1DBoldDMwLT_1>0.5&&byTightIsolationMVArun2v1DBoldDMwLT_2<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_2>0.5)",
                 "tau_aiso"),
-            fakeWeightstring="(0.5*ff1_nom*(byTightIsolationMVArun2017v2DBoldDMwLT2017_1<0.5)+0.5*ff2_nom*(byTightIsolationMVArun2017v2DBoldDMwLT2017_2<0.5))")
+            fakeWeightstring="(0.5*ff1_nom*(byTightIsolationMVArun2v1DBoldDMwLT_1<0.5)+0.5*ff2_nom*(byTightIsolationMVArun2v1DBoldDMwLT_2<0.5))")
 
 
 class FakeEstimationTT(DataEstimation):
