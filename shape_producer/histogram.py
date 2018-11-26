@@ -127,8 +127,6 @@ class Histogram(TTreeContent):
             friend_trees = []
             if self._friend_inputfiles_collection != None:
                 for friend_inputfiles in self._friend_inputfiles_collection:
-                    if "keras" in friend_inputfiles[0]:
-                        continue
                     friend_tree = ROOT.TChain()
                     for friend_inputfile in friend_inputfiles:
                         folder = self._folder
