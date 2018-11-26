@@ -1,4 +1,5 @@
 
+
 # -*- coding: utf-8 -*-
 
 from cutstring import *
@@ -875,6 +876,12 @@ class ggHEstimation(HTTEstimation):
             friend_directory=friend_directory,
             channel=channel,
             mc_campaign="RunIIFall17MiniAODv2")
+
+    def get_weights(self):
+        weights = super(ggHEstimation, self).get_weights()
+        weights.remove("numberGeneratedEventsWeight")
+        weights.add(Weight("8.22976e-8", "numberGeneratedEventsWeight"))
+        return weights
 
     def get_files(self):
         query = {
