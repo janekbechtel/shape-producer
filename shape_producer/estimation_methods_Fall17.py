@@ -906,6 +906,11 @@ class qqHEstimation(HTTEstimation):
             channel=channel,
             mc_campaign="RunIIFall17MiniAODv2")
 
+    def get_weights(self):
+        weights = super(qqHEstimation, self).get_weights()
+        weights.add(Weight("(0.95+0.02*(jpt_1>0)*(jpt_1<200)*(njets<2||((jdeta<2.8||mjj<400)&&(mjj<60||mjj>=120)))-0.1*(jpt_1>=200))", "prefireWeight"))
+        return weights
+
     def get_files(self):
         query = {
             "process": "^VBFHToTauTau.*125.*",
