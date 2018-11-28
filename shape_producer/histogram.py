@@ -119,20 +119,14 @@ class Histogram(TTreeContent):
             # combine files to a single tree using TChain
             tree = ROOT.TChain()
             for inputfile in self._inputfiles:
-                folder = self._folder
-                if "EWK" in inputfile and "Recoil" in folder:
-                    folder = folder.replace("metRecoilResponseUp", "nominal").replace("metRecoilResponseDown", "nominal").replace("metRecoilResolutionUp", "nominal").replace("metRecoilResolutionDown", "nominal")
-                tree.Add(inputfile + "/" + folder)
+                tree.Add(inputfile + "/" + self._folder)
             # repeat this for friends if applicable
             friend_trees = []
             if self._friend_inputfiles_collection != None:
                 for friend_inputfiles in self._friend_inputfiles_collection:
                     friend_tree = ROOT.TChain()
                     for friend_inputfile in friend_inputfiles:
-                        folder = self._folder
-                        if "EWK" in friend_inputfile and "Recoil" in folder:
-                            folder = folder.replace("metRecoilResponseUp", "nominal").replace("metRecoilResponseDown", "nominal").replace("metRecoilResolutionUp", "nominal").replace("metRecoilResolutionDown", "nominal")
-                        friend_tree.Add(friend_inputfile + "/" + folder)
+                        friend_tree.Add(friend_inputfile + "/" + self._folder)
                     tree.AddFriend(friend_tree)
                     friend_trees.append(friend_tree)
 
