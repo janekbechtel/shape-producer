@@ -246,10 +246,19 @@ class VVEstimation(EstimationMethod):
         files = self.era.datasets_helper.get_nicks_with_query(query)
 
         query = {
-            "process": "ST",  # Query for Single-Top samples
+            "process": "ST",  # Query for Single-Top samples (newer v2)
             "data": False,
             "scenario": "^PU2017$",
-            "version": "v1",
+            "version": "v2",
+            "generator": "powheg\-pythia8",
+            "campaign": self._mc_campaign
+        }
+        files += self.era.datasets_helper.get_nicks_with_query(query)
+
+        query = {
+            "process": "ST",  # Query for Single-Top samples (newer pileup mixing)
+            "data": False,
+            "scenario": "^PU2017newpmx$",
             "generator": "powheg\-pythia8",
             "campaign": self._mc_campaign
         }
@@ -373,9 +382,9 @@ class DYJetsToLLEstimation(EstimationMethod):
             Weight("generatorWeight", "generatorWeight"),
             #Weight("numberGeneratedEventsWeight","numberGeneratedEventsWeight"), # to be used only for one inclusive sample
             #Weight("crossSectionPerEventWeight","crossSectionPerEventWeight"), # to be used only for one inclusive sample
-            Weight("((genbosonmass >= 50.0)*5.895035424966625e-05*((npartons == 0 || npartons >= 5)*1.0 + (npartons == 1)*0.1721 + (npartons == 2)*0.3634 + (npartons == 3)*0.2273 + (npartons == 4)*0.2097) + (genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight)",
+            Weight("((genbosonmass >= 50.0)*5.8950e-05*((npartons == 0 || npartons >= 5)*1.0 + (npartons == 1)*0.1743 + (npartons == 2)*0.3634 + (npartons == 3)*0.2273 + (npartons == 4)*0.2104) + (genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight)",
                 "z_stitching_weight"),
-              # xsec_NNLO [pb] = 5765.4, N_inclusive = 97800939,  xsec_NNLO/N_inclusive = 5.89503542e-05 [pb] weights: [1.0, 0.3152264560877219, 0.3634129397952724, 0.6383571409919083, 0.20970400388334687]
+              # xsec_NNLO [pb] = 5765.4, N_inclusive = 97800939,  xsec_NNLO/N_inclusive = 5.89503542e-05 [pb] weights: [1.0, 0.1743347690195873, 0.3634129397952724, 0.22728901609456784, 0.21040417678899315]
 
             # Weights for corrections
             Weight("puweight", "puweight"),
@@ -401,14 +410,35 @@ class DYJetsToLLEstimation(EstimationMethod):
             "extension": "^$",
             "version": "v1"
         }
-        queryM50 = {
-            "process": "(DY(|1|2|3|4)JetsToLL_M50)",
-            # "process": "DYJetsToLL_M50",
+        queryM50_inclusive_2_3jet = {
+            "process": "DY(|2|3)JetsToLL_M50",
             "data": False,
             "campaign": self._mc_campaign,
             "generator": "madgraph\-pythia8",
-            # "extension": "^$",
-            "version": "v1" # to be used if only one inclusive sample is desired
+            "version": "v1"
+        }
+        queryM50_1jet_v1 = {
+            "process": "DY1JetsToLL_M50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8",
+            "extension": "^$",
+            "version": "v1"
+        }
+        queryM50_1jet_ext1_v2 = {
+            "process": "DY1JetsToLL_M50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8",
+            "extension": "ext1",
+            "version": "v2"
+        }
+        queryM50_4jet = {
+            "process": "DY4JetsToLL_M50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8",
+            "version": "v2"
         }
         queryEWKZ = {
             "process": "^EWKZ",
@@ -416,10 +446,13 @@ class DYJetsToLLEstimation(EstimationMethod):
             "campaign": self._mc_campaign,
             "generator": "madgraph\-pythia8",
         }
-        files = self.era.datasets_helper.get_nicks_with_query(queryM50) + self.era.datasets_helper.get_nicks_with_query(queryM10) + self.era.datasets_helper.get_nicks_with_query(queryEWKZ)
-        log_query(self.name, queryM50, files)
+        files = self.era.datasets_helper.get_nicks_with_query(queryM50_inclusive_2_3jet) + \
+                self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_v1) + \
+                self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_ext1_v2) + \
+                self.era.datasets_helper.get_nicks_with_query(queryM50_4jet) + \
+                self.era.datasets_helper.get_nicks_with_query(queryM10) + \
+                self.era.datasets_helper.get_nicks_with_query(queryEWKZ)
         log_query(self.name, queryM10, files)
-        log_query(self.name, queryEWKZ, files)
         return self.artus_file_names(files)
 
 
@@ -538,9 +571,6 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                 Weight("generatorWeight",
                        "simulation_sf"),
                 Weight("muonEffTrgWeight*muonEffIDWeight_1*muonEffIDWeight_2", "scale_factor"),
-                #~ Weight(
-                    #~ "doubleTauTrgWeight*crossTriggerDataEfficiencyWeight_tight_MVA_1*crossTriggerDataEfficiencyWeight_tight_MVA_2",
-                        #~ "trg_sf"),
                 Weight("(0.18321*(pt_1>=30 && pt_1<35) + 0.53906*(pt_1>=35 && pt_1<40) + 0.63658*(pt_1>=40 && pt_1<45) + 0.73152*(pt_1>=45 && pt_1<50) + 0.79002*(pt_1>=50 && pt_1<60) + 0.84666*(pt_1>=60 && pt_1<80) + 0.84919*(pt_1>=80 && pt_1<100) + 0.86819*(pt_1>=100 && pt_1<150) + 0.88206*(pt_1>=150 && pt_1<200) + (pt_1>=200))","tau1_leg_weight"),
                 Weight("(0.18321*(pt_2>=30 && pt_2<35) + 0.53906*(pt_2>=35 && pt_2<40) + 0.63658*(pt_2>=40 && pt_2<45) + 0.73152*(pt_2>=45 && pt_2<50) + 0.79002*(pt_2>=50 && pt_2<60) + 0.84666*(pt_2>=60 && pt_2<80) + 0.84919*(pt_2>=80 && pt_2<100) + 0.86819*(pt_2>=100 && pt_2<150) + 0.88206*(pt_2>=150 && pt_2<200) + (pt_2>=200))","tau2_leg_weight"),                 
                 Weight("((gen_match_1==5)*0.97+(gen_match_1!=5))*((gen_match_2==5)*0.97+(gen_match_2!=5))", "emb_tau_id"),
@@ -734,7 +764,8 @@ class TTEstimation(EstimationMethod):
             Weight("generatorWeight", "generatorWeight"),
             Weight("numberGeneratedEventsWeight",
                    "numberGeneratedEventsWeight"),
-            Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+            Weight("(abs(crossSectionPerEventWeight - 380.1) < 0.1)*377.96 + (abs(crossSectionPerEventWeight - 87.31) < 0.1)*88.29 + (abs(crossSectionPerEventWeight - 364.4) < 0.1)*365.35", "crossSectionPerEventWeight"),
+            #Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
 
             # Weights for corrections
             Weight("puweight", "puweight"),
@@ -754,9 +785,9 @@ class TTEstimation(EstimationMethod):
     def get_files(self):
         query = {
             "process": "TTTo.*",
-            "scenario": "^PU2017$",
+            "scenario": "PU2017",
+            "dbs" : ".*new_pmx.*",
             "data": False,
-            "version": "v1",
             "campaign": self._mc_campaign,
         }
         files = self.era.datasets_helper.get_nicks_with_query(query)
