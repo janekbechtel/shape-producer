@@ -1013,6 +1013,7 @@ class ggHEstimation(HTTEstimation):
         weights = super(ggHEstimation, self).get_weights()
         weights.remove("numberGeneratedEventsWeight")
         weights.add(Weight("8.22976e-8", "numberGeneratedEventsWeight"))
+        weights.add(Weight("ggh_NNLO_weight", "gghNNLO"))
         return weights
 
     def get_files(self):
