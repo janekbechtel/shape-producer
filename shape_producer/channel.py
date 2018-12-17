@@ -222,7 +222,7 @@ class TTSM2016(Channel):
             Cut("byTightIsolationMVArun2v1DBoldDMwLT_1>0.5", "tau_1_iso"),
             Cut("byTightIsolationMVArun2v1DBoldDMwLT_2>0.5", "tau_2_iso"),
             Cut("q_1*q_2<0", "os"), Cut("pt_tt>50", "pt_h"),
-            Cut("(trg_doubletau==1 && pt_1>50 && pt_2>40)", "trg_doubletau"))
+            Cut("(trg_doubletau==1 && pt_1>40 && pt_2>40)", "trg_doubletau"))
 
 
 class TTMSSM2017(Channel):
