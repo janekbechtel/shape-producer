@@ -139,7 +139,7 @@ class NewFakeEstimationLT(SumUpEstimationMethod):
 
 
 class NewFakeEstimationLT(NewFakeEstimationMethodLT):
-    def __init__(self, 
+    def __init__(self,
                  era,
                  directory,
                  channel,
@@ -261,6 +261,9 @@ class ggHEstimation(HTTEstimation):
                 "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
                 "hadronic_tau_sf"), Weight("ggh_NNLO_weight", "gghNNLO"),
             Weight("eventWeight", "eventWeight"), self.era.lumi_weight)
+
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=101)&&(htxs_stage1cat<=111)", "htxs_match"))
 
     def get_files(self):
         query = {
@@ -455,9 +458,12 @@ class qqHEstimation(HTTEstimation):
         weights.add(Weight("(0.972+0.011*(jpt_1>0)*(jpt_1<200)*(njets<2||((jdeta<2.8||mjj<400)&&(mjj<60||mjj>=120)))-0.52*(jpt_1>=200))", "prefireWeight"))
         return weights
 
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=201)&&(htxs_stage1cat<=205)", "htxs_match"))
+
     def get_files(self):
         query = {
-            "process": "^VBFHToTauTau.*125.*",
+            "process": "(^VBFHToTauTau.*125.*|^W(minus|plus)HToTauTau.*125.*|^ZHToTauTau.*125.*)",
             "data": False,
             "campaign": self._mc_campaign,
             "generator": "powheg\-pythia8"
@@ -553,6 +559,9 @@ class VHEstimation(HTTEstimation):
             channel=channel,
             mc_campaign="RunIISummer16MiniAODv2")
 
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=300)&&(htxs_stage1cat<=404)", "htxs_match"))
+
     def get_files(self):
         query = {
             "process": "(^W(minus|plus)HToTauTau.*125.*|^ZHToTauTau.*125.*)",
@@ -563,8 +572,8 @@ class VHEstimation(HTTEstimation):
         files = self.era.datasets_helper.get_nicks_with_query(query)
         log_query(self.name, query, files)
         return self.artus_file_names(files)
-    
-    
+
+
 class WHEstimation(HTTEstimation):
     def __init__(self, era, directory, channel, friend_directory=None):
         super(HTTEstimation, self).__init__(
@@ -575,6 +584,9 @@ class WHEstimation(HTTEstimation):
             friend_directory=friend_directory,
             channel=channel,
             mc_campaign="RunIISummer16MiniAODv2")
+
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=300)&&(htxs_stage1cat<=304)", "htxs_match"))
 
     def get_files(self):
         query = {
@@ -598,6 +610,9 @@ class ZHEstimation(HTTEstimation):
             friend_directory=friend_directory,
             channel=channel,
             mc_campaign="RunIISummer16MiniAODv2")
+
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=400)&&(htxs_stage1cat<=404)", "htxs_match"))
 
     def get_files(self):
         query = {
@@ -849,7 +864,7 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                 Weight("muonEffTrgWeight", "scale_factor"),
                 Weight(self.embedding_stitchingweight(),
                        "2016 stitching weight"),
-                Weight("idWeight_1*(triggerWeight_1*(pt_1>23)+((MuTau_TauLeg_DataEfficiencyWeight_2/MuTau_TauLeg_EmbeddedEfficiencyWeight_2)*(pt_1<=23)))*isoWeight_1", "lepton_sf"), 
+                Weight("idWeight_1*(triggerWeight_1*(pt_1>23)+((MuTau_TauLeg_DataEfficiencyWeight_2/MuTau_TauLeg_EmbeddedEfficiencyWeight_2)*(pt_1<=23)))*isoWeight_1", "lepton_sf"),
                 Weight("1.0", "mutau_crosstriggerweight"),
                 Weight("(gen_match_2==5)*1.02+(gen_match_2!=5)", "emb_tau_id"),
                 Weight("gen_match_1==4 && gen_match_2==5","emb_veto"),
