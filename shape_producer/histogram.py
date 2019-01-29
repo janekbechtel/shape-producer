@@ -122,6 +122,8 @@ class Histogram(TTreeContent):
                 folder = self._folder
                 if "EWK" in inputfile and "Recoil" in folder:
                     folder = folder.replace("metRecoilResponseUp", "nominal").replace("metRecoilResponseDown", "nominal").replace("metRecoilResolutionUp", "nominal").replace("metRecoilResolutionDown", "nominal")
+                if "DY" in inputfile and "Unclustered" in folder:
+                    folder = folder.replace("metUnclusteredEnUp", "nominal").replace("metUnclusteredEnDown", "nominal")
                 tree.Add(inputfile + "/" + folder)
             # repeat this for friends if applicable
             friend_trees = []
@@ -132,6 +134,8 @@ class Histogram(TTreeContent):
                         folder = self._folder
                         if "EWK" in friend_inputfile and "Recoil" in folder:
                             folder = folder.replace("metRecoilResponseUp", "nominal").replace("metRecoilResponseDown", "nominal").replace("metRecoilResolutionUp", "nominal").replace("metRecoilResolutionDown", "nominal")
+                        if "DY" in friend_inputfile and "Unclustered" in folder:
+                            folder = folder.replace("metUnclusteredEnUp", "nominal").replace("metUnclusteredEnDown", "nominal")
                         friend_tree.Add(friend_inputfile + "/" + folder)
                     tree.AddFriend(friend_tree)
                     friend_trees.append(friend_tree)
