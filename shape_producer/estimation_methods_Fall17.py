@@ -1023,6 +1023,7 @@ class ggHEstimation(HTTEstimation):
         weights.remove("numberGeneratedEventsWeight")
         weights.add(Weight("8.22976e-8", "numberGeneratedEventsWeight"))
         weights.add(Weight("ggh_NNLO_weight", "gghNNLO"))
+        weights.add(Weight("1.01", "bbh_inclusion_weight"))
         return weights
 
     def get_cuts(self):
@@ -1394,6 +1395,72 @@ class SUSYbbHEstimation(EstimationMethod):
             "process": "^SUSYGluGluToBBHToTauTau_M{MASS}$".format(MASS=self.mass),
             "data": False,
             "campaign": self._mc_campaign
+        }
+        files = self.era.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return self.artus_file_names(files)
+
+class bbH120Estimation(HTTEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(HTTEstimation, self).__init__(
+            name="bbH120",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign="RunIIFall17MiniAODv2")
+
+    def get_files(self):
+        query = {
+           "process": "(^SUSYGluGluToBBHToTauTau.*120$)",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "pythia8"
+        }
+        files = self.era.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return self.artus_file_names(files)
+
+class bbH130Estimation(HTTEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(HTTEstimation, self).__init__(
+            name="bbH130",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign="RunIIFall17MiniAODv2")
+
+    def get_files(self):
+        query = {
+            "process": "(^SUSYGluGluToBBHToTauTau.*130$)",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "pythia8"
+        }
+        files = self.era.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return self.artus_file_names(files)
+
+class ttHEstimation(HTTEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(HTTEstimation, self).__init__(
+            name="ttH",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign="RunIIFall17MiniAODv2")
+
+    def get_files(self):
+        query = {
+            "process": "(^ttHToTauTau.*125.*)",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "powheg\-pythia8"
         }
         files = self.era.datasets_helper.get_nicks_with_query(query)
         log_query(self.name, query, files)

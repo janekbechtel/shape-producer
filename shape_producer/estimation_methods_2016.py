@@ -261,6 +261,7 @@ class ggHEstimation(HTTEstimation):
                 "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
                 "hadronic_tau_sf"), Weight("ggh_NNLO_weight", "gghNNLO"),
             Weight("8.8384e-8/numberGeneratedEventsWeight", "ggh_stitching_weight"),
+            Weight("1.01", "bbh_inclusion_weight"),
             Weight("eventWeight", "eventWeight"), self.era.lumi_weight)
 
     def get_cuts(self):
