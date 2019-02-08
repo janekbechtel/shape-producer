@@ -10,7 +10,24 @@ from estimation_methods_2016 import QCDEstimationWithW as QCDEstimationWithW2016
 from systematics import *
 from era import log_query
 from process import *
+import json
 
+stage1_cuts = {
+    "qqh_stxs_0" : "(jpt_1>0)*(jpt_1<200)*(njets>=2)*(mjj>400)*(jdeta>2.8)*(pt_ttjj>0)*(pt_ttjj<25)",
+    "qqh_stxs_1" : "(jpt_1>0)*(jpt_1<200)*(njets>=2)*(mjj>400)*(jdeta>2.8)*(pt_ttjj>25)",
+    "qqh_stxs_2" : "(jpt_1>0)*(jpt_1<200)*(njets>=2)*(mjj>60)*(mjj<120)",
+    "qqh_stxs_3" : "( (jpt_1>0)*(jpt_1<200)*(njets<2) + (jpt_1>0)*(jpt_1<200)*(njets>=2)*(mjj>400)*(jdeta<2.8) + (jpt_1>0)*(jpt_1<200)*(njets>=2)*(mjj>0)*(mjj<60) + (jpt_1>0)*(jpt_1<200)*(njets>=2)*(mjj>120)*(mjj<400) )",
+    "qqh_stxs_4" : "(jpt_1>200)",
+}
+
+def get_ggZH_hadronic_correction(channel):
+    weight_string = "(abs(crossSectionPerEventWeight - 0.0554) < 0.0001)*(0.7612/(0.1227 + 0.7612))*({GGZHCORRECTION}) + (abs(crossSectionPerEventWeight - 0.0554) >= 0.0001)*1.0" # correct for the already applied crossSectionPerEventWeight
+    hadronic_ratios_input  = open("/portal/ekpbms1/home/akhmet/workdir/PostProcessingggZHCorrection/sm-htt-analysis/shape-producer/shape_producer/hadronic_ratios.json","r")
+    hadronic_ratios_dict = json.loads(hadronic_ratios_input.read())
+    ggZHcorr_list = ["(%s*%s)"%(stage1_cuts[cat], str(1.0+hadronic_ratios_dict["_".join([channel,cat])]["r_ZH"])) for cat in stage1_cuts]
+    ggZHcorr_string = " + ".join(ggZHcorr_list)
+    #print ggZHcorr_string
+    return Weight(weight_string.format(GGZHCORRECTION=ggZHcorr_string), "ggZH_correction")
 
 def get_triggerweight_for_channel(channel):
     weight = Weight("1.0","triggerweight")
@@ -1055,6 +1072,7 @@ class qqHEstimation(HTTEstimation):
     def get_weights(self):
         weights = super(qqHEstimation, self).get_weights()
         weights.add(Weight("(0.95+0.02*(jpt_1>0)*(jpt_1<200)*(njets<2||((jdeta<2.8||mjj<400)&&(mjj<60||mjj>=120)))-0.1*(jpt_1>=200))", "prefireWeight"))
+        weights.add(get_ggZH_hadronic_correction(self.channel.name))
         return weights
 
     def get_cuts(self):
