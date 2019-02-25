@@ -232,6 +232,7 @@ class VVEstimation(EstimationMethod):
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
             get_tauByIsoIdWeight_for_channel(self.channel.name),
             get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            Weight("(1.0+0.56*(abs(crossSectionPerEventWeight-75.769996)<0.00001))", "VV_NNLO_reweight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
