@@ -119,14 +119,24 @@ class Histogram(TTreeContent):
             # combine files to a single tree using TChain
             tree = ROOT.TChain()
             for inputfile in self._inputfiles:
-                tree.Add(inputfile + "/" + self._folder)
+                folder = self._folder
+                if "EWK" in inputfile and "Recoil" in folder:
+                    folder = folder.replace("metRecoilResponseUp", "nominal").replace("metRecoilResponseDown", "nominal").replace("metRecoilResolutionUp", "nominal").replace("metRecoilResolutionDown", "nominal")
+                if "DY" in inputfile and "Unclustered" in folder:
+                    folder = folder.replace("metUnclusteredEnUp", "nominal").replace("metUnclusteredEnDown", "nominal")
+                tree.Add(inputfile + "/" + folder)
             # repeat this for friends if applicable
             friend_trees = []
             if self._friend_inputfiles_collection != None:
                 for friend_inputfiles in self._friend_inputfiles_collection:
                     friend_tree = ROOT.TChain()
                     for friend_inputfile in friend_inputfiles:
-                        friend_tree.Add(friend_inputfile + "/" + self._folder)
+                        folder = self._folder
+                        if "EWK" in friend_inputfile and "Recoil" in folder:
+                            folder = folder.replace("metRecoilResponseUp", "nominal").replace("metRecoilResponseDown", "nominal").replace("metRecoilResolutionUp", "nominal").replace("metRecoilResolutionDown", "nominal")
+                        if "DY" in friend_inputfile and "Unclustered" in folder:
+                            folder = folder.replace("metUnclusteredEnUp", "nominal").replace("metUnclusteredEnDown", "nominal")
+                        friend_tree.Add(friend_inputfile + "/" + folder)
                     tree.AddFriend(friend_tree)
                     friend_trees.append(friend_tree)
 

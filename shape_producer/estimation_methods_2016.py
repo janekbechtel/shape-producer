@@ -1,9 +1,10 @@
+
 # -*- coding: utf-8 -*-
 
 import copy
 import os
 
-from estimation_methods import EstimationMethod, SStoOSEstimationMethod, ABCDEstimationMethod, SumUpEstimationMethod
+from estimation_methods import EstimationMethod, SStoOSEstimationMethod, ABCDEstimationMethod, SumUpEstimationMethod, NewFakeEstimationMethodLT, NewFakeEstimationMethodTT
 from histogram import *
 from cutstring import *
 from process import *
@@ -58,6 +59,129 @@ class FakeEstimationLT(DataEstimation):
                 "tau_aiso"))
         return super(FakeEstimationLT,
                      self).create_root_objects(aiso_systematic)
+
+
+'''class AntiFakeEstimationLT(DataEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(DataEstimation, self).__init__(
+            name="antifakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign=None)
+        self._channel = channel
+
+    def get_weights(self):
+        return Weights(Weight("(1.0-ff2_nom)", "anti_fake_factor"))
+
+    def create_root_objects(self, systematic):
+        aiso_systematic = copy.deepcopy(systematic)
+        aiso_systematic.category.cuts.remove("tau_iso")
+        aiso_systematic.category.cuts.add(
+            Cut(
+                "byTightIsolationMVArun2v1DBoldDMwLT_2<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_2>0.5",
+                "tau_aiso"))
+        return super(AntiFakeEstimationLT,
+                     self).create_root_objects(aiso_systematic)
+
+
+class DataFakeEstimationLT(DataEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(DataEstimation, self).__init__(
+            name="datafakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign=None)
+        self._channel = channel
+
+    def create_root_objects(self, systematic):
+        aiso_systematic = copy.deepcopy(systematic)
+        aiso_systematic.category.cuts.remove("tau_iso")
+        aiso_systematic.category.cuts.add(
+            Cut(
+                "byTightIsolationMVArun2v1DBoldDMwLT_2<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_2>0.5",
+                "tau_aiso"))
+        return super(DataFakeEstimationLT,
+                     self).create_root_objects(aiso_systematic)
+
+
+class NewFakeEstimationLT(SumUpEstimationMethod):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(NewFakeEstimationLT, self).__init__(
+            name="fakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            factors=[1.0,-1.0],
+            processes=[
+                Process(
+                    "dataFakes",
+                    DataFakeEstimationLT(
+                        era,
+                        directory,
+                        channel,
+                        friend_directory=friend_directory)),
+                Process(
+                    "antiFakes",
+                    AntiFakeEstimationLT(
+                        era,
+                        directory,
+                        channel,
+                        friend_directory=friend_directory))
+            ])'''
+
+
+class NewFakeEstimationLT(NewFakeEstimationMethodLT):
+    def __init__(self,
+                 era,
+                 directory,
+                 channel,
+                 nofake_processes,
+                 data_process,
+                 friend_directory=None):
+        super(NewFakeEstimationLT, self).__init__(
+            name="jetFakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            nofake_processes=nofake_processes,
+            data_process=data_process,
+            aisoCut=Cut(
+                "byTightIsolationMVArun2v1DBoldDMwLT_2<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_2>0.5",
+                "tau_aiso"),
+            fakeWeightstring="ff2_nom")
+
+
+class NewFakeEstimationTT(NewFakeEstimationMethodTT):
+    def __init__(self,
+                 era,
+                 directory,
+                 channel,
+                 nofake_processes,
+                 data_process,
+                 friend_directory=None):
+        super(NewFakeEstimationTT, self).__init__(
+            name="jetFakes",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            nofake_processes=nofake_processes,
+            data_process=data_process,
+            aisoCut=Cut(
+                "(byTightIsolationMVArun2v1DBoldDMwLT_2>0.5&&byTightIsolationMVArun2v1DBoldDMwLT_1<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_1>0.5)||(byTightIsolationMVArun2v1DBoldDMwLT_1>0.5&&byTightIsolationMVArun2v1DBoldDMwLT_2<0.5&&byVLooseIsolationMVArun2v1DBoldDMwLT_2>0.5)",
+                "tau_aiso"),
+            fakeWeightstring="(0.5*ff1_nom*(byTightIsolationMVArun2v1DBoldDMwLT_1<0.5)+0.5*ff2_nom*(byTightIsolationMVArun2v1DBoldDMwLT_2<0.5))")
 
 
 class FakeEstimationTT(DataEstimation):
@@ -136,7 +260,12 @@ class ggHEstimation(HTTEstimation):
             Weight(
                 "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
                 "hadronic_tau_sf"), Weight("ggh_NNLO_weight", "gghNNLO"),
+            Weight("8.8384e-8/numberGeneratedEventsWeight", "ggh_stitching_weight"),
+            Weight("1.01", "bbh_inclusion_weight"),
             Weight("eventWeight", "eventWeight"), self.era.lumi_weight)
+
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=101)&&(htxs_stage1cat<=111)", "htxs_match"))
 
     def get_files(self):
         query = {
@@ -326,9 +455,17 @@ class qqHEstimation(HTTEstimation):
             channel=channel,
             mc_campaign="RunIISummer16MiniAODv2")
 
+    def get_weights(self):
+        weights = super(qqHEstimation, self).get_weights()
+        weights.add(Weight("(0.972+0.011*(jpt_1>0)*(jpt_1<200)*(njets<2||((jdeta<2.8||mjj<400)&&(mjj<60||mjj>=120)))-0.52*(jpt_1>=200))", "prefireWeight"))
+        return weights
+
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=201)&&(htxs_stage1cat<=205)", "htxs_match"))
+
     def get_files(self):
         query = {
-            "process": "^VBFHToTauTau.*125.*",
+            "process": "(^VBFHToTauTau.*125.*|^W(minus|plus)HToTauTau.*125.*|^ZHToTauTau.*125.*)",
             "data": False,
             "campaign": self._mc_campaign,
             "generator": "powheg\-pythia8"
@@ -424,12 +561,136 @@ class VHEstimation(HTTEstimation):
             channel=channel,
             mc_campaign="RunIISummer16MiniAODv2")
 
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=300)&&(htxs_stage1cat<=404)", "htxs_match"))
+
     def get_files(self):
         query = {
             "process": "(^W(minus|plus)HToTauTau.*125.*|^ZHToTauTau.*125.*)",
             "data": False,
             "campaign": self._mc_campaign,
             "generator": "powheg\-pythia8"
+        }
+        files = self.era.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return self.artus_file_names(files)
+
+
+class WHEstimation(HTTEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(HTTEstimation, self).__init__(
+            name="WH",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign="RunIISummer16MiniAODv2")
+
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=300)&&(htxs_stage1cat<=304)", "htxs_match"))
+
+    def get_files(self):
+        query = {
+            "process": "(^W(minus|plus)HToTauTau.*125.*)",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "powheg\-pythia8"
+        }
+        files = self.era.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return self.artus_file_names(files)
+
+
+class ZHEstimation(HTTEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(HTTEstimation, self).__init__(
+            name="ZH",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign="RunIISummer16MiniAODv2")
+
+    def get_cuts(self):
+        return Cuts(Cut("(htxs_stage1cat>=400)&&(htxs_stage1cat<=404)", "htxs_match"))
+
+    def get_files(self):
+        query = {
+            "process": "(^ZHToTauTau.*125.*)",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "powheg\-pythia8"
+        }
+        files = self.era.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return self.artus_file_names(files)
+
+
+class ttHEstimation(HTTEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(HTTEstimation, self).__init__(
+            name="ttH",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign="RunIISummer16MiniAODv2")
+
+    def get_files(self):
+        query = {
+            "process": "(^ttHJetToTT.*125.*)",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "amcatnlo\-pythia8"
+        }
+	files = self.era.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return self.artus_file_names(files)
+
+
+class bbH120Estimation(HTTEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(HTTEstimation, self).__init__(
+            name="bbH120",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign="RunIISummer16MiniAODv2")
+
+    def get_files(self):
+        query = {
+	    "process": "(^SUSYGluGluToBBHToTauTau.*120$)",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "amcatnlo\-pythia8"
+        }
+	files = self.era.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return self.artus_file_names(files)
+
+
+class bbH130Estimation(HTTEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None):
+        super(HTTEstimation, self).__init__(
+            name="bbH130",
+            folder="nominal",
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign="RunIISummer16MiniAODv2")
+
+    def get_files(self):
+        query = {
+            "process": "(^SUSYGluGluToBBHToTauTau.*130$)",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "amcatnlo\-pythia8"
         }
         files = self.era.datasets_helper.get_nicks_with_query(query)
         log_query(self.name, query, files)
@@ -517,10 +778,15 @@ class ZTTEstimation(DYJetsToLLEstimation):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_cuts(self):
-        return Cuts(
-            Cut(
-                "((gen_match_1>2 && gen_match_1<6) &&  (gen_match_2>2 && gen_match_2<6))",
-                "dy_genuine_tau"))
+        if "mt" in self.channel.name:
+            ztt_cut = "gen_match_1==4 && gen_match_2==5"
+        elif "et" in self.channel.name:
+            ztt_cut = "gen_match_1==3 && gen_match_2==5"
+        elif "tt" in self.channel.name:
+            ztt_cut = "gen_match_1==5 && gen_match_2==5"
+        elif "em" in self.channel.name:
+            ztt_cut = "gen_match_1==3 && gen_match_2==4"
+        return Cuts(Cut(ztt_cut, "ztt_cut"))
 
 
 class ZLEstimation(DYJetsToLLEstimation):
@@ -544,13 +810,19 @@ class ZLEstimation(DYJetsToLLEstimation):
             ct = "0 == 1"
         return Cuts(Cut(ct, "zl_genmatch"))'''
     def get_cuts(self):
-        if "mt" in self.channel.name or "et" in self.channel.name:
+        if "mt" in self.channel.name:
+            emb_veto = "!(gen_match_1==4 && gen_match_2==5)"
+            ff_veto = "!(gen_match_2 == 6)"
+        elif "et" in self.channel.name:
+            emb_veto = "!(gen_match_1==3 && gen_match_2==5)"
             ff_veto = "!(gen_match_2 == 6)"
         elif "tt" in self.channel.name:
+            emb_veto = "!(gen_match_1==5 && gen_match_2==5)"
             ff_veto = "!(gen_match_1 == 6 || gen_match_2 == 6)"
         elif "em" in self.channel.name:
+            emb_veto = "!(gen_match_1==3 && gen_match_2==4)"
             ff_veto = "(1.0)"
-        return Cuts(Cut("!((gen_match_1>2 && gen_match_1<6) &&  (gen_match_2>2 && gen_match_2<6)) && %s"%ff_veto, "dy_emb_and_ff_veto"))
+        return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "dy_emb_and_ff_veto"))
 
 
 class ZJEstimation(DYJetsToLLEstimation):
@@ -663,10 +935,10 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                 Weight("muonEffTrgWeight", "scale_factor"),
                 Weight(self.embedding_stitchingweight(),
                        "2016 stitching weight"),
-                Weight("idWeight_1*(triggerWeight_1*(pt_1>23)+(0.91*(pt_1<=23)))*isoWeight_1", "lepton_sf"), 
-                ## 0.91 is single-lepton trigger weight for pt [23-25] region extrapolated until cross-trigger SF for single lepton leg is available
+                Weight("idWeight_1*(triggerWeight_1*(pt_1>23)+((MuTau_TauLeg_DataEfficiencyWeight_2/MuTau_TauLeg_EmbeddedEfficiencyWeight_2)*(pt_1<=23)))*isoWeight_1", "lepton_sf"),
                 Weight("1.0", "mutau_crosstriggerweight"),
                 Weight("(gen_match_2==5)*1.02+(gen_match_2!=5)", "emb_tau_id"),
+                Weight("gen_match_1==4 && gen_match_2==5","emb_veto"),
                 Weight("embeddedDecayModeWeight", "decayMode_SF"))
         if self.channel.name == "et":
             return Weights(
@@ -677,6 +949,7 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                        "2016 stitching weight"),
                 Weight("idWeight_1*triggerWeight_1*isoWeight_1", "lepton_sf"),
                 Weight("(gen_match_2==5)*1.02+(gen_match_2!=5)", "emb_tau_id"),
+                Weight("gen_match_1==3 && gen_match_2==5","emb_veto"),
                 Weight("embeddedDecayModeWeight", "decayMode_SF"))
         elif self.channel.name == "tt":
             return Weights(
@@ -688,6 +961,7 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                 Weight(
                     "(TriggerDataEfficiencyWeight_1/TriggerEmbeddedEfficiencyWeight_1)*(TriggerDataEfficiencyWeight_2/TriggerEmbeddedEfficiencyWeight_2)",
                     "trg_sf"),
+                Weight("gen_match_1==5 && gen_match_2==5","emb_veto"),
                 Weight(
                     "((gen_match_1==5)*1.02+(gen_match_1!=5))*((gen_match_2==5)*1.02+(gen_match_2!=5))",
                     "emb_tau_id"),
@@ -716,20 +990,6 @@ class ZTTEmbeddedEstimation(EstimationMethod):
         files = self.era.datasets_helper.get_nicks_with_query(query)
         log_query(self.name, query, files)
         return self.artus_file_names(files)
-
-    '''def get_cuts(self):
-        ztt_genmatch_cut = Cut("1 == 1", "ztt_genmatch")
-        if self.channel.name in ["mt", "et"]:
-            ztt_genmatch_cut = Cut("gen_match_2==5", "ztt_genmatch")
-        elif self.channel.name == "tt":
-            ztt_genmatch_cut = Cut("(gen_match_1==5) && (gen_match_2==5)",
-                                   "ztt_genmatch")
-        elif self.channel.name == "em":
-            ztt_genmatch_cut = Cut("(gen_match_1>2) && (gen_match_2>3)",
-                                   "ztt_genmatch")
-        return Cuts(ztt_genmatch_cut)'''
-    def get_cuts(self):
-        return Cuts(Cut("((gen_match_1>2 && gen_match_1<6) &&  (gen_match_2>2 && gen_match_2<6))", "dy_genuine_tau"))
 
 
 class EWKWpEstimation(EstimationMethod):
@@ -937,16 +1197,19 @@ class TTLEstimation(TTEstimation):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_cuts(self):
-        if "mt" in self.channel.name or "et" in self.channel.name:
+        if "mt" in self.channel.name:
+            emb_veto = "!(gen_match_1==4 && gen_match_2==5)"
+            ff_veto = "!(gen_match_2 == 6)"
+        elif "et" in self.channel.name:
+            emb_veto = "!(gen_match_1==3 && gen_match_2==5)"
             ff_veto = "!(gen_match_2 == 6)"
         elif "tt" in self.channel.name:
+            emb_veto = "!(gen_match_1==5 && gen_match_2==5)"
             ff_veto = "!(gen_match_1 == 6 || gen_match_2 == 6)"
         elif "em" in self.channel.name:
+            emb_veto = "!(gen_match_1==3 && gen_match_2==4)"
             ff_veto = "(1.0)"
-        return Cuts(
-            Cut(
-                "!((gen_match_1>2 && gen_match_1<6) &&  (gen_match_2>2 && gen_match_2<6)) && %s"
-                % ff_veto, "tt_emb_and_ff_veto"))
+        return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "tt_emb_and_ff_veto"))
 
 
 class TTTEstimation(TTEstimation):
@@ -961,10 +1224,15 @@ class TTTEstimation(TTEstimation):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_cuts(self):
-        return Cuts(
-            Cut(
-                "((gen_match_1>2 && gen_match_1<6) &&  (gen_match_2>2 && gen_match_2<6))",
-                "tt_genuine_tau"))
+        if "mt" in self.channel.name:
+            tt_cut = "gen_match_1==4 && gen_match_2==5"
+        elif "et" in self.channel.name:
+            tt_cut = "gen_match_1==3 && gen_match_2==5"
+        elif "tt" in self.channel.name:
+            tt_cut = "gen_match_1==5 && gen_match_2==5"
+        elif "em" in self.channel.name:
+            tt_cut = "gen_match_1==3 && gen_match_2==4"
+        return Cuts(Cut(tt_cut, "ttt_cut"))
 
 
 class TTJEstimation(TTEstimation):
@@ -1064,17 +1332,19 @@ class VVLEstimation(VVEstimation):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_cuts(self):
-        if "mt" in self.channel.name or "et" in self.channel.name:
+        if "mt" in self.channel.name:
+            emb_veto = "!(gen_match_1==4 && gen_match_2==5)"
+            ff_veto = "!(gen_match_2 == 6)"
+        elif "et" in self.channel.name:
+            emb_veto = "!(gen_match_1==3 && gen_match_2==5)"
             ff_veto = "!(gen_match_2 == 6)"
         elif "tt" in self.channel.name:
+            emb_veto = "!(gen_match_1==5 && gen_match_2==5)"
             ff_veto = "!(gen_match_1 == 6 || gen_match_2 == 6)"
         elif "em" in self.channel.name:
+            emb_veto = "!(gen_match_1==3 && gen_match_2==4)"
             ff_veto = "(1.0)"
-        return Cuts(
-            Cut(
-                "!((gen_match_1>2 && gen_match_1<6) &&  (gen_match_2>2 && gen_match_2<6)) && %s"
-                % ff_veto, "vv_emb_and_ff_veto"))
-
+        return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "vv_emb_and_ff_veto"))
 
 class VVTEstimation(VVEstimation):
     def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
@@ -1088,10 +1358,15 @@ class VVTEstimation(VVEstimation):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_cuts(self):
-        return Cuts(
-            Cut(
-                "((gen_match_1>2 && gen_match_1<6) &&  (gen_match_2>2 && gen_match_2<6))",
-                "vv_genuine_tau"))
+        if "mt" in self.channel.name:
+            tt_cut = "gen_match_1==4 && gen_match_2==5"
+        elif "et" in self.channel.name:
+            tt_cut = "gen_match_1==3 && gen_match_2==5"
+        elif "tt" in self.channel.name:
+            tt_cut = "gen_match_1==5 && gen_match_2==5"
+        elif "em" in self.channel.name:
+            tt_cut = "gen_match_1==3 && gen_match_2==4"
+        return Cuts(Cut(tt_cut, "vvt_cut"))
 
 
 class VVJEstimation(VVEstimation):
@@ -1219,10 +1494,10 @@ class WEstimationWithQCD(EstimationMethod):
         high_mt_ss_control_region.name = "wjets_high_mt_ss_cr"
         high_mt_ss_control_region._variable = None
 
-        high_mt_ss_control_region.cuts.remove("mt")
+        high_mt_ss_control_region.cuts.remove("m_t")
         high_mt_ss_control_region.cuts.remove("os")
 
-        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "mt"))
+        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "m_t"))
         high_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
 
         # create control regions for W high mt to low mt extrapolation factor
@@ -1231,9 +1506,9 @@ class WEstimationWithQCD(EstimationMethod):
         high_mt_os_control_region.name = "wjets_high_mt_os_cr"
         high_mt_os_control_region._variable = None
 
-        high_mt_os_control_region.cuts.remove("mt")
+        high_mt_os_control_region.cuts.remove("m_t")
 
-        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "mt"))
+        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "m_t"))
 
         low_mt_os_control_region = copy.deepcopy(systematic.category)
         low_mt_os_control_region.name = "wjets_low_mt_os_cr"
@@ -1252,13 +1527,13 @@ class WEstimationWithQCD(EstimationMethod):
         inclusive_os_control_region.name = "wjets_os_cr"
         inclusive_os_control_region._variable = None
 
-        inclusive_os_control_region.cuts.remove("mt")
+        inclusive_os_control_region.cuts.remove("m_t")
 
         inclusive_ss_control_region = copy.deepcopy(systematic.category)
         inclusive_ss_control_region.name = "wjets_ss_cr"
         inclusive_ss_control_region._variable = None
 
-        inclusive_ss_control_region.cuts.remove("mt")
+        inclusive_ss_control_region.cuts.remove("m_t")
         inclusive_ss_control_region.cuts.remove("os")
 
         inclusive_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
@@ -1470,10 +1745,10 @@ class QCDEstimationWithW(EstimationMethod):
         high_mt_ss_control_region.name = "wjets_high_mt_ss_cr"
         high_mt_ss_control_region._variable = None
 
-        high_mt_ss_control_region.cuts.remove("mt")
+        high_mt_ss_control_region.cuts.remove("m_t")
         high_mt_ss_control_region.cuts.remove("os")
 
-        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "mt"))
+        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "m_t"))
         high_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
 
         # create control regions for W high mt to low mt extrapolation factor
@@ -1482,9 +1757,9 @@ class QCDEstimationWithW(EstimationMethod):
         high_mt_os_control_region.name = "wjets_high_mt_os_cr"
         high_mt_os_control_region._variable = None
 
-        high_mt_os_control_region.cuts.remove("mt")
+        high_mt_os_control_region.cuts.remove("m_t")
 
-        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "mt"))
+        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "m_t"))
 
         low_mt_os_control_region = copy.deepcopy(systematic.category)
         low_mt_os_control_region.name = "wjets_low_mt_os_cr"
@@ -1503,13 +1778,13 @@ class QCDEstimationWithW(EstimationMethod):
         inclusive_os_control_region.name = "wjets_os_cr"
         inclusive_os_control_region._variable = None
 
-        inclusive_os_control_region.cuts.remove("mt")
+        inclusive_os_control_region.cuts.remove("m_t")
 
         inclusive_ss_control_region = copy.deepcopy(systematic.category)
         inclusive_ss_control_region.name = "wjets_ss_cr"
         inclusive_ss_control_region._variable = None
 
-        inclusive_ss_control_region.cuts.remove("mt")
+        inclusive_ss_control_region.cuts.remove("m_t")
         inclusive_ss_control_region.cuts.remove("os")
 
         inclusive_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
