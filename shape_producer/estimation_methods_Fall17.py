@@ -427,35 +427,50 @@ class DYJetsToLLEstimation(EstimationMethod):
             "extension": "^$",
             "version": "v1"
         }
-        queryM50_inclusive_2_3jet = {
-            "process": "DY(|2|3)JetsToLL_M50",
+        # queryM50_inclusive_2_3jet = {
+        #     "process": "DY(|2|3)JetsToLL_M50",
+        #     "data": False,
+        #     "campaign": self._mc_campaign,
+        #     "generator": "madgraph\-pythia8",
+        #     "version": "v1"
+        # }
+        # queryM50_1jet_v1 = {
+        #     "process": "DY1JetsToLL_M50",
+        #     "data": False,
+        #     "campaign": self._mc_campaign,
+        #     "generator": "madgraph\-pythia8",
+        #     "extension": "^$",
+        #     "version": "v1"
+        # }
+        # queryM50_1jet_ext1_v2 = {
+        #     "process": "DY1JetsToLL_M50",
+        #     "data": False,
+        #     "campaign": self._mc_campaign,
+        #     "generator": "madgraph\-pythia8",
+        #     "extension": "ext1",
+        #     "version": "v2"
+        # }
+        # queryM50_4jet = {
+        #     "process": "DY4JetsToLL_M50",
+        #     "data": False,
+        #     "campaign": self._mc_campaign,
+        #     "generator": "madgraph\-pythia8",
+        #     "version": "v2"
+        # }
+        # files = self.era.datasets_helper.get_nicks_with_query(queryM50_inclusive_2_3jet) + \
+        #         self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_v1) + \
+        #         self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_ext1_v2) + \
+        #         self.era.datasets_helper.get_nicks_with_query(queryM50_4jet) + \
+        #         self.era.datasets_helper.get_nicks_with_query(queryM10) + \
+        #         self.era.datasets_helper.get_nicks_with_query(queryEWKZ)
+        queryM50 = {
+            "process": "(DY(|1|2|3|4)JetsToLL_M50)",
+            # "process": "DYJetsToLL_M50",
             "data": False,
             "campaign": self._mc_campaign,
             "generator": "madgraph\-pythia8",
-            "version": "v1"
-        }
-        queryM50_1jet_v1 = {
-            "process": "DY1JetsToLL_M50",
-            "data": False,
-            "campaign": self._mc_campaign,
-            "generator": "madgraph\-pythia8",
-            "extension": "^$",
-            "version": "v1"
-        }
-        queryM50_1jet_ext1_v2 = {
-            "process": "DY1JetsToLL_M50",
-            "data": False,
-            "campaign": self._mc_campaign,
-            "generator": "madgraph\-pythia8",
-            "extension": "ext1",
-            "version": "v2"
-        }
-        queryM50_4jet = {
-            "process": "DY4JetsToLL_M50",
-            "data": False,
-            "campaign": self._mc_campaign,
-            "generator": "madgraph\-pythia8",
-            "version": "v2"
+            # "extension": "^$",
+            "version": "v1",
         }
         queryEWKZ = {
             "process": "^EWKZ",
@@ -463,13 +478,14 @@ class DYJetsToLLEstimation(EstimationMethod):
             "campaign": self._mc_campaign,
             "generator": "madgraph\-pythia8",
         }
-        files = self.era.datasets_helper.get_nicks_with_query(queryM50_inclusive_2_3jet) + \
-                self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_v1) + \
-                self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_ext1_v2) + \
-                self.era.datasets_helper.get_nicks_with_query(queryM50_4jet) + \
+        files = self.era.datasets_helper.get_nicks_with_query(queryM50) + \
                 self.era.datasets_helper.get_nicks_with_query(queryM10) + \
                 self.era.datasets_helper.get_nicks_with_query(queryEWKZ)
+
         log_query(self.name, queryM10, files)
+        log_query(self.name, queryM50, files)
+        log_query(self.name, queryEWKZ, files)
+
         return self.artus_file_names(files)
 
 
