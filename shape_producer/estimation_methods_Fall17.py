@@ -15,12 +15,8 @@ def get_triggerweight_for_channel(channel):
 
     singleMC = "singleTriggerMCEfficiencyWeightKIT_1"
     crossMCL = "crossTriggerMCEfficiencyWeight_1"
-
-    MCTau_1 = "( (byMediumIsolationMVArun2017v2DBoldDMwLT2017_1 < 0.5 && byLooseIsolationMVArun2017v2DBoldDMwLT2017_1 > 0.5) * crossTriggerMCEfficiencyWeight_loose_MVA_1 "\
-              "+ (byTightIsolationMVArun2017v2DBoldDMwLT2017_1 < 0.5 && byMediumIsolationMVArun2017v2DBoldDMwLT2017_1 > 0.5) * crossTriggerMCEfficiencyWeight_medium_MVA_1 "\
-              "+ (byTightIsolationMVArun2017v2DBoldDMwLT2017_1 > 0.5) * crossTriggerMCEfficiencyWeight_tight_MVA_1 )"
-
-    MCTau_2 = MCTau_1.replace("_1", "_2")
+    MCTau_1 = "((byTightIsolationMVArun2017v2DBoldDMwLT2017_1<0.5 && byMediumIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_medium_MVA_1 + (byTightIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_tight_MVA_1)"
+    MCTau_2 = MCTau_1.replace("_1","_2")
 
     if "mt" in channel:
         trig_sL = "(trg_singlemuon_27 || trg_singlemuon_24)"
@@ -33,8 +29,7 @@ def get_triggerweight_for_channel(channel):
         weight = Weight(MuTau,"triggerweight")
 
     elif "et" in channel:
-        # trig_sL = "(trg_singleelectron_32_fallback || trg_singleelectron_27)"
-        trig_sL = "(trg_singleelectron_32 || trg_singleelectron_27)"
+        trig_sL = "(trg_singleelectron_32_fallback || trg_singleelectron_27)"
         trig_X = "trg_crossele_ele24tau30"
 
         # Eff = Eff(singleL)*(1 - Eff(xTau)) + Eff(xL)*Eff(xTau)
