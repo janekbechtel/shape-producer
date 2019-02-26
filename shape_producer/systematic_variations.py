@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 # this helper function can be used in case the systematic variation's name ends with "Down" and "Up"
 def create_systematic_variations(name, property_name, systematic_variation):
     results = []
-    results.append(systematic_variation(name, property_name, "Down"))
-    results.append(systematic_variation(name, property_name, "Up"))
+    results.append(systematic_variation(name=name, pipeline=property_name, direction="Down"))
+    results.append(systematic_variation(name=name, pipeline=property_name, direction="Up"))
     return results
 
 

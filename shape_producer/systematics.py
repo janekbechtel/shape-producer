@@ -91,6 +91,7 @@ class Systematic(object):
         return self._root_objects
 
     def create_root_objects(self):
+        if logger.getEffectiveLevel() == 10: print '--->Systematic::create_root_objects: ' + self._process.estimation_method.name, self._process.estimation_method._friend_directories, self._process
         self._root_objects = self._process.estimation_method.create_root_objects(
             self)
 
@@ -150,6 +151,7 @@ class Systematics(object):
 
     # do the estimations
     def produce(self):
+        logger.debug('-->Systematics::produce: len:' + str(len(self._systematics)))
         # create the input histograms, all at once to make optimal use of TDFs
         self.create_histograms()
 
@@ -157,18 +159,21 @@ class Systematics(object):
         # self.sort_estimations()
 
         # do the background estimations
+        logger.debug('-->do the background estimations:')
         self.do_estimations()
         logger.debug("Successfully finished systematics production.")
 
     # read root histograms from the inputfiles and write them to the outputfile
     def create_histograms(self):
+        logger.debug('--->Systematics::create_histograms:')
         # collect ROOT objects
         self._root_objects_holder = RootObjects(self._output_file)
 
         if self._num_threads == 1:
             for systematic in self._systematics:
-                logger.debug("Create ROOT objects for systematic %s.",
+                logger.debug("---->Create ROOT objects for systematic %s.",
                              systematic.name)
+                if logger.getEffectiveLevel() == 10: print '---->Systematics::create_histograms: systematic', systematic.process, systematic._process.estimation_method._friend_directories
                 systematic.create_root_objects()
         else:
             logger.debug("Create ROOT objects for all systematics.")
@@ -186,6 +191,7 @@ class Systematics(object):
             # the result objects have to be copied.
             for i_sys in range(len(systematics_new)):
                 self._systematics[i_sys] = systematics_new[i_sys]
+        logger.debug('-->Create root holders')
         for systematic in self._systematics:
             if self._find_unique_objects:
                 self._root_objects_holder.add_unique(systematic.root_objects)
@@ -196,6 +202,7 @@ class Systematics(object):
         # produce ROOT objects (in parallel)
         logger.debug("Produce ROOT objects using the %s backend.",
                      self._backend)
+        logger.debug('-->Produce root with' + self._backend + 'backend')
         if self._backend == "classic":
             self._root_objects_holder.produce_classic(self._num_threads)
         elif self._backend == "tdf":
@@ -205,13 +212,15 @@ class Systematics(object):
             raise Exception
 
         # set duplicates to the produced ROOT objects
+        logger.debug('--># set duplicates to the produced ROOT objects')
         if self._find_unique_objects:
             self._root_objects_holder.set_duplicates()
 
     # to the actual estimations. Currently do not run in parallel due to expected very low runtime, can in principle be parallelized
     def do_estimations(self):
+        logger.debug('-->do_estimations')
         for systematic in self._systematics:
-            logger.debug("Do estimation for systematic %s.", systematic.name)
+            logger.debug('---->Do estimation for systematic' + systematic.name)
             systematic.do_estimation()
             systematic.shape.save(self._root_objects_holder)
 
@@ -230,7 +239,9 @@ class Systematics(object):
     # Enable application of multiple variations at once
     def add_systematic_variation(self, variation, **properties):
         if self._skip_systematic_variations:
+            print "\tadd_systematic_variation: SKIP SYST VAR"
             return
+
         new_systematics = []
         for systematic in self._systematics:
             # consider only Nominal values for shifts

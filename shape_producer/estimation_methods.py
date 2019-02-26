@@ -30,6 +30,7 @@ class EstimationMethod(object):
             friend_directory, str) else friend_directory
 
     def get_path(self, systematic, folder):
+        logger.debug('-------->EstimationMethod:get_path: ' + systematic.category.channel.name + "_" + folder + "/ntuple")
         return systematic.category.channel.name + "_" + folder + "/ntuple"
 
     @property
@@ -74,6 +75,7 @@ class EstimationMethod(object):
         return systematic.variation.shifted_root_objects(settings)
 
     def define_root_objects(self, systematic):
+        logger.debug('------>EstimationMethod::define_root_objects: folder : ' + self._folder)
         histogram_settings = []
         histogram_settings.append({
             "name":
@@ -96,6 +98,7 @@ class EstimationMethod(object):
 
     # TODO: Make this less magic
     def create_root_objects(self, systematic):
+        logger.debug('---->EstimationMethod::create_root_objects: systematic.name : ' + systematic.name)
         root_object_settings = self.define_root_objects(systematic)
 
         # execute the underlying functions
@@ -103,10 +106,12 @@ class EstimationMethod(object):
             systematic, root_object_settings)
         for setting in root_object_settings:
             for key, value in setting.iteritems():
+                if logger.getEffectiveLevel() == 10: print 'k,v:', key, value
                 if isinstance(value, list):
                     setting[key] = value[0](*value[1:])
                 elif callable(value):
                     setting[key] = value()
+                    if logger.getEffectiveLevel() == 10: print setting[key]
 
         root_objects = []
         for setting in root_object_settings:

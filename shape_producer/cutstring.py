@@ -151,6 +151,7 @@ class Cut(object):
         # TODO: Corner cases? They are all checked?
         # TODO: error handling?
         try:
+            logger.info('\t cutstring:' + cutstring)
             operators = [s for s in supported_operators if s in cutstring]
             self._operator = operators[0]
             tmpcutstring = cutstring.split(self._operator)
