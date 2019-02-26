@@ -229,10 +229,10 @@ class Cuts(object):
             for w in args:
                 self.add(w)
 
-    def __str__(self):
-        s = ''
+    def __str__(self, indent=1):
+        s = '\n'
         for cut in self._cutstrings:
-            s += '\t' + cut.name + ' : ' + cut._weightstring + '\n'
+            s += '\t' * indent + cut.name + ' : ' + cut._weightstring + '\n'
         return s
 
     # TODO: Remove this magic due to consistence
