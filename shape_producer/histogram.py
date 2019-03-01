@@ -258,7 +258,7 @@ class Count(TTreeContent):
         self._result = False
 
     def create_result(self, dataframe=False):
-        logger.debug("----->Count::create_result::", self._name, self._inputfiles, self._folder)
+        logger.debug("----->Count::create_result::" + ' '.join([self._name] + self._inputfiles + [self._folder]))
         if dataframe:
             self._result = dataframe.Define("flat", "1").Histo1D(
                 "flat", self._weight_name)
