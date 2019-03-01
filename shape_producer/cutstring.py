@@ -167,6 +167,9 @@ class Cut(object):
                 "Failed to compose cut from string \'{}\'.".format(cutstring))
             raise Exception
 
+    def __str__(self):
+        return '{%s : %s}' % (self._name, self._weightstring)
+
     @property
     def weightstring(self):
         return self._weightstring
