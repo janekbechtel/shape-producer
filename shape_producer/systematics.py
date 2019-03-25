@@ -29,6 +29,12 @@ class Systematic(object):
         self._root_objects = None
         self._additionalWeights = additionalWeights
 
+    def __str__(self):
+        print_str = 'Systematic:\n'
+        for attribute_name in self.__dict__.keys():
+            print_str += '   ' + attribute_name + ': ' + str(self.__dict__[attribute_name]).replace('\n', '\n   ') + '\n'
+        return print_str[:-1]
+
     # TODO: What does this magic?
     def __deepcopy__(self, memo):
         # some kind of workaround: the deepcopy method is overwritten, but anyway the one from the base class should be called
@@ -145,6 +151,21 @@ class Systematics(object):
         self._output_file = output_file
         self._num_threads = num_threads
         self._find_unique_objects = find_unique_objects
+
+    def __str__(self):
+        print_str = 'Systematics:\n'
+        for attribute_name in self.__dict__.keys():
+            attribute = getattr(self, attribute_name)
+            # print attribute_name,':', getattr(self, attribute_name), type(attribute), type(attribute).__dict__
+            print_str += ' ' + attribute_name + ': ' + str(self.__dict__[attribute_name]) + '\n'
+
+            if hasattr(type(attribute), '__iter__') and not isinstance(attribute, str):
+                sub_print = ''
+                for i in attribute:
+                    sub_print += ' \t' + str(i).replace('\n', '\n \t') + '\n'
+                print_str += sub_print[:-1]
+
+        return print_str[:-1]
 
     def add(self, systematic):
         self._systematics.append(systematic)
