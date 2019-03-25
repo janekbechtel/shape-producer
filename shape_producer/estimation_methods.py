@@ -19,13 +19,17 @@ class EstimationMethod(object):
                  directory,
                  channel,
                  mc_campaign,
-                 friend_directory=None):
+                 friend_directory=None,
+                 extra_chain=None,
+                 ):
         self._directory = directory
         self._folder = folder
         self._name = name
         self._mc_campaign = mc_campaign
         self._channel = channel
         self._era = era
+        self._extra_chain = [extra_chain] if isinstance(
+            extra_chain, str) else extra_chain
         self._friend_directories = [friend_directory] if isinstance(
             friend_directory, str) else friend_directory
 
@@ -67,8 +71,22 @@ class EstimationMethod(object):
             for filename in self.get_files()
         ] for friend_directory in self._friend_directories]
 
+    def extra_chain(self, files, remove_nonexisting=True):
+        if self._extra_chain is None or len(self._extra_chain) == 0:
+            return []
+        extra_files = []
+        for x in self._extra_chain:
+            for f in files:
+                file_path = os.path.join(x, f, "%s.root" % f)
+                if os.path.exists(file_path):
+                    logger.info('extra_chain: add ' + str(file_path))
+                    extra_files.append(file_path)
+                else:
+                    logger.warning('extra_chain: skipping not found: ' + str(file_path))
+        return extra_files
+
     def artus_file_names(self, files):
-        return [os.path.join(self._directory, f, "%s.root" % f) for f in files]
+        return [os.path.join(self._directory, f, "%s.root" % f) for f in files] + self.extra_chain(files)
 
     # wrapper function for the Histogram creation performing the systematic shifts
     def apply_systematic_variations(self, systematic, settings):
