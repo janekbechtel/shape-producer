@@ -243,7 +243,11 @@ class Systematics(object):
         for systematic in self._systematics:
             logger.debug('---->Do estimation for systematic %s', systematic.name)
             systematic.do_estimation()
-            systematic.shape.save(self._root_objects_holder)
+            # systematic.shape.save(self._root_objects_holder)
+            if systematic._shape is not None:
+                systematic.shape.save(self._root_objects_holder)
+            else:
+                logger.warning('%s not saved', systematic.name)
 
     def summary(self):
         table = [[
