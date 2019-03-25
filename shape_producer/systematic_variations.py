@@ -3,7 +3,7 @@
 """
 import logging
 logger = logging.getLogger(__name__)
-
+import pprint
 
 # this helper function can be used in case the systematic variation's name ends with "Down" and "Up"
 def create_systematic_variations(name, property_name, systematic_variation):
@@ -18,6 +18,9 @@ class SystematicVariation(object):
     def __init__(self, name, direction):
         self._name = name
         self._direction = direction
+
+    def __str__(self):
+        return "SystematicVariation(name=%s, direction=%s)" % (self._name, self._direction)
 
     # TODO: init name vs getter name is different, confusing!
     @property

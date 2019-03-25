@@ -30,7 +30,7 @@ class EstimationMethod(object):
             friend_directory, str) else friend_directory
 
     def get_path(self, systematic, folder):
-        logger.debug('-------->EstimationMethod:get_path: ' + systematic.category.channel.name + "_" + folder + "/ntuple")
+        logger.debug('-------->EstimationMethod::get_path: ' + systematic.category.channel.name + "_" + folder + "/ntuple")
         return systematic.category.channel.name + "_" + folder + "/ntuple"
 
     @property
@@ -108,7 +108,7 @@ class EstimationMethod(object):
             for key, value in setting.iteritems():
                 if logger.getEffectiveLevel() == 10: print 'k,v:', key, value
                 if isinstance(value, list):
-                    setting[key] = value[0](*value[1:])
+                    setting[key] = value[0](*value[1:])  # returned: <pipeline>/ntuple
                 elif callable(value):
                     setting[key] = value()
                     if logger.getEffectiveLevel() == 10: print setting[key]

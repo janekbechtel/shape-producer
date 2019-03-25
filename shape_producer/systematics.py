@@ -218,7 +218,7 @@ class Systematics(object):
                 self._root_objects_holder.add_unique(systematic.root_objects)
             else:
                 self._root_objects_holder.add(systematic.root_objects)
-        #self._root_objects_holder.check_duplicates() # TODO: Implement this if needed
+        # self._root_objects_holder.check_duplicates() # TODO: Implement this if needed
 
         # produce ROOT objects (in parallel)
         logger.debug("Produce ROOT objects using the %s backend.",
@@ -241,7 +241,7 @@ class Systematics(object):
     def do_estimations(self):
         logger.debug('-->do_estimations')
         for systematic in self._systematics:
-            logger.debug('---->Do estimation for systematic' + systematic.name)
+            logger.debug('---->Do estimation for systematic %s', systematic.name)
             systematic.do_estimation()
             systematic.shape.save(self._root_objects_holder)
 
@@ -269,21 +269,28 @@ class Systematics(object):
             if systematic.variation.is_nominal():
                 found = 0
                 for key, value in properties.iteritems():
+                    logger.debug(' '.join([
+                        "key, value in properties.iteritems():",
+                        str(key),
+                        str(value)
+                    ]))
                     if hasattr(systematic, key):
                         property_ = getattr(systematic, key)
-                        if hasattr(property_, "name") and hasattr(
-                                value, "name"):
-                            if property_.name == value.name: found += 1
+                        if hasattr(property_, "name") and hasattr(value, "name"):
+                            if property_.name == value.name:
+                                found += 1
                         else:
                             logger.fatal(
                                 "Method %s.name does not exist. Comparison is not possible.",
-                                key)
+                                key,
+                            )
                             raise Exception
 
                 if found == len(properties):
                     new_systematic = copy.deepcopy(systematic)
                     new_systematic.variation = variation
                     new_systematics.append(new_systematic)
+
         self._systematics += new_systematics
 
     def add_extra_category(self, new_category, category_to_modify):
