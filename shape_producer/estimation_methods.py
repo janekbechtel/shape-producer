@@ -120,11 +120,16 @@ class EstimationMethod(object):
 
     # doing nothing, shape is exactly the histogram as default
     def do_estimation(self, systematic):
-        if len(systematic.root_objects) != 1:
+        if len(systematic.root_objects) > 1:
             logger.fatal(
                 "There are %d histograms associated to the systematic with name %s, but not exactly 1.",
                 len(systematic.root_objects), systematic.name)
             raise Exception
+        elif len(systematic.root_objects) == 0:
+            logger.warning(
+                "There are 0 histograms associated to the systematic with name %s -> skipped",
+                systematic.name)
+            return None
         return systematic.root_objects[0]
 
 
