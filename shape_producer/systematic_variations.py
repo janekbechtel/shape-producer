@@ -69,9 +69,14 @@ class DifferentPipeline(SystematicVariation):
         super(DifferentPipeline, self).__init__(name, direction)
         self._pipeline = pipeline
 
+    def __str__(self):
+        return super(DifferentPipeline, self).__str__()[:-1] + ', pipeline=' + self._pipeline + ')'
+
     def shifted_root_objects(self, h_settings):
+        logger.debug('DifferentPipeline::shifted_root_objects:')
         for index in range(len(h_settings)):
             h_settings[index]["folder"][2] = self._pipeline + self._direction
+        logger.debug('    ' + pprint.pformat(h_settings, indent=4))  # ; exit(1)
         return h_settings
 
 
