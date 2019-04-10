@@ -13,7 +13,7 @@ from process import *
 
 
 def get_triggerweight_for_channel(channel):
-    weight = Weight("1.0","triggerweight")
+    weight = Weight("1.0", "triggerweight")
 
     singleMC = "singleTriggerMCEfficiencyWeightKIT_1"
     crossMCL = "crossTriggerMCEfficiencyWeight_1"
@@ -1610,10 +1610,11 @@ class NewFakeEstimationLT(NewFakeEstimationMethodLT):
                  channel,
                  nofake_processes,
                  data_process,
-                 friend_directory=None):
+                 friend_directory=None,
+                 folder="nominal",):
         super(NewFakeEstimationLT, self).__init__(
             name="jetFakes",
-            folder="nominal",
+            folder=folder,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1633,10 +1634,11 @@ class NewFakeEstimationTT(NewFakeEstimationMethodTT):
                  channel,
                  nofake_processes,
                  data_process,
-                 friend_directory=None):
+                 friend_directory=None,
+                 folder="nominal",):
         super(NewFakeEstimationTT, self).__init__(
             name="jetFakes",
-            folder="nominal",
+            folder=folder,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
