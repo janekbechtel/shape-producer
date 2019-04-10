@@ -19,7 +19,11 @@ class EstimationMethod(object):
                  directory,
                  channel,
                  mc_campaign,
-                 friend_directory=None):
+                 friend_directory=None,
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         self._directory = directory
         self._folder = folder
         self._name = name
@@ -28,6 +32,16 @@ class EstimationMethod(object):
         self._era = era
         self._friend_directories = [friend_directory] if isinstance(
             friend_directory, str) else friend_directory
+
+        self.get_triggerweight_for_channel = get_triggerweight_for_channel
+        self.get_singlelepton_triggerweight_for_channel = get_singlelepton_triggerweight_for_channel
+        self.get_tauByIsoIdWeight_for_channel = get_tauByIsoIdWeight_for_channel
+        self.get_eleHLTZvtxWeight_for_channel = get_eleHLTZvtxWeight_for_channel
+        for i in ['get_triggerweight_for_channel', 'get_singlelepton_triggerweight_for_channel', 'get_tauByIsoIdWeight_for_channel', 'get_eleHLTZvtxWeight_for_channel']:
+            if getattr(self, i) is None:
+                setattr(self, i, lambda x=None: (_ for _ in ()).throw(
+                    Exception('Call of undefined method "%s" with arguments: %s' % (i, str(x))))
+                )
 
     def get_path(self, systematic, folder):
         logger.debug('-------->EstimationMethod::get_path: ' + systematic.category.channel.name + "_" + folder + "/ntuple")

@@ -101,18 +101,19 @@ class QCDEstimationWithW(QCDEstimationWithW2016):
 
 class QCDEstimation_SStoOS_MTETEM(SStoOSEstimationMethod):
     def __init__(self,
-                 era,
-                 directory,
-                 channel,
-                 bg_processes,
-                 data_process,
-                 friend_directory=None,
-                 extrapolation_factor=1.0,
-                 folder="nominal",
-                 ):
+            era,
+            directory,
+            channel,
+            bg_processes,
+            data_process,
+            friend_directory=None,
+            extrapolation_factor=1.0,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(QCDEstimation_SStoOS_MTETEM, self).__init__(
             name="QCD",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -123,10 +124,19 @@ class QCDEstimation_SStoOS_MTETEM(SStoOSEstimationMethod):
 
 
 class QCDEstimation_ABCD_TT_ISO2(ABCDEstimationMethod):
-    def __init__(self, era, directory, channel, bg_processes, data_process, friend_directory=None, folder="nominal"):
+    def __init__(self,
+            era,
+            directory,
+            channel,
+            bg_processes,
+            data_process,
+            friend_directory=None,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(QCDEstimation_ABCD_TT_ISO2, self).__init__(
             name="QCD",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -151,10 +161,19 @@ class QCDEstimation_ABCD_TT_ISO2(ABCDEstimationMethod):
 
 
 class QCDEstimation_ABCD_TT_ISO2_TRANSPOSED(ABCDEstimationMethod):
-    def __init__(self, era, directory, channel, bg_processes, data_process, friend_directory=None, folder="nominal"):
+    def __init__(self,
+            era,
+            directory,
+            channel,
+            bg_processes,
+            data_process,
+            friend_directory=None,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(QCDEstimation_ABCD_TT_ISO2_TRANSPOSED, self).__init__(
             name="QCD",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -179,10 +198,19 @@ class QCDEstimation_ABCD_TT_ISO2_TRANSPOSED(ABCDEstimationMethod):
 
 
 class QCDEstimation_ABCD_TT_ISO1(ABCDEstimationMethod):
-    def __init__(self, era, directory, channel, bg_processes, data_process, friend_directory=None, folder="nominal"):
+    def __init__(self,
+            era,
+            directory,
+            channel,
+            bg_processes,
+            data_process,
+            friend_directory=None,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(QCDEstimation_ABCD_TT_ISO1, self).__init__(
             name="QCD",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -205,11 +233,19 @@ class QCDEstimation_ABCD_TT_ISO1(ABCDEstimationMethod):
             ]
         )
 
+
 class VVEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self,
+            era,
+            directory,
+            channel,
+            friend_directory=None,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(VVEstimation, self).__init__(
             name="VV",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -229,11 +265,11 @@ class VVEstimation(EstimationMethod):
             Weight("idWeight_1*idWeight_2","idweight"),
             Weight("isoWeight_1*isoWeight_2","isoweight"),
             Weight("trackWeight_1*trackWeight_2","trackweight"),
-            get_triggerweight_for_channel(self.channel.name),
-            #get_singlelepton_triggerweight_for_channel(self.channel.name),
+            self.get_triggerweight_for_channel(self.channel.name),
+            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
-            get_tauByIsoIdWeight_for_channel(self.channel.name),
-            get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
             Weight("(1.0+0.56*(abs(crossSectionPerEventWeight-75.769996)<0.00001))", "VV_NNLO_reweight"),
 
             # Data related scale-factors
@@ -270,10 +306,17 @@ class VVEstimation(EstimationMethod):
         return self.artus_file_names(files)
 
 class VVLEstimation(VVEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self,
+            era,
+            directory,
+            channel,
+            friend_directory=None,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(VVEstimation, self).__init__(
             name="VVL",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -296,10 +339,17 @@ class VVLEstimation(VVEstimation):
         return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "vv_emb_and_ff_veto"))
 
 class VVTEstimation(VVEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self,
+            era,
+            directory,
+            channel,
+            friend_directory=None,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(VVEstimation, self).__init__(
             name="VVT",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -318,10 +368,17 @@ class VVTEstimation(VVEstimation):
         return Cuts(Cut(tt_cut, "vvt_cut"))
 
 class VVJEstimation(VVEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self,
+            era,
+            directory,
+            channel,
+            friend_directory=None,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(VVEstimation, self).__init__(
             name="VVJ",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -339,10 +396,11 @@ class VVJEstimation(VVEstimation):
         return Cuts(Cut(ct, "vv_fakes"))
 
 class EWKZEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(EWKZEstimation, self).__init__(
             name="EWKZ",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -362,11 +420,11 @@ class EWKZEstimation(EstimationMethod):
             Weight("idWeight_1*idWeight_2","idweight"),
             Weight("isoWeight_1*isoWeight_2","isoweight"),
             Weight("trackWeight_1*trackWeight_2","trackweight"),
-            get_triggerweight_for_channel(self.channel.name),
-            #get_singlelepton_triggerweight_for_channel(self.channel.name),
+            self.get_triggerweight_for_channel(self.channel.name),
+            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
-            get_tauByIsoIdWeight_for_channel(self.channel.name),
-            get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -383,10 +441,11 @@ class EWKZEstimation(EstimationMethod):
         return self.artus_file_names(files)
 
 class DYJetsToLLEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(DYJetsToLLEstimation, self).__init__(
             name="DYJetsToLL",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -408,11 +467,11 @@ class DYJetsToLLEstimation(EstimationMethod):
             Weight("idWeight_1*idWeight_2","idweight"),
             Weight("isoWeight_1*isoWeight_2","isoweight"),
             Weight("trackWeight_1*trackWeight_2","trackweight"),
-            get_triggerweight_for_channel(self.channel._name),
-            #get_singlelepton_triggerweight_for_channel(self.channel.name),
+            self.get_triggerweight_for_channel(self.channel._name),
+            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
-            get_tauByIsoIdWeight_for_channel(self.channel.name),
-            get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
             Weight("zPtReweightWeight", "zPtReweightWeight"),
 
             # Data related scale-factors
@@ -474,10 +533,11 @@ class DYJetsToLLEstimation(EstimationMethod):
 
 
 class ZTTEstimation(DYJetsToLLEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(DYJetsToLLEstimation, self).__init__(
             name="ZTT",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -496,10 +556,11 @@ class ZTTEstimation(DYJetsToLLEstimation):
         return Cuts(Cut(tt_cut, "ztt_cut"))
 
 class ZJEstimation(DYJetsToLLEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(DYJetsToLLEstimation, self).__init__(
             name="ZJ",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -518,11 +579,12 @@ class ZJEstimation(DYJetsToLLEstimation):
 
 
 class ZLEstimation(DYJetsToLLEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         print '-->ZLEstimation:',
         super(DYJetsToLLEstimation, self).__init__(
             name="ZL",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -555,10 +617,11 @@ class ZLEstimation(DYJetsToLLEstimation):
 
 
 class ZTTEmbeddedEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(ZTTEmbeddedEstimation, self).__init__(
             name="EMB",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             friend_directory=friend_directory,
             directory=directory,
@@ -646,6 +709,7 @@ class ZttEmbeddingEstimation_ScaledToMC(EstimationMethod):
         super(ZttEmbeddingEstimation_ScaledToMC, self).__init__(
             name="Ztt",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -717,10 +781,11 @@ class ZttEmbeddingEstimation_ScaledToMC(EstimationMethod):
 
 
 class WEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(WEstimation, self).__init__(
             name="W",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -741,11 +806,11 @@ class WEstimation(EstimationMethod):
             Weight("idWeight_1*idWeight_2","idweight"),
             Weight("isoWeight_1*isoWeight_2","isoweight"),
             Weight("trackWeight_1*trackWeight_2","trackweight"),
-            get_triggerweight_for_channel(self.channel._name),
-            #get_singlelepton_triggerweight_for_channel(self.channel.name),
+            self.get_triggerweight_for_channel(self.channel._name),
+            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
-            get_tauByIsoIdWeight_for_channel(self.channel.name),
-            get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -771,10 +836,11 @@ class WEstimation(EstimationMethod):
 
 
 class TTEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(TTEstimation, self).__init__(
             name="TT",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -796,11 +862,11 @@ class TTEstimation(EstimationMethod):
             Weight("isoWeight_1*isoWeight_2","isoweight"),
             Weight("trackWeight_1*trackWeight_2","trackweight"),
             Weight("topPtReweightWeight", "topPtReweightWeight"),
-            get_triggerweight_for_channel(self.channel._name),
-            #get_singlelepton_triggerweight_for_channel(self.channel.name),
+            self.get_triggerweight_for_channel(self.channel._name),
+            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
-            get_tauByIsoIdWeight_for_channel(self.channel.name),
-            get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -818,10 +884,11 @@ class TTEstimation(EstimationMethod):
         return self.artus_file_names(files)
 
 class TTLEstimation(TTEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(TTEstimation, self).__init__(
             name="TTL",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -845,10 +912,11 @@ class TTLEstimation(TTEstimation):
 
 
 class TTTEstimation(TTEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(TTEstimation, self).__init__(
             name="TTT",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -867,10 +935,11 @@ class TTTEstimation(TTEstimation):
         return Cuts(Cut(tt_cut, "ttt_cut"))
 
 class TTJEstimation(TTEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(TTEstimation, self).__init__(
             name="TTJ",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -889,10 +958,11 @@ class TTJEstimation(TTEstimation):
 
 
 class HTTEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="HTT",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -912,11 +982,11 @@ class HTTEstimation(EstimationMethod):
             Weight("idWeight_1*idWeight_2","idweight"),
             Weight("isoWeight_1*isoWeight_2","isoweight"),
             Weight("trackWeight_1*trackWeight_2","trackweight"),
-            get_triggerweight_for_channel(self.channel._name),
-            #get_singlelepton_triggerweight_for_channel(self.channel.name),
+            self.get_triggerweight_for_channel(self.channel._name),
+            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
-            get_tauByIsoIdWeight_for_channel(self.channel.name),
-            get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -1012,10 +1082,11 @@ class ZHEstimation(HTTEstimation):
 
 
 class ggHEstimation(HTTEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1046,10 +1117,11 @@ class ggHEstimation(HTTEstimation):
 
 
 class qqHEstimation(HTTEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="qqH",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1077,10 +1149,11 @@ class qqHEstimation(HTTEstimation):
 
 
 class ggHEstimation_VBFTOPO_JET3VETO(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_VBFTOPO_JET3VETO",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1092,10 +1165,11 @@ class ggHEstimation_VBFTOPO_JET3VETO(ggHEstimation):
 
 
 class ggHEstimation_VBFTOPO_JET3(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_VBFTOPO_JET3",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1107,10 +1181,11 @@ class ggHEstimation_VBFTOPO_JET3(ggHEstimation):
 
 
 class ggHEstimation_0J(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_0J",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1122,10 +1197,11 @@ class ggHEstimation_0J(ggHEstimation):
 
 
 class ggHEstimation_1J_PTH_0_60(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_1J_PTH_0_60",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1137,10 +1213,11 @@ class ggHEstimation_1J_PTH_0_60(ggHEstimation):
 
 
 class ggHEstimation_1J_PTH_60_120(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_1J_PTH_60_120",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1152,10 +1229,11 @@ class ggHEstimation_1J_PTH_60_120(ggHEstimation):
 
 
 class ggHEstimation_1J_PTH_120_200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_1J_PTH_120_200",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1167,10 +1245,11 @@ class ggHEstimation_1J_PTH_120_200(ggHEstimation):
 
 
 class ggHEstimation_1J_PTH_GT200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_1J_PTH_GT200",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1182,10 +1261,11 @@ class ggHEstimation_1J_PTH_GT200(ggHEstimation):
 
 
 class ggHEstimation_GE2J_PTH_0_60(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_GE2J_PTH_0_60",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1197,10 +1277,11 @@ class ggHEstimation_GE2J_PTH_0_60(ggHEstimation):
 
 
 class ggHEstimation_GE2J_PTH_60_120(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_GE2J_PTH_60_120",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1212,10 +1293,11 @@ class ggHEstimation_GE2J_PTH_60_120(ggHEstimation):
 
 
 class ggHEstimation_GE2J_PTH_120_200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_GE2J_PTH_120_200",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1227,10 +1309,11 @@ class ggHEstimation_GE2J_PTH_120_200(ggHEstimation):
 
 
 class ggHEstimation_GE2J_PTH_GT200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="ggH_GE2J_PTH_GT200",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1242,10 +1325,11 @@ class ggHEstimation_GE2J_PTH_GT200(ggHEstimation):
 
 
 class qqHEstimation_VBFTOPO_JET3VETO(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="qqH_VBFTOPO_JET3VETO",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1257,10 +1341,11 @@ class qqHEstimation_VBFTOPO_JET3VETO(qqHEstimation):
 
 
 class qqHEstimation_VBFTOPO_JET3(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="qqH_VBFTOPO_JET3",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1272,10 +1357,11 @@ class qqHEstimation_VBFTOPO_JET3(qqHEstimation):
 
 
 class qqHEstimation_VH2JET(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="qqH_VH2JET",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1287,10 +1373,11 @@ class qqHEstimation_VH2JET(qqHEstimation):
 
 
 class qqHEstimation_REST(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="qqH_REST",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1302,10 +1389,11 @@ class qqHEstimation_REST(qqHEstimation):
 
 
 class qqHEstimation_PTJET1_GT200(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(HTTEstimation, self).__init__(
             name="qqH_PTJET1_GT200",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1317,10 +1405,11 @@ class qqHEstimation_PTJET1_GT200(qqHEstimation):
 
 
 class SUSYggHEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, mass, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, mass, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(SUSYggHEstimation, self).__init__(
             name="_".join(["ggH",str(mass)]),
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -1341,11 +1430,11 @@ class SUSYggHEstimation(EstimationMethod):
             Weight("idWeight_1*idWeight_2","idweight"),
             Weight("isoWeight_1*isoWeight_2","isoweight"),
             Weight("trackWeight_1*trackWeight_2","trackweight"),
-            get_triggerweight_for_channel(self.channel._name),
-            #get_singlelepton_triggerweight_for_channel(self.channel.name),
+            self.get_triggerweight_for_channel(self.channel._name),
+            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
-            get_tauByIsoIdWeight_for_channel(self.channel.name),
-            get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -1361,10 +1450,11 @@ class SUSYggHEstimation(EstimationMethod):
         return self.artus_file_names(files)
 
 class SUSYbbHEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, mass, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, mass, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(SUSYbbHEstimation, self).__init__(
             name="_".join(["bbH",str(mass)]),
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             channel=channel,
@@ -1385,11 +1475,11 @@ class SUSYbbHEstimation(EstimationMethod):
             Weight("idWeight_1*idWeight_2","idweight"),
             Weight("isoWeight_1*isoWeight_2","isoweight"),
             Weight("trackWeight_1*trackWeight_2","trackweight"),
-            get_triggerweight_for_channel(self.channel._name),
-            #get_singlelepton_triggerweight_for_channel(self.channel.name),
+            self.get_triggerweight_for_channel(self.channel._name),
+            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
-            get_tauByIsoIdWeight_for_channel(self.channel.name),
-            get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -1471,10 +1561,11 @@ class ttHEstimation(HTTEstimation):
         return self.artus_file_names(files)
 
 class FakeEstimationLT(DataEstimation2016):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(DataEstimation2016, self).__init__(
             name="fakes",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1574,10 +1665,11 @@ class NewFakeEstimationLT(SumUpEstimationMethod):
 
 
 class FakeEstimationTT(DataEstimation2016):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", get_triggerweight_for_channel=get_triggerweight_for_channel,):
         super(DataEstimation2016, self).__init__(
             name="fakes",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1615,6 +1707,7 @@ class NewFakeEstimationLT(NewFakeEstimationMethodLT):
         super(NewFakeEstimationLT, self).__init__(
             name="jetFakes",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
@@ -1639,6 +1732,7 @@ class NewFakeEstimationTT(NewFakeEstimationMethodTT):
         super(NewFakeEstimationTT, self).__init__(
             name="jetFakes",
             folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
