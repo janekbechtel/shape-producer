@@ -147,5 +147,29 @@ class Run2017ReReco31Mar(Era):
         return files
 
 
+class Run2018(Era):
+    def __init__(self, database_path):
+        super(Run2018, self).__init__("Run2018", 6.94 * 1000.0, database_path)
+
+    def data_files(self, channel):
+        query = {
+            "data": True,
+            "campaign": "Run2018C",
+            "scenario": "17Sep2018v1"
+        }
+        if channel.name == "mt":
+            query["process"] = "SingleMuon"
+        elif channel.name == "et":
+            query["process"] = "EGamma"
+        elif channel.name == "tt":
+            query["process"] = "Tau"
+        elif channel.name == "em":
+            query["process"] = "MuonEG"
+        else:
+            logger.critical("Channel %s is not implemented.", channel.name)
+        files = self.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return files
+
 # Redirect Run2017 to most recent setup
 Run2017 = Run2017ReReco31Mar
