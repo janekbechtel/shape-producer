@@ -56,6 +56,7 @@ def get_triggerweight_for_channel(channel):
 
     return weight
 
+
 def get_singlelepton_triggerweight_for_channel(channel):
     weight = Weight("1.0","triggerweight")
 
@@ -72,6 +73,7 @@ def get_singlelepton_triggerweight_for_channel(channel):
 
     return weight
 
+
 def get_tauByIsoIdWeight_for_channel(channel):
     # WPs: VLoose 0.88, Loose 0.89, Medium 0.89, Tight 0.89, VTight 0.86, VVTight 0.84. Currently used: SR mt,et Tight; SR tt Tight, anti-iso CR tt Medium; VVLoose is used for SF estimation and therefore not listed here.
     # Source: https://indico.cern.ch/event/738043/contributions/3048471/attachments/1674773/2691664/TauId_26062018.pdf
@@ -82,14 +84,17 @@ def get_tauByIsoIdWeight_for_channel(channel):
         weight = Weight("((gen_match_1 == 5)*0.89 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.89 + (gen_match_2 != 5))", "taubyIsoIdWeight")
     return weight
 
+
 def get_eleHLTZvtxWeight_for_channel(channel):
     weight = Weight("1.0","eleHLTZvtxWeight")
     if "et" in channel:
         weight = Weight("(trg_singleelectron_35 || trg_singleelectron_32 || trg_singleelectron_27 || trg_crossele_ele24tau30)*0.991 + (!(trg_singleelectron_35 || trg_singleelectron_32 || trg_singleelectron_27 || trg_crossele_ele24tau30))*1.0", "eleHLTZvtxWeight")
     return weight
 
+
 class DataEstimation(DataEstimation2016):
     pass
+
 
 class WEstimationWithQCD(WEstimationWithQCD2016):
     pass
@@ -660,7 +665,6 @@ class ZLEstimation(DYJetsToLLEstimation):
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        print '-->ZLEstimation:',
         super(DYJetsToLLEstimation, self).__init__(
             name="ZL",
             folder=folder,
@@ -1986,13 +1990,17 @@ class FakeEstimationTT(DataEstimation2016):
 
 class NewFakeEstimationLT(NewFakeEstimationMethodLT):
     def __init__(self,
-                 era,
-                 directory,
-                 channel,
-                 nofake_processes,
-                 data_process,
-                 friend_directory=None,
-                 folder="nominal",):
+            era,
+            directory,
+            channel,
+            nofake_processes,
+            data_process,
+            friend_directory=None,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
         super(NewFakeEstimationLT, self).__init__(
             name="jetFakes",
             folder=folder,
@@ -2014,13 +2022,17 @@ class NewFakeEstimationLT(NewFakeEstimationMethodLT):
 
 class NewFakeEstimationTT(NewFakeEstimationMethodTT):
     def __init__(self,
-                 era,
-                 directory,
-                 channel,
-                 nofake_processes,
-                 data_process,
-                 friend_directory=None,
-                 folder="nominal",):
+            era,
+            directory,
+            channel,
+            nofake_processes,
+            data_process,
+            friend_directory=None,
+            folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
         super(NewFakeEstimationTT, self).__init__(
             name="jetFakes",
             folder=folder,
