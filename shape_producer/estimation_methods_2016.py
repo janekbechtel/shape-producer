@@ -226,11 +226,19 @@ class HTTEstimation(EstimationMethod):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_weights(self):
-        return Weights(
-            Weight(
-                "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-                "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
-            self.era.lumi_weight)
+        if self.channel.name=="em":
+            return Weights(
+                Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+                Weight("numberGeneratedEventsWeight", "numberGeneratedEventsWeight"),
+                Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
+                Weight("puweight", "puweight"),
+                self.era.lumi_weight)
+        else:
+            return Weights(
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
+                self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -256,13 +264,23 @@ class ggHEstimation(HTTEstimation):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_weights(self):
-        return Weights(
-            Weight(
-                "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-                "hadronic_tau_sf"), Weight("ggh_NNLO_weight", "gghNNLO"),
-            Weight("8.8384e-8/numberGeneratedEventsWeight", "ggh_stitching_weight"),
-            Weight("1.01", "bbh_inclusion_weight"),
-            Weight("eventWeight", "eventWeight"), self.era.lumi_weight)
+        if self.channel.name=="em":
+            return Weights(
+                Weight("ggh_NNLO_weight", "gghNNLO"),
+                Weight("numberGeneratedEventsWeight", "numberGeneratedEventsWeight"),
+                Weight("8.8384e-8/numberGeneratedEventsWeight", "ggh_stitching_weight"),
+                Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+                Weight("1.01", "bbh_inclusion_weight"),
+                Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
+                Weight("puweight", "puweight"), self.era.lumi_weight)
+        else:
+            return Weights(
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"), Weight("ggh_NNLO_weight", "gghNNLO"),
+                Weight("8.8384e-8/numberGeneratedEventsWeight", "ggh_stitching_weight"),
+                Weight("1.01", "bbh_inclusion_weight"),
+                Weight("eventWeight", "eventWeight"), self.era.lumi_weight)
 
     def get_cuts(self):
         return Cuts(Cut("(htxs_stage1cat>=101)&&(htxs_stage1cat<=111)", "htxs_match"))
@@ -709,15 +727,29 @@ class DYJetsToLLEstimation(EstimationMethod):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_weights(self):
-        return Weights(
-            Weight("eventWeight", "eventWeight"),
-            Weight("zPtReweightWeight", "zPtReweightWeight"),
-            Weight(
-                "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-                "hadronic_tau_sf"),
-            Weight(
-                "((((genbosonmass >= 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass >= 50.0 && genbosonmass < 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight))/(numberGeneratedEventsWeight*crossSectionPerEventWeight*sampleStitchingWeight))",
-                "z_stitching_weight"), self.era.lumi_weight)
+        if self.channel.name=="em":
+            return Weights(
+                Weight("numberGeneratedEventsWeight", "numberGeneratedEventsWeight"),
+                Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+                Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
+                Weight("puweight", "puweight"),
+                Weight("zPtReweightWeight", "zPtReweightWeight"),
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"),
+                Weight(
+                    "((((genbosonmass >= 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass >= 50.0 && genbosonmass < 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight))/(numberGeneratedEventsWeight*crossSectionPerEventWeight*sampleStitchingWeight))",
+                    "z_stitching_weight"), self.era.lumi_weight)
+        # else:
+        #     return Weights(
+        #         Weight("eventWeight", "eventWeight"),
+        #         Weight("zPtReweightWeight", "zPtReweightWeight"),
+        #         Weight(
+        #             "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+        #             "hadronic_tau_sf"),
+        #         Weight(
+        #             "((((genbosonmass >= 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass >= 50.0 && genbosonmass < 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight))/(numberGeneratedEventsWeight*crossSectionPerEventWeight*sampleStitchingWeight))",
+        #             "z_stitching_weight"), self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -968,9 +1000,12 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                 Weight("embeddedDecayModeWeight", "decayMode_SF"))
         elif self.channel.name == "em":
             return Weights(
-                Weight("generatorWeight", "simulation_sf"),
-                Weight("muonEffTrgWeight", "scale_factor"),
-                # no trigger sf yet
+                Weight("generatorWeight*(generatorWeight<=1.0)", "simulation_sf"),
+                Weight("(gen_match_1==3 && gen_match_2==4)*muonEffTrgWeight*muonEffIDWeight_1*muonEffIDWeight_2", "scale_factor"),
+                Weight(self.embedding_stitchingweight(),
+                       "2016 stitching weight"),
+                Weight("(trigger_23_data_Weight_2*trigger_12_data_Weight_1*(trg_muonelectron_mu23ele12==1)+trigger_23_data_Weight_1*trigger_8_data_Weight_2*(trg_muonelectron_mu8ele23==1) - trigger_23_data_Weight_2*trigger_23_data_Weight_1*(trg_muonelectron_mu8ele23==1 && trg_muonelectron_mu23ele12==1))/(trigger_23_embed_Weight_2*trigger_12_embed_Weight_1*(trg_muonelectron_mu23ele12==1)+trigger_23_embed_Weight_1*trigger_8_embed_Weight_2*(trg_muonelectron_mu8ele23==1) - trigger_23_embed_Weight_2*trigger_23_embed_Weight_1*(trg_muonelectron_mu8ele23==1 && trg_muonelectron_mu23ele12==1))",
+                       "trigger_lepton_sf"),
                 Weight("idWeight_1*isoWeight_1*idWeight_2*isoWeight_2",
                        "leptopn_sf"))
 
@@ -987,6 +1022,7 @@ class ZTTEmbeddedEstimation(EstimationMethod):
             query["scenario"] = ".*(v2|v3)"
         elif self.channel.name == "em":
             query["campaign"] = "ElMuFinalState"
+            query["scenario"] = ".*(v2|v4)"
         files = self.era.datasets_helper.get_nicks_with_query(query)
         log_query(self.name, query, files)
         return self.artus_file_names(files)
@@ -1004,13 +1040,25 @@ class EWKWpEstimation(EstimationMethod):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_weights(self):
-        return Weights(
-            Weight(
-                "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-                "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
-            Weight(
-                "(5.190747826298e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
-                "EWKWp_stitching_weight"), self.era.lumi_weight)
+        if self.channel.name=="em":
+            return Weights(
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"), Weight("numberGeneratedEventsWeight", "numberGeneratedEventsWeight"),
+                Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+                Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
+                Weight("puweight", "puweight"),
+                Weight(
+                    "(5.190747826298e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
+                    "EWKWp_stitching_weight"), self.era.lumi_weight)
+        else:
+            return Weights(
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
+                Weight(
+                    "(5.190747826298e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
+                    "EWKWp_stitching_weight"), self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -1037,13 +1085,25 @@ class EWKWmEstimation(EstimationMethod):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_weights(self):
-        return Weights(
-            Weight(
-                "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-                "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
-            Weight(
-                "(4.200367267668e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
-                "EWKW_stitching_weight"), self.era.lumi_weight)
+        if self.channel.name=="em":
+            return Weights(
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"), Weight("numberGeneratedEventsWeight", "numberGeneratedEventsWeight"),
+                Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+                Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
+                Weight("puweight", "puweight"),
+                Weight(
+                    "(5.190747826298e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
+                    "EWKWp_stitching_weight"), self.era.lumi_weight)
+        else:
+            return Weights(
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
+                Weight(
+                    "(4.200367267668e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
+                    "EWKW_stitching_weight"), self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -1070,14 +1130,27 @@ class WEstimationRaw(EstimationMethod):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_weights(self):
-        return Weights(
-            Weight(
-                "(((npartons == 0 || npartons >= 5)*7.09390278348407e-4) + ((npartons == 1)*1.90063898596475e-4) + ((npartons == 2)*5.8529964471165e-5) + ((npartons == 3)*1.9206444928444e-5) + ((npartons == 4)*1.923548021385e-5))/(numberGeneratedEventsWeight*crossSectionPerEventWeight*sampleStitchingWeight)",
-                "wj_stitching_weight"),
-            Weight(
-                "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-                "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
-            self.era.lumi_weight)
+        if self.channel.name=="em":
+                return Weights(
+                    Weight(
+                        "(((npartons == 0 || npartons >= 5)*7.09390278348407e-4) + ((npartons == 1)*1.90063898596475e-4) + ((npartons == 2)*5.8529964471165e-5) + ((npartons == 3)*1.9206444928444e-5) + ((npartons == 4)*1.923548021385e-5))/(numberGeneratedEventsWeight*crossSectionPerEventWeight*sampleStitchingWeight)",
+                        "wj_stitching_weight"),
+                    Weight(
+                        "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                        "hadronic_tau_sf"), Weight("numberGeneratedEventsWeight", "numberGeneratedEventsWeight"),
+                    Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+                    Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
+                    Weight("puweight", "puweight"),
+                    self.era.lumi_weight)
+        else:
+            return Weights(
+                Weight(
+                    "(((npartons == 0 || npartons >= 5)*7.09390278348407e-4) + ((npartons == 1)*1.90063898596475e-4) + ((npartons == 2)*5.8529964471165e-5) + ((npartons == 3)*1.9206444928444e-5) + ((npartons == 4)*1.923548021385e-5))/(numberGeneratedEventsWeight*crossSectionPerEventWeight*sampleStitchingWeight)",
+                    "wj_stitching_weight"),
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
+                self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -1167,12 +1240,23 @@ class TTEstimation(EstimationMethod):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_weights(self):
-        return Weights(
-            Weight("topPtReweightWeight", "topPtReweightWeight"),
-            Weight("eventWeight", "eventWeight"),
-            Weight(
-                "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-                "hadronic_tau_sf"), self.era.lumi_weight)
+        if self.channel.name=="em":
+            return Weights(
+                Weight("0.989*topPtReweightWeightRun1", "topPtReweightWeight"),
+                Weight("numberGeneratedEventsWeight", "numberGeneratedEventsWeight"),
+                Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+                Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
+                Weight("puweight", "puweight"),
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"), self.era.lumi_weight)
+        else:
+            return Weights(
+                Weight("topPtReweightWeight", "topPtReweightWeight"),
+                Weight("eventWeight", "eventWeight"),
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"), self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -1269,11 +1353,19 @@ class VVEstimation(EstimationMethod):
             mc_campaign="RunIISummer16MiniAODv2")
 
     def get_weights(self):
-        return Weights(
-            Weight(
+        if self.channel.name=="em":
+            return Weights(
+                Weight("numberGeneratedEventsWeight", "numberGeneratedEventsWeight"),
+                Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+                Weight("triggerWeight_1*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
+                Weight("puweight", "puweight"),
+                self.era.lumi_weight)
+        else:
+            return Weights(
+                Weight(
                 "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
                 "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
-            self.era.lumi_weight)
+                self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -1391,7 +1483,7 @@ class VVJEstimation(VVEstimation):
         return Cuts(Cut(ct, "vv_fakes"))
 
 
-class QCDEstimationET(SStoOSEstimationMethod):
+class QCDEstimation_SStoOS_MTETEM(SStoOSEstimationMethod):
     def __init__(self,
                  era,
                  directory,
@@ -1399,21 +1491,20 @@ class QCDEstimationET(SStoOSEstimationMethod):
                  bg_processes,
                  data_process,
                  friend_directory=None,
-                 extrapolation_factor=1.0):
-        super(QCDEstimationET, self).__init__(
+                 extrapolation_factor=1.0,
+                 qcd_weight=Weight("1.0","qcd_Weight")):
+        super(QCDEstimation_SStoOS_MTETEM, self).__init__(
             name="QCD",
             folder="nominal",
             era=era,
             directory=directory,
-            friend_directory=friend_directory,
             channel=channel,
             bg_processes=bg_processes,
+            friend_directory=friend_directory,
             data_process=data_process,
-            extrapolation_factor=extrapolation_factor)
-
-
-class QCDEstimationMT(QCDEstimationET):
-    pass
+            extrapolation_factor=extrapolation_factor,
+            qcd_weight = qcd_weight
+            )
 
 
 class QCDEstimationTT(ABCDEstimationMethod):

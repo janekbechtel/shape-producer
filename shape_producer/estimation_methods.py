@@ -133,7 +133,8 @@ class SStoOSEstimationMethod(EstimationMethod):
                  bg_processes,
                  data_process,
                  friend_directory=None,
-                 extrapolation_factor=1.0):
+                 extrapolation_factor=1.0,
+                 qcd_weight = Weight("1.0","qcd_weight")):
         super(SStoOSEstimationMethod, self).__init__(
             name=name,
             folder=folder,
@@ -145,13 +146,13 @@ class SStoOSEstimationMethod(EstimationMethod):
         self._bg_processes = [copy.deepcopy(p) for p in bg_processes]
         self._data_process = copy.deepcopy(data_process)
         self._extrapolation_factor = extrapolation_factor
+        self._qcd_weight = qcd_weight
 
     def create_root_objects(self, systematic):
         ss_category = copy.deepcopy(systematic.category)
         ss_category.cuts.get("os").name = "ss"
         ss_category.cuts.get("ss").invert()
         ss_category.name = ss_category._name + "_ss"
-
         root_objects = []
         systematic._qcd_systematics = []
         for process in [self._data_process] + self._bg_processes:
@@ -161,7 +162,8 @@ class SStoOSEstimationMethod(EstimationMethod):
                 analysis=systematic.analysis,
                 era=self.era,
                 variation=systematic.variation,
-                mass=125)
+                mass=125,
+                additionalWeights=Weights(self._qcd_weight))
             systematic._qcd_systematics.append(s)
             s.create_root_objects()
             root_objects += s.root_objects
