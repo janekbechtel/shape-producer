@@ -449,18 +449,19 @@ class DYJetsToLLEstimation(EstimationMethod):
             "campaign": self._mc_campaign,
             "generator": "madgraph\-pythia8"
         }
-        # queryEWKZ = {
-        #     "process": "^EWKZ",
-        #     "data": False,
-        #     "campaign": self._mc_campaign,
-        #     "generator": "madgraph\-pythia8",
-        # }
+        queryEWKZ = {
+            "process": "EWKZ2Jets_ZToLL_M50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8",
+        }
         files = self.era.datasets_helper.get_nicks_with_query(queryM50_inclusive)
         files += self.era.datasets_helper.get_nicks_with_query(queryM50_1jet)
         files += self.era.datasets_helper.get_nicks_with_query(queryM50_2jet)
         files += self.era.datasets_helper.get_nicks_with_query(queryM50_3jet)
         files += self.era.datasets_helper.get_nicks_with_query(queryM50_4jet)
         files += self.era.datasets_helper.get_nicks_with_query(queryM10)
+        files += self.era.datasets_helper.get_nicks_with_query(queryEWKZ)
         log_query(self.name, queryM50_inclusive, files)
         return self.artus_file_names(files)
 

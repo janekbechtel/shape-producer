@@ -149,13 +149,12 @@ class Run2017ReReco31Mar(Era):
 
 class Run2018(Era):
     def __init__(self, database_path):
-        super(Run2018, self).__init__("Run2018", 6.94 * 1000.0, database_path)
+        super(Run2018, self).__init__("Run2018", 59.7 * 1000.0, database_path)
 
     def data_files(self, channel):
         query = {
             "data": True,
-            "campaign": "Run2018C",
-            "scenario": "17Sep2018v1"
+            "campaign": "Run2018(A|B|C|D)"
         }
         if channel.name == "mt":
             query["process"] = "SingleMuon"
