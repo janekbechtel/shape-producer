@@ -117,7 +117,8 @@ class QCDEstimation_SStoOS_MTETEM(SStoOSEstimationMethod):
             bg_processes=bg_processes,
             friend_directory=friend_directory,
             data_process=data_process,
-            extrapolation_factor=extrapolation_factor)
+            extrapolation_factor=extrapolation_factor,
+            qcd_weight=qcd_weight)
 
 
 class QCDEstimation_ABCD_TT_ISO2(ABCDEstimationMethod):
