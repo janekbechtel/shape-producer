@@ -54,6 +54,11 @@ def get_triggerweight_for_channel(channel):
         DiTau = "("+DiTauData+")/("+DiTauMC+")"
         weight = Weight(DiTau,"triggerweight")
 
+    elif "em" in channel:
+        weight = Weight(
+            "(trigger_23_data_Weight_2*trigger_12_data_Weight_1*(trg_muonelectron_mu23ele12==1)+trigger_23_data_Weight_1*trigger_8_data_Weight_2*(trg_muonelectron_mu8ele23==1) - trigger_23_data_Weight_2*trigger_23_data_Weight_1*(trg_muonelectron_mu8ele23==1 && trg_muonelectron_mu23ele12==1))/(trigger_23_mc_Weight_2*trigger_12_mc_Weight_1*(trg_muonelectron_mu23ele12==1)+trigger_23_mc_Weight_1*trigger_8_mc_Weight_2*(trg_muonelectron_mu8ele23==1) - trigger_23_mc_Weight_2*trigger_23_mc_Weight_1*(trg_muonelectron_mu8ele23==1 && trg_muonelectron_mu23ele12==1))",
+            "trigger_lepton_sf")
+
     return weight
 
 def get_singlelepton_triggerweight_for_channel(channel):
@@ -107,7 +112,8 @@ class QCDEstimation_SStoOS_MTETEM(SStoOSEstimationMethod):
                  bg_processes,
                  data_process,
                  friend_directory=None,
-                 extrapolation_factor=1.0):
+                 extrapolation_factor=1.0,
+                 qcd_weight=Weight("1.0","qcd_Weight")):
         super(QCDEstimation_SStoOS_MTETEM, self).__init__(
             name="QCD",
             folder="nominal",
@@ -117,7 +123,9 @@ class QCDEstimation_SStoOS_MTETEM(SStoOSEstimationMethod):
             bg_processes=bg_processes,
             friend_directory=friend_directory,
             data_process=data_process,
-            extrapolation_factor=extrapolation_factor)
+            extrapolation_factor=extrapolation_factor,
+            qcd_weight = qcd_weight
+            )
 
 
 class QCDEstimation_ABCD_TT_ISO2(ABCDEstimationMethod):
@@ -596,12 +604,12 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                 Weight("embeddedDecayModeWeight", "decayMode_SF"))
         elif self.channel.name == "em":
             return Weights(
-                Weight("generatorWeight", "simulation_sf"),
+                Weight("1.043*generatorWeight", "simulation_sf"), # 1.043 for event loss in ntuple production, to be removed with new ntuples
+                Weight("(gen_match_1==3 && gen_match_2==4)", "emb_gen_match"),
                 Weight("muonEffTrgWeight*muonEffIDWeight_1*muonEffIDWeight_2", "scale_factor"),
-                Weight("idWeight_1*isoWeight_1*idWeight_2*isoWeight_2",
+                Weight("0.99*trackWeight_1*trackWeight_2*idWeight_1*isoWeight_1*idWeight_2*looseIsoWeight_2",
                        "idiso_lepton_sf"),
-                Weight("gen_match_1==3 && gen_match_2==4","emb_veto"),
-                Weight("(trigger_23_data_Weight_2/trigger_23_embed_Weight_2)*(pt_2>24)+(trigger_8_data_Weight_2/trigger_8_embed_Weight_2)*(pt_2<24)+(trigger_12_data_Weight_1/trigger_12_embed_Weight_1)*(pt_1<24)+(trigger_23_data_Weight_1/trigger_23_embed_Weight_1)*(pt_1<24)",
+                Weight("(trigger_23_data_Weight_2*trigger_12_data_Weight_1*(trg_muonelectron_mu23ele12==1)+trigger_23_data_Weight_1*trigger_8_data_Weight_2*(trg_muonelectron_mu8ele23==1) - trigger_23_data_Weight_2*trigger_23_data_Weight_1*(trg_muonelectron_mu8ele23==1 && trg_muonelectron_mu23ele12==1))/(trigger_23_embed_Weight_2*trigger_12_embed_Weight_1*(trg_muonelectron_mu23ele12==1)+trigger_23_embed_Weight_1*trigger_8_embed_Weight_2*(trg_muonelectron_mu8ele23==1) - trigger_23_embed_Weight_2*trigger_23_embed_Weight_1*(trg_muonelectron_mu8ele23==1 && trg_muonelectron_mu23ele12==1))",
                        "trigger_lepton_sf"))
 
 
