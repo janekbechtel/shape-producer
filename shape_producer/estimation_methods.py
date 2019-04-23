@@ -158,7 +158,11 @@ class SStoOSEstimationMethod(EstimationMethod):
                  data_process,
                  friend_directory=None,
                  extrapolation_factor=1.0,
-                 qcd_weight = Weight("1.0","qcd_weight")):
+                 qcd_weight = Weight("1.0","qcd_weight"),
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         super(SStoOSEstimationMethod, self).__init__(
             name=name,
             folder=folder,
@@ -166,7 +170,11 @@ class SStoOSEstimationMethod(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign=None)
+            mc_campaign=None,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,)
         self._bg_processes = [copy.deepcopy(p) for p in bg_processes]
         self._data_process = copy.deepcopy(data_process)
         self._extrapolation_factor = extrapolation_factor
@@ -251,7 +259,11 @@ class ABCDEstimationMethod(EstimationMethod):
             BD_cuts,
             AB_cut_names,
             CD_cuts,
-            friend_directory=None
+            friend_directory=None,
+            get_triggerweight_for_channel=None,
+            get_singlelepton_triggerweight_for_channel=None,
+            get_tauByIsoIdWeight_for_channel=None,
+            get_eleHLTZvtxWeight_for_channel=None,
     ):  #last four arguments correspond to 1. list of names of cuts to be removed in order to include the sideband for the shape derivation 2. list of cuts to be applied to restrict on that sideband and 3.,4. accordingly for the extrapolation factor sideband
         super(ABCDEstimationMethod, self).__init__(
             name=name,
@@ -260,7 +272,11 @@ class ABCDEstimationMethod(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign=None)
+            mc_campaign=None,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,)
         self._bg_processes = [copy.deepcopy(p) for p in bg_processes]
         self._data_process = copy.deepcopy(data_process)
         self._AC_cut_names = AC_cut_names
@@ -382,14 +398,22 @@ class ABCDEstimationMethod(EstimationMethod):
 
 class AddHistogramEstimationMethod(EstimationMethod):
     def __init__(self, name, folder, era, directory, channel, add_processes,
-                 add_weights):
+                 add_weights,
+             get_triggerweight_for_channel=None,
+             get_singlelepton_triggerweight_for_channel=None,
+             get_tauByIsoIdWeight_for_channel=None,
+             get_eleHLTZvtxWeight_for_channel=None,):
         super(AddHistogramEstimationMethod, self).__init__(
             name=name,
             folder=folder,
             era=era,
             directory=directory,
             channel=channel,
-            mc_campaign=None)
+            mc_campaign=None,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,)
         self._add_processes = [copy.deepcopy(p) for p in add_processes]
         self._add_weights = copy.deepcopy(add_weights)
 
@@ -450,13 +474,21 @@ class SumUpEstimationMethod(EstimationMethod):
                  channel,
                  processes,
                  factors=None,
-                 friend_directory=None):
+                 friend_directory=None,
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         super(SumUpEstimationMethod, self).__init__(
             name=name,
             folder=folder,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
             channel=channel,
             mc_campaign=None)
         self._processes = [copy.deepcopy(p) for p in processes]
@@ -536,13 +568,21 @@ class NewFakeEstimationMethodLT(EstimationMethod):
                  data_process,
                  aisoCut,
                  fakeWeightstring,
-                 friend_directory=None):
+                 friend_directory=None,
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         super(NewFakeEstimationMethodLT, self).__init__(
             name=name,
             folder=folder,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
             channel=channel,
             mc_campaign=None)
         self._nofake_processes = [copy.deepcopy(p) for p in nofake_processes]
@@ -631,13 +671,21 @@ class NewFakeEstimationMethodTT(NewFakeEstimationMethodLT):
                  data_process,
                  aisoCut,
                  fakeWeightstring,
-                 friend_directory=None):
+                 friend_directory=None,
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         super(NewFakeEstimationMethodLT, self).__init__(
             name=name,
             folder=folder,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
             channel=channel,
             mc_campaign=None)
         self._nofake_processes = [copy.deepcopy(p) for p in nofake_processes]
