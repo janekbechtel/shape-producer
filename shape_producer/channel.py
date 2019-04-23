@@ -21,13 +21,15 @@ class EMSM2016(Channel):
     def __init__(self):
         self._name = "em"
         self._cuts = Cuts(
+            Cut("flagMETFilter == 1", "METFilter"),
             Cut("extraelec_veto<0.5", "extraelec_veto"),
             Cut("extramuon_veto<0.5", "extramuon_veto"),
+            Cut("dilepton_veto<0.5", "dilepton_veto"),
             Cut("iso_1<0.15", "ele_iso"), Cut("iso_2<0.2", "muon_iso"),
-            Cut("nbtag==0", "bveto"), Cut("diLepMetMt<60.0", "diLepMetMt"),
-            Cut("pZetaMissVis>-35.0", "pzeta"), Cut("q_1*q_2<0", "os"),
-            Cut("(trg_electronmuon==1 && pt_1>26 && pt_2>25)",
-                "trg_electronmuon"))
+            Cut("q_1*q_2<0", "os"),
+            Cut("nbtag==0 && pZetaMissVis>-35 && mTdileptonMET<60","dzeta"),
+            Cut("pt_2>10 && ((pt_1>13 && pt_2>24 && trg_muonelectron_mu23ele12 == 1) || (pt_1>24 && pt_2>10 && trg_muonelectron_mu8ele23 == 1))",
+                "trg_selection"))
 
 
 class EESM(Channel):
@@ -206,7 +208,7 @@ class ETSM2018(Channel):
             Cut("byTightIsolationMVArun2017v2DBoldDMwLT2017_2>0.5", "tau_iso"),
             Cut("iso_1<0.15", "ele_iso"), Cut("q_1*q_2<0", "os"),
             Cut("mt_1<50", "m_t"),
-            Cut("pt_2>30 && pt_1 > 28 && ((trg_singleelectron_35 == 1) || (trg_singleelectron_32 == 1) || (trg_singleelectron_27 == 1))",
+            Cut("pt_2>30 && pt_1 > 33 && ((trg_singleelectron_35 == 1) || (trg_singleelectron_32 == 1))",# || (trg_singleelectron_27 == 1))",
                 "trg_selection"))
 
 class ETSM2016(Channel):
@@ -358,6 +360,7 @@ class EMSM2018(Channel):
             Cut("dilepton_veto<0.5", "dilepton_veto"),
             Cut("iso_1<0.15", "ele_iso"), Cut("iso_2<0.2", "muon_iso"),
             Cut("q_1*q_2<0", "os"),
+            Cut("nbtag==0", "nbtag"),
             Cut("(trg_muonelectron_mu23ele12 == 1 && pt_1>13 && pt_2 > 24) || (trg_muonelectron_mu8ele23 == 1 && pt_1>24 && pt_2>10)",
                 "trg_selection"))
 
