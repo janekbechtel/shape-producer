@@ -17,6 +17,11 @@ class Variable(object):
         else:
             self._expression = expression
 
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return super(type(self), self).__repr__().split(' object at')[0][1:] + '(%s, %s) [addr.: %s]' % (self._name, self._expression, hex(id(self)))
     @property
     def name(self):
         return self._name

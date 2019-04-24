@@ -19,7 +19,11 @@ class EstimationMethod(object):
                  directory,
                  channel,
                  mc_campaign,
-                 friend_directory=None):
+                 friend_directory=None,
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         self._directory = directory
         self._folder = folder
         self._name = name
@@ -29,7 +33,18 @@ class EstimationMethod(object):
         self._friend_directories = [friend_directory] if isinstance(
             friend_directory, str) else friend_directory
 
+        self.get_triggerweight_for_channel = get_triggerweight_for_channel
+        self.get_singlelepton_triggerweight_for_channel = get_singlelepton_triggerweight_for_channel
+        self.get_tauByIsoIdWeight_for_channel = get_tauByIsoIdWeight_for_channel
+        self.get_eleHLTZvtxWeight_for_channel = get_eleHLTZvtxWeight_for_channel
+        for i in ['get_triggerweight_for_channel', 'get_singlelepton_triggerweight_for_channel', 'get_tauByIsoIdWeight_for_channel', 'get_eleHLTZvtxWeight_for_channel']:
+            if getattr(self, i) is None:
+                setattr(self, i, lambda x=None: (_ for _ in ()).throw(
+                    Exception('Call of undefined method "%s" with arguments: %s' % (i, str(x))))
+                )
+
     def get_path(self, systematic, folder):
+        logger.debug('-------->EstimationMethod::get_path: ' + systematic.category.channel.name + "_" + folder + "/ntuple")
         return systematic.category.channel.name + "_" + folder + "/ntuple"
 
     @property
@@ -74,6 +89,7 @@ class EstimationMethod(object):
         return systematic.variation.shifted_root_objects(settings)
 
     def define_root_objects(self, systematic):
+        logger.debug('------>EstimationMethod::define_root_objects: folder : ' + self._folder)
         histogram_settings = []
         histogram_settings.append({
             "name":
@@ -96,6 +112,7 @@ class EstimationMethod(object):
 
     # TODO: Make this less magic
     def create_root_objects(self, systematic):
+        logger.debug('---->EstimationMethod::create_root_objects: systematic.name : ' + systematic.name)
         root_object_settings = self.define_root_objects(systematic)
 
         # execute the underlying functions
@@ -103,10 +120,12 @@ class EstimationMethod(object):
             systematic, root_object_settings)
         for setting in root_object_settings:
             for key, value in setting.iteritems():
+                if logger.getEffectiveLevel() == 10: print 'k,v:', key, value
                 if isinstance(value, list):
-                    setting[key] = value[0](*value[1:])
+                    setting[key] = value[0](*value[1:])  # returned: <pipeline>/ntuple
                 elif callable(value):
                     setting[key] = value()
+                    if logger.getEffectiveLevel() == 10: print setting[key]
 
         root_objects = []
         for setting in root_object_settings:
@@ -115,11 +134,16 @@ class EstimationMethod(object):
 
     # doing nothing, shape is exactly the histogram as default
     def do_estimation(self, systematic):
-        if len(systematic.root_objects) != 1:
+        if len(systematic.root_objects) > 1:
             logger.fatal(
                 "There are %d histograms associated to the systematic with name %s, but not exactly 1.",
                 len(systematic.root_objects), systematic.name)
             raise Exception
+        elif len(systematic.root_objects) == 0:
+            logger.warning(
+                "There are 0 histograms associated to the systematic with name %s -> skipped",
+                systematic.name)
+            return None
         return systematic.root_objects[0]
 
 
@@ -134,7 +158,11 @@ class SStoOSEstimationMethod(EstimationMethod):
                  data_process,
                  friend_directory=None,
                  extrapolation_factor=1.0,
-                 qcd_weight = Weight("1.0","qcd_weight")):
+                 qcd_weight = Weight("1.0","qcd_weight"),
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         super(SStoOSEstimationMethod, self).__init__(
             name=name,
             folder=folder,
@@ -142,7 +170,11 @@ class SStoOSEstimationMethod(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign=None)
+            mc_campaign=None,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,)
         self._bg_processes = [copy.deepcopy(p) for p in bg_processes]
         self._data_process = copy.deepcopy(data_process)
         self._extrapolation_factor = extrapolation_factor
@@ -227,7 +259,11 @@ class ABCDEstimationMethod(EstimationMethod):
             BD_cuts,
             AB_cut_names,
             CD_cuts,
-            friend_directory=None
+            friend_directory=None,
+            get_triggerweight_for_channel=None,
+            get_singlelepton_triggerweight_for_channel=None,
+            get_tauByIsoIdWeight_for_channel=None,
+            get_eleHLTZvtxWeight_for_channel=None,
     ):  #last four arguments correspond to 1. list of names of cuts to be removed in order to include the sideband for the shape derivation 2. list of cuts to be applied to restrict on that sideband and 3.,4. accordingly for the extrapolation factor sideband
         super(ABCDEstimationMethod, self).__init__(
             name=name,
@@ -236,7 +272,11 @@ class ABCDEstimationMethod(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign=None)
+            mc_campaign=None,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,)
         self._bg_processes = [copy.deepcopy(p) for p in bg_processes]
         self._data_process = copy.deepcopy(data_process)
         self._AC_cut_names = AC_cut_names
@@ -358,14 +398,22 @@ class ABCDEstimationMethod(EstimationMethod):
 
 class AddHistogramEstimationMethod(EstimationMethod):
     def __init__(self, name, folder, era, directory, channel, add_processes,
-                 add_weights):
+                 add_weights,
+             get_triggerweight_for_channel=None,
+             get_singlelepton_triggerweight_for_channel=None,
+             get_tauByIsoIdWeight_for_channel=None,
+             get_eleHLTZvtxWeight_for_channel=None,):
         super(AddHistogramEstimationMethod, self).__init__(
             name=name,
             folder=folder,
             era=era,
             directory=directory,
             channel=channel,
-            mc_campaign=None)
+            mc_campaign=None,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,)
         self._add_processes = [copy.deepcopy(p) for p in add_processes]
         self._add_weights = copy.deepcopy(add_weights)
 
@@ -426,13 +474,21 @@ class SumUpEstimationMethod(EstimationMethod):
                  channel,
                  processes,
                  factors=None,
-                 friend_directory=None):
+                 friend_directory=None,
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         super(SumUpEstimationMethod, self).__init__(
             name=name,
             folder=folder,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
             channel=channel,
             mc_campaign=None)
         self._processes = [copy.deepcopy(p) for p in processes]
@@ -512,13 +568,21 @@ class NewFakeEstimationMethodLT(EstimationMethod):
                  data_process,
                  aisoCut,
                  fakeWeightstring,
-                 friend_directory=None):
+                 friend_directory=None,
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         super(NewFakeEstimationMethodLT, self).__init__(
             name=name,
             folder=folder,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
             channel=channel,
             mc_campaign=None)
         self._nofake_processes = [copy.deepcopy(p) for p in nofake_processes]
@@ -607,13 +671,21 @@ class NewFakeEstimationMethodTT(NewFakeEstimationMethodLT):
                  data_process,
                  aisoCut,
                  fakeWeightstring,
-                 friend_directory=None):
+                 friend_directory=None,
+                 get_triggerweight_for_channel=None,
+                 get_singlelepton_triggerweight_for_channel=None,
+                 get_tauByIsoIdWeight_for_channel=None,
+                 get_eleHLTZvtxWeight_for_channel=None,):
         super(NewFakeEstimationMethodLT, self).__init__(
             name=name,
             folder=folder,
             era=era,
             directory=directory,
             friend_directory=friend_directory,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
             channel=channel,
             mc_campaign=None)
         self._nofake_processes = [copy.deepcopy(p) for p in nofake_processes]

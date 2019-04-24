@@ -28,6 +28,12 @@ class Weight(object):
             raise ValueError
         self._name = name
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return 'Weight("%s" : "%s")' % (self._name, self._weightstring)
+
     @property
     def name(self):
         return self._name
@@ -75,6 +81,26 @@ class Weights(object):
         if args != False:
             for w in args:
                 self.add(w)
+
+    def __str__(self):
+        print_str = super(type(self), self).__repr__().split(' object at')[0][1:] + '\n'  # ': [' + str(hex(id(self))) + ']\n'
+
+        if len(self._weightstrings) == 0:
+            print_str = 'Weights: empty'
+        else:
+            for i in self._weightstrings:
+                print_str += '\t' + str(i).replace('\n', '\n\t') + '\n'
+        return print_str
+
+    def __repr__(self):
+        print_str = super(type(self), self).__repr__().split(' object at')[0][1:] + ': [' + str(hex(id(self))) + ']\n'
+
+        if len(self._weightstrings) == 0:
+            print_str = super(type(self), self).__repr__().split(' object at')[0][1:] + str(hex(id(self))) + ': empty'
+        else:
+            for i in self._weightstrings:
+                print_str += '\t' + str(i).replace('\n', '\n\t') + '\n'
+        return print_str
 
     def add(self, weightstring):
         if (issubclass(type(weightstring), Weight)):
@@ -151,6 +177,7 @@ class Cut(object):
         # TODO: Corner cases? They are all checked?
         # TODO: error handling?
         try:
+            logger.debug('\t cutstring:' + cutstring)
             operators = [s for s in supported_operators if s in cutstring]
             self._operator = operators[0]
             tmpcutstring = cutstring.split(self._operator)
@@ -165,6 +192,9 @@ class Cut(object):
             logger.fatal(
                 "Failed to compose cut from string \'{}\'.".format(cutstring))
             raise Exception
+
+    def __str__(self):
+        return '{%s : %s}' % (self._name, self._weightstring)
 
     @property
     def weightstring(self):
@@ -228,6 +258,12 @@ class Cuts(object):
         if args != False:
             for w in args:
                 self.add(w)
+
+    def __str__(self, indent=1):
+        s = '\n'
+        for cut in self._cutstrings:
+            s += '\t' * indent + cut.name + ' : ' + cut._weightstring + '\n'
+        return s
 
     # TODO: Remove this magic due to consistence
     def __add__(self, other):

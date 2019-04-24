@@ -29,6 +29,12 @@ class Systematic(object):
         self._root_objects = None
         self._additionalWeights = additionalWeights
 
+    def __str__(self):
+        print_str = 'Systematic:\n'
+        for attribute_name in self.__dict__.keys():
+            print_str += '   ' + attribute_name + ': ' + str(self.__dict__[attribute_name]).replace('\n', '\n   ') + '\n'
+        return print_str[:-1]
+
     # TODO: What does this magic?
     def __deepcopy__(self, memo):
         # some kind of workaround: the deepcopy method is overwritten, but anyway the one from the base class should be called
@@ -91,6 +97,7 @@ class Systematic(object):
         return self._root_objects
 
     def create_root_objects(self):
+        if logger.getEffectiveLevel() == 10: print '--->Systematic::create_root_objects: ' + self._process.estimation_method.name, self._process.estimation_method._friend_directories, self._process
         self._root_objects = self._process.estimation_method.create_root_objects(
             self)
 
@@ -145,11 +152,27 @@ class Systematics(object):
         self._num_threads = num_threads
         self._find_unique_objects = find_unique_objects
 
+    def __str__(self):
+        print_str = 'Systematics:\n'
+        for attribute_name in self.__dict__.keys():
+            attribute = getattr(self, attribute_name)
+            # print attribute_name,':', getattr(self, attribute_name), type(attribute), type(attribute).__dict__
+            print_str += ' ' + attribute_name + ': ' + str(self.__dict__[attribute_name]) + '\n'
+
+            if hasattr(type(attribute), '__iter__') and not isinstance(attribute, str):
+                sub_print = ''
+                for i in attribute:
+                    sub_print += ' \t' + str(i).replace('\n', '\n \t') + '\n'
+                print_str += sub_print[:-1]
+
+        return print_str[:-1]
+
     def add(self, systematic):
         self._systematics.append(systematic)
 
     # do the estimations
     def produce(self):
+        logger.debug('-->Systematics::produce: len:' + str(len(self._systematics)))
         # create the input histograms, all at once to make optimal use of TDFs
         self.create_histograms()
 
@@ -157,18 +180,21 @@ class Systematics(object):
         # self.sort_estimations()
 
         # do the background estimations
+        logger.debug('-->do the background estimations:')
         self.do_estimations()
         logger.debug("Successfully finished systematics production.")
 
     # read root histograms from the inputfiles and write them to the outputfile
     def create_histograms(self):
+        logger.debug('--->Systematics::create_histograms:')
         # collect ROOT objects
         self._root_objects_holder = RootObjects(self._output_file)
 
         if self._num_threads == 1:
             for systematic in self._systematics:
-                logger.debug("Create ROOT objects for systematic %s.",
+                logger.debug("---->Create ROOT objects for systematic %s.",
                              systematic.name)
+                if logger.getEffectiveLevel() == 10: print '---->Systematics::create_histograms: systematic', systematic.process, systematic._process.estimation_method._friend_directories
                 systematic.create_root_objects()
         else:
             logger.debug("Create ROOT objects for all systematics.")
@@ -186,16 +212,18 @@ class Systematics(object):
             # the result objects have to be copied.
             for i_sys in range(len(systematics_new)):
                 self._systematics[i_sys] = systematics_new[i_sys]
+        logger.debug('-->Create root holders')
         for systematic in self._systematics:
             if self._find_unique_objects:
                 self._root_objects_holder.add_unique(systematic.root_objects)
             else:
                 self._root_objects_holder.add(systematic.root_objects)
-        #self._root_objects_holder.check_duplicates() # TODO: Implement this if needed
+        # self._root_objects_holder.check_duplicates() # TODO: Implement this if needed
 
         # produce ROOT objects (in parallel)
         logger.debug("Produce ROOT objects using the %s backend.",
                      self._backend)
+        logger.debug('-->Produce root with' + self._backend + 'backend')
         if self._backend == "classic":
             self._root_objects_holder.produce_classic(self._num_threads)
         elif self._backend == "tdf":
@@ -205,15 +233,21 @@ class Systematics(object):
             raise Exception
 
         # set duplicates to the produced ROOT objects
+        logger.debug('--># set duplicates to the produced ROOT objects')
         if self._find_unique_objects:
             self._root_objects_holder.set_duplicates()
 
     # to the actual estimations. Currently do not run in parallel due to expected very low runtime, can in principle be parallelized
     def do_estimations(self):
+        logger.debug('-->do_estimations')
         for systematic in self._systematics:
-            logger.debug("Do estimation for systematic %s.", systematic.name)
+            logger.debug('---->Do estimation for systematic %s', systematic.name)
             systematic.do_estimation()
-            systematic.shape.save(self._root_objects_holder)
+            # systematic.shape.save(self._root_objects_holder)
+            if systematic._shape is not None:
+                systematic.shape.save(self._root_objects_holder)
+            else:
+                logger.warning('%s not saved', systematic.name)
 
     def summary(self):
         table = [[
@@ -230,28 +264,37 @@ class Systematics(object):
     # Enable application of multiple variations at once
     def add_systematic_variation(self, variation, **properties):
         if self._skip_systematic_variations:
+            print "\tadd_systematic_variation: SKIP SYST VAR"
             return
+
         new_systematics = []
         for systematic in self._systematics:
             # consider only Nominal values for shifts
             if systematic.variation.is_nominal():
                 found = 0
                 for key, value in properties.iteritems():
+                    logger.debug(' '.join([
+                        "key, value in properties.iteritems():",
+                        str(key),
+                        str(value)
+                    ]))
                     if hasattr(systematic, key):
                         property_ = getattr(systematic, key)
-                        if hasattr(property_, "name") and hasattr(
-                                value, "name"):
-                            if property_.name == value.name: found += 1
+                        if hasattr(property_, "name") and hasattr(value, "name"):
+                            if property_.name == value.name:
+                                found += 1
                         else:
                             logger.fatal(
                                 "Method %s.name does not exist. Comparison is not possible.",
-                                key)
+                                key,
+                            )
                             raise Exception
 
                 if found == len(properties):
                     new_systematic = copy.deepcopy(systematic)
                     new_systematic.variation = variation
                     new_systematics.append(new_systematic)
+
         self._systematics += new_systematics
 
     def add_extra_category(self, new_category, category_to_modify):

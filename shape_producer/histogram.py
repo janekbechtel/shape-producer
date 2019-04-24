@@ -106,6 +106,7 @@ class Histogram(TTreeContent):
             friend_inputfiles_collection=friend_inputfiles_collection)
 
     def create_result(self, dataframe=False):
+        logger.debug("----->Histogram::create_result::" + self.name)
         if dataframe:
             if not isinstance(self._variable.binning, binning.ConstantBinning):
                 logger.fatal("TDataFrames work only with a constant binning.")
@@ -117,18 +118,24 @@ class Histogram(TTreeContent):
                 self._weight_name)
         else:  # classic way
             # combine files to a single tree using TChain
+            logger.debug("------>combine files to a single tree using TChain")
             tree = ROOT.TChain()
             for inputfile in self._inputfiles:
+                logger.debug("------>inputfile: " + inputfile)
                 folder = self._folder
                 if "EWK" in inputfile and "Recoil" in folder:
                     folder = folder.replace("metRecoilResponseUp", "nominal").replace("metRecoilResponseDown", "nominal").replace("metRecoilResolutionUp", "nominal").replace("metRecoilResolutionDown", "nominal")
                 if "DY" in inputfile and "Unclustered" in folder:
                     folder = folder.replace("metUnclusteredEnUp", "nominal").replace("metUnclusteredEnDown", "nominal")
+                logger.debug("------>include:" + inputfile + " / " + self._folder)
+
                 tree.Add(inputfile + "/" + folder)
             # repeat this for friends if applicable
             friend_trees = []
-            if self._friend_inputfiles_collection != None:
+            if self._friend_inputfiles_collection is not None:
+                logger.debug(self._friend_inputfiles_collection)
                 for friend_inputfiles in self._friend_inputfiles_collection:
+                    logger.debug("------>friend_inputfiles: [" + ', '.join(friend_inputfiles) + ']')
                     friend_tree = ROOT.TChain()
                     for friend_inputfile in friend_inputfiles:
                         folder = self._folder
@@ -137,24 +144,31 @@ class Histogram(TTreeContent):
                         if "DY" in friend_inputfile and "Unclustered" in folder:
                             folder = folder.replace("metUnclusteredEnUp", "nominal").replace("metUnclusteredEnDown", "nominal")
                         friend_tree.Add(friend_inputfile + "/" + folder)
+                        logger.debug("-------->Add friend_inputfile:" + friend_inputfile + "/" + self._folder)
                     tree.AddFriend(friend_tree)
                     friend_trees.append(friend_tree)
 
             # create unfilled template histogram
+            logger.debug("------>create unfilled template histogram")
             hist = ROOT.TH1F(self._name, self._name,
                              self._variable.binning.nbinsx,
                              self._variable.binning.bin_borders)
             # draw histogram and pipe result in the template histogram
+            logger.debug("------>draw histogram and pipe result in the template histogram: " )
+            logger.debug(self._variable.expression + ">>" + self._name + ' ; \n' + self._cuts.expand() + "*" + self._weights.extract())
+
             tree.Draw(self._variable.expression + ">>" + self._name,
                       self._cuts.expand() + "*" + self._weights.extract(),
                       "goff")
             # write out result
+            logger.debug("------>write out result")
             self._result = ROOT.gDirectory.Get(self._name)
             # reset the chain to close the open files explicitely
             tree.Reset()
             for ft in friend_trees:
                 ft.Reset()
 
+        logger.debug("----->Histogram::create_result:: done")
         return self
 
     def update(self):
@@ -249,6 +263,11 @@ class Count(TTreeContent):
         self._result = False
 
     def create_result(self, dataframe=False):
+        logger.debug("----->Count::create_result::" +
+            '\n name: ' + self._name +
+            '\n _inputfiles: [' + ', '.join(self._inputfiles) + ']' +
+            '\n folder: ' + self._folder
+        )
         if dataframe:
             self._result = dataframe.Define("flat", "1").Histo1D(
                 "flat", self._weight_name)
@@ -301,6 +320,7 @@ def create_root_object(**kwargs):
 
 # Helper function to use multiprocessing.Pool with class methods
 def root_object_create_result(root_object):
+    logger.debug("root_object_create_result")
     return root_object.create_result()
 
 
@@ -411,7 +431,7 @@ class RootObjects(object):
         self.create_output_file()
         self._produced = True
         logger.info(
-            "Start to produce %u shapes in classic mode and %u processes.",
+            "produce_classic : Start to produce %u shapes in classic mode and %u processes.",
             len(self._root_objects), num_threads)
         if num_threads == 1:
             for ro in self._root_objects:
@@ -437,7 +457,8 @@ class RootObjects(object):
 
     def set_duplicates(self):
         logger.debug(
-            "Setting duplicates to the corresponding produced ROOT objects")
+            "set_duplicates : Setting duplicates to the corresponding produced ROOT objects",
+        )
         for ro in self._root_objects:
             if ro in self._duplicate_root_objects:
                 logger.debug(
@@ -447,7 +468,7 @@ class RootObjects(object):
                     logger.debug("duplicate %s with address %s", dup_ro.name,
                                  dup_ro)
                     dup_ro._result = ro.result
-                    #self._root_objects[self._root_objects.index(dup_ro)]._result = ro.result
+                    # self._root_objects[self._root_objects.index(dup_ro)]._result = ro.result
                 logger.debug("--------------------------------")
 
     def save(self):
@@ -457,3 +478,4 @@ class RootObjects(object):
         self._output_tree.Fill()
         self._output_file.Write()
         self._output_file.Close()
+        logger.info("Output file closed: %s.", self._output_file)
