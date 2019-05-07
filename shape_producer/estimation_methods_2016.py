@@ -232,6 +232,7 @@ class HTTEstimation(EstimationMethod):
                 Weight("numberGeneratedEventsWeight", "numberGeneratedEventsWeight"),
                 Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
                 Weight("puweight", "puweight"),
+                Weight("prefiringweight", "prefireWeight"),
                 self.era.lumi_weight)
         else:
             return Weights(
@@ -272,7 +273,8 @@ class ggHEstimation(HTTEstimation):
                 Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
                 Weight("1.01", "bbh_inclusion_weight"),
                 Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
-                Weight("puweight", "puweight"), self.era.lumi_weight)
+                Weight("puweight", "puweight"), self.era.lumi_weight,
+                Weight("prefiringweight", "prefireWeight"))
         else:
             return Weights(
                 Weight(
@@ -280,6 +282,7 @@ class ggHEstimation(HTTEstimation):
                     "hadronic_tau_sf"), Weight("ggh_NNLO_weight", "gghNNLO"),
                 Weight("8.8384e-8/numberGeneratedEventsWeight", "ggh_stitching_weight"),
                 Weight("1.01", "bbh_inclusion_weight"),
+                Weight("prefiringweight", "prefireWeight"),
                 Weight("eventWeight", "eventWeight"), self.era.lumi_weight)
 
     def get_cuts(self):
@@ -472,11 +475,6 @@ class qqHEstimation(HTTEstimation):
             friend_directory=friend_directory,
             channel=channel,
             mc_campaign="RunIISummer16MiniAODv2")
-
-    def get_weights(self):
-        weights = super(qqHEstimation, self).get_weights()
-        weights.add(Weight("(0.972+0.011*(jpt_1>0)*(jpt_1<200)*(njets<2||((jdeta<2.8||mjj<400)&&(mjj<60||mjj>=120)))-0.52*(jpt_1>=200))", "prefireWeight"))
-        return weights
 
     def get_cuts(self):
         return Cuts(Cut("(htxs_stage1cat>=201)&&(htxs_stage1cat<=205)", "htxs_match"))
@@ -734,6 +732,7 @@ class DYJetsToLLEstimation(EstimationMethod):
                 Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
                 Weight("puweight", "puweight"),
                 Weight("zPtReweightWeight", "zPtReweightWeight"),
+                Weight("prefiringweight", "prefireWeight"),
                 Weight(
                     "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
                     "hadronic_tau_sf"),
@@ -1050,7 +1049,9 @@ class EWKWpEstimation(EstimationMethod):
                 Weight("puweight", "puweight"),
                 Weight(
                     "(5.190747826298e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
-                    "EWKWp_stitching_weight"), self.era.lumi_weight)
+                    "EWKWp_stitching_weight"),
+                Weight("prefiringweight", "prefireWeight"),
+                self.era.lumi_weight)
         else:
             return Weights(
                 Weight(
@@ -1058,7 +1059,9 @@ class EWKWpEstimation(EstimationMethod):
                     "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
                 Weight(
                     "(5.190747826298e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
-                    "EWKWp_stitching_weight"), self.era.lumi_weight)
+                    "EWKWp_stitching_weight"),
+                Weight("prefiringweight", "prefireWeight"),
+                self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -1095,7 +1098,9 @@ class EWKWmEstimation(EstimationMethod):
                 Weight("puweight", "puweight"),
                 Weight(
                     "(5.190747826298e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
-                    "EWKWp_stitching_weight"), self.era.lumi_weight)
+                    "EWKWp_stitching_weight"),
+                Weight("prefiringweight", "prefireWeight"),
+                self.era.lumi_weight)
         else:
             return Weights(
                 Weight(
@@ -1103,7 +1108,9 @@ class EWKWmEstimation(EstimationMethod):
                     "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
                 Weight(
                     "(4.200367267668e-6)/(numberGeneratedEventsWeight*crossSectionPerEventWeight)",
-                    "EWKW_stitching_weight"), self.era.lumi_weight)
+                    "EWKW_stitching_weight"),
+                Weight("prefiringweight", "prefireWeight"),
+                self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -1141,6 +1148,7 @@ class WEstimationRaw(EstimationMethod):
                     Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
                     Weight("triggerWeight_1*triggerWeight_2*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
                     Weight("puweight", "puweight"),
+                    Weight("prefiringweight", "prefireWeight"),
                     self.era.lumi_weight)
         else:
             return Weights(
@@ -1150,6 +1158,7 @@ class WEstimationRaw(EstimationMethod):
                 Weight(
                     "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
                     "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
+                Weight("prefiringweight", "prefireWeight"),
                 self.era.lumi_weight)
 
     def get_files(self):
@@ -1249,14 +1258,18 @@ class TTEstimation(EstimationMethod):
                 Weight("puweight", "puweight"),
                 Weight(
                     "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-                    "hadronic_tau_sf"), self.era.lumi_weight)
+                    "hadronic_tau_sf"),
+                Weight("prefiringweight", "prefireWeight"),
+                self.era.lumi_weight)
         else:
             return Weights(
                 Weight("topPtReweightWeight", "topPtReweightWeight"),
                 Weight("eventWeight", "eventWeight"),
                 Weight(
                     "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-                    "hadronic_tau_sf"), self.era.lumi_weight)
+                    "hadronic_tau_sf"),
+                Weight("prefiringweight", "prefireWeight"),
+                self.era.lumi_weight)
 
     def get_files(self):
         query = {
@@ -1359,12 +1372,14 @@ class VVEstimation(EstimationMethod):
                 Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
                 Weight("triggerWeight_1*identificationWeight_1*identificationWeight_2*trackWeight_1*trackWeight_2", "eventWeight"),
                 Weight("puweight", "puweight"),
+                Weight("prefiringweight", "prefireWeight"),
                 self.era.lumi_weight)
         else:
             return Weights(
                 Weight(
                 "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
                 "hadronic_tau_sf"), Weight("eventWeight", "eventWeight"),
+                Weight("prefiringweight", "prefireWeight"),
                 self.era.lumi_weight)
 
     def get_files(self):

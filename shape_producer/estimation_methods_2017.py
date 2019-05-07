@@ -314,6 +314,7 @@ class VVEstimation(EstimationMethod):
             self.get_tauByIsoIdWeight_for_channel(self.channel.name),
             self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
             Weight("(1.0+0.56*(abs(crossSectionPerEventWeight-75.769996)<0.00001))", "VV_NNLO_reweight"),
+            Weight("prefiringweight", "prefireWeight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -493,6 +494,7 @@ class EWKZEstimation(EstimationMethod):
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
             self.get_tauByIsoIdWeight_for_channel(self.channel.name),
             self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            Weight("prefiringweight", "prefireWeight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -548,6 +550,7 @@ class DYJetsToLLEstimation(EstimationMethod):
             self.get_tauByIsoIdWeight_for_channel(self.channel.name),
             self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
             Weight("zPtReweightWeight", "zPtReweightWeight"),
+            Weight("prefiringweight", "prefireWeight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -923,6 +926,7 @@ class WEstimation(EstimationMethod):
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
             self.get_tauByIsoIdWeight_for_channel(self.channel.name),
             self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            Weight("prefiringweight", "prefireWeight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -986,6 +990,7 @@ class TTEstimation(EstimationMethod):
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
             self.get_tauByIsoIdWeight_for_channel(self.channel.name),
             self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            Weight("prefiringweight", "prefireWeight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -1134,6 +1139,7 @@ class HTTEstimation(EstimationMethod):
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
             self.get_tauByIsoIdWeight_for_channel(self.channel.name),
             self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            Weight("prefiringweight", "prefireWeight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -1312,11 +1318,6 @@ class qqHEstimation(HTTEstimation):
             friend_directory=friend_directory,
             channel=channel,
             mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_weights(self):
-        weights = super(qqHEstimation, self).get_weights()
-        weights.add(Weight("(0.95+0.02*(jpt_1>0)*(jpt_1<200)*(njets<2||((jdeta<2.8||mjj<400)&&(mjj<60||mjj>=120)))-0.1*(jpt_1>=200))", "prefireWeight"))
-        return weights
 
     def get_cuts(self):
         return Cuts(Cut("(htxs_stage1p1cat>=200)&&(htxs_stage1p1cat<=210)", "htxs_match"))
@@ -1739,6 +1740,7 @@ class SUSYggHEstimation(EstimationMethod):
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
             self.get_tauByIsoIdWeight_for_channel(self.channel.name),
             self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            Weight("prefiringweight", "prefireWeight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
@@ -1791,6 +1793,7 @@ class SUSYbbHEstimation(EstimationMethod):
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
             self.get_tauByIsoIdWeight_for_channel(self.channel.name),
             self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            Weight("prefiringweight", "prefireWeight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
