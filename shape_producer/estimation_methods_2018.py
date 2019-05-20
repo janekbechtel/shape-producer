@@ -1084,7 +1084,7 @@ class VHEstimation(HTTEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     # def get_cuts(self):
-    #     return Cuts(Cut("(htxs_stage1cat>=300)&&(htxs_stage1cat<=404)", "htxs_match"))
+    #     return Cuts(Cut("(htxs_stage1p1cat>=300)&&(htxs_stage1p1cat<=404)", "htxs_match"))
 
     def get_files(self):
         query = {
@@ -1118,7 +1118,7 @@ class WHEstimation(HTTEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     # def get_cuts(self):
-    #     return Cuts(Cut("(htxs_stage1cat>=300)&&(htxs_stage1cat<=304)", "htxs_match"))
+    #     return Cuts(Cut("(htxs_stage1p1cat>=300)&&(htxs_stage1p1cat<=304)", "htxs_match"))
 
     def get_files(self):
         query = {
@@ -1152,7 +1152,7 @@ class ZHEstimation(HTTEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     # def get_cuts(self):
-    #     return Cuts(Cut("(htxs_stage1cat>=400)&&(htxs_stage1cat<=404)", "htxs_match"))
+    #     return Cuts(Cut("(htxs_stage1p1cat>=400)&&(htxs_stage1p1cat<=404)", "htxs_match"))
 
     def get_files(self):
         query = {
@@ -1194,7 +1194,7 @@ class ggHEstimation(HTTEstimation):
     #     return weights
 
     # def get_cuts(self):
-    #     return Cuts(Cut("(htxs_stage1cat>=101)&&(htxs_stage1cat<=111)", "htxs_match"))
+    #     return Cuts(Cut("(htxs_stage1p1cat>=101)&&(htxs_stage1p1cat<=111)", "htxs_match"))
 
     def get_files(self):
         query = {
@@ -1228,7 +1228,7 @@ class qqHEstimation(HTTEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     # def get_cuts(self):
-    #     return Cuts(Cut("(htxs_stage1cat>=201)&&(htxs_stage1cat<=205)", "htxs_match"))
+    #     return Cuts(Cut("(htxs_stage1p1cat>=201)&&(htxs_stage1p1cat<=205)", "htxs_match"))
 
     def get_files(self):
         query = {
@@ -1262,7 +1262,7 @@ class ggHEstimation_VBFTOPO_JET3VETO(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     # def get_cuts(self):
-    #     return Cuts(Cut("htxs_stage1cat==101", "htxs_match"))
+    #     return Cuts(Cut("htxs_stage1p1cat==101", "htxs_match"))
 
 
 class ggHEstimation_VBFTOPO_JET3(ggHEstimation):
@@ -1285,7 +1285,7 @@ class ggHEstimation_VBFTOPO_JET3(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==102", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==102", "htxs_match"))
 
 
 class ggHEstimation_0J(ggHEstimation):
@@ -1308,7 +1308,7 @@ class ggHEstimation_0J(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     # def get_cuts(self):
-    #     return Cuts(Cut("htxs_stage1cat==103", "htxs_match"))
+    #     return Cuts(Cut("htxs_stage1p1cat==103", "htxs_match"))
 
 
 class ggHEstimation_1J_PTH_0_60(ggHEstimation):
@@ -1331,7 +1331,7 @@ class ggHEstimation_1J_PTH_0_60(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==104", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==104", "htxs_match"))
 
 
 class ggHEstimation_1J_PTH_60_120(ggHEstimation):
@@ -1354,7 +1354,7 @@ class ggHEstimation_1J_PTH_60_120(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==105", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==105", "htxs_match"))
 
 
 class ggHEstimation_1J_PTH_120_200(ggHEstimation):
@@ -1377,7 +1377,7 @@ class ggHEstimation_1J_PTH_120_200(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==106", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==106", "htxs_match"))
 
 
 class ggHEstimation_1J_PTH_GT200(ggHEstimation):
@@ -1400,7 +1400,7 @@ class ggHEstimation_1J_PTH_GT200(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==107", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==107", "htxs_match"))
 
 
 class ggHEstimation_GE2J_PTH_0_60(ggHEstimation):
@@ -1423,7 +1423,7 @@ class ggHEstimation_GE2J_PTH_0_60(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==108", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==108", "htxs_match"))
 
 
 class ggHEstimation_GE2J_PTH_60_120(ggHEstimation):
@@ -1446,7 +1446,7 @@ class ggHEstimation_GE2J_PTH_60_120(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==109", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==109", "htxs_match"))
 
 
 class ggHEstimation_GE2J_PTH_120_200(ggHEstimation):
@@ -1469,7 +1469,7 @@ class ggHEstimation_GE2J_PTH_120_200(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==110", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==110", "htxs_match"))
 
 
 class ggHEstimation_GE2J_PTH_GT200(ggHEstimation):
@@ -1492,7 +1492,7 @@ class ggHEstimation_GE2J_PTH_GT200(ggHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==111", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==111", "htxs_match"))
 
 
 class qqHEstimation_VBFTOPO_JET3VETO(qqHEstimation):
@@ -1515,7 +1515,7 @@ class qqHEstimation_VBFTOPO_JET3VETO(qqHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==201", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==201", "htxs_match"))
 
 
 class qqHEstimation_VBFTOPO_JET3(qqHEstimation):
@@ -1538,7 +1538,7 @@ class qqHEstimation_VBFTOPO_JET3(qqHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==202", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==202", "htxs_match"))
 
 
 class qqHEstimation_VH2JET(qqHEstimation):
@@ -1561,7 +1561,7 @@ class qqHEstimation_VH2JET(qqHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==203", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==203", "htxs_match"))
 
 
 class qqHEstimation_REST(qqHEstimation):
@@ -1584,7 +1584,7 @@ class qqHEstimation_REST(qqHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==204", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==204", "htxs_match"))
 
 
 class qqHEstimation_PTJET1_GT200(qqHEstimation):
@@ -1607,7 +1607,7 @@ class qqHEstimation_PTJET1_GT200(qqHEstimation):
             mc_campaign="RunIIAutumn18MiniAOD")
 
     def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==205", "htxs_match"))
+        return Cuts(Cut("htxs_stage1p1cat==205", "htxs_match"))
 
 
 class SUSYggHEstimation(EstimationMethod):
