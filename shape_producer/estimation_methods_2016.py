@@ -223,7 +223,7 @@ class HTTEstimation(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_weights(self):
         if self.channel.name=="em":
@@ -262,7 +262,7 @@ class ggHEstimation(HTTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_weights(self):
         if self.channel.name=="em":
@@ -309,7 +309,7 @@ class ggHEstimation_VBFTOPO_JET3VETO(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==101", "htxs_match"))
@@ -324,7 +324,7 @@ class ggHEstimation_VBFTOPO_JET3(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==102", "htxs_match"))
@@ -339,7 +339,7 @@ class ggHEstimation_0J(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==103", "htxs_match"))
@@ -354,7 +354,7 @@ class ggHEstimation_1J_PTH_0_60(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==104", "htxs_match"))
@@ -369,7 +369,7 @@ class ggHEstimation_1J_PTH_60_120(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==105", "htxs_match"))
@@ -384,7 +384,7 @@ class ggHEstimation_1J_PTH_120_200(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==106", "htxs_match"))
@@ -399,7 +399,7 @@ class ggHEstimation_1J_PTH_GT200(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==107", "htxs_match"))
@@ -414,7 +414,7 @@ class ggHEstimation_GE2J_PTH_0_60(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==108", "htxs_match"))
@@ -429,7 +429,7 @@ class ggHEstimation_GE2J_PTH_60_120(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==109", "htxs_match"))
@@ -444,7 +444,7 @@ class ggHEstimation_GE2J_PTH_120_200(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==110", "htxs_match"))
@@ -459,7 +459,7 @@ class ggHEstimation_GE2J_PTH_GT200(ggHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==111", "htxs_match"))
@@ -474,7 +474,7 @@ class qqHEstimation(HTTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("(htxs_stage1p1cat>=201)&&(htxs_stage1p1cat<=205)", "htxs_match"))
@@ -500,7 +500,7 @@ class qqHEstimation_VBFTOPO_JET3VETO(qqHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==201", "htxs_match"))
@@ -515,7 +515,7 @@ class qqHEstimation_VBFTOPO_JET3(qqHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==202", "htxs_match"))
@@ -530,7 +530,7 @@ class qqHEstimation_VH2JET(qqHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==203", "htxs_match"))
@@ -545,7 +545,7 @@ class qqHEstimation_REST(qqHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==204", "htxs_match"))
@@ -560,7 +560,7 @@ class qqHEstimation_PTJET1_GT200(qqHEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("htxs_stage1p1cat==205", "htxs_match"))
@@ -575,7 +575,7 @@ class VHEstimation(HTTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("(htxs_stage1p1cat>=300)&&(htxs_stage1p1cat<=404)", "htxs_match"))
@@ -601,7 +601,7 @@ class WHEstimation(HTTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("(htxs_stage1p1cat>=300)&&(htxs_stage1p1cat<=304)", "htxs_match"))
@@ -627,7 +627,7 @@ class ZHEstimation(HTTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("(htxs_stage1p1cat>=400)&&(htxs_stage1p1cat<=404)", "htxs_match"))
@@ -653,7 +653,7 @@ class ttHEstimation(HTTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_files(self):
         query = {
@@ -676,7 +676,7 @@ class bbH120Estimation(HTTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_files(self):
         query = {
@@ -699,7 +699,7 @@ class bbH130Estimation(HTTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_files(self):
         query = {
@@ -722,7 +722,7 @@ class DYJetsToLLEstimation(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_weights(self):
         if self.channel.name=="em":
@@ -739,39 +739,92 @@ class DYJetsToLLEstimation(EstimationMethod):
                 Weight(
                     "((((genbosonmass >= 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass >= 50.0 && genbosonmass < 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight))/(numberGeneratedEventsWeight*crossSectionPerEventWeight*sampleStitchingWeight))",
                     "z_stitching_weight"), self.era.lumi_weight)
-        # else:
-        #     return Weights(
-        #         Weight("eventWeight", "eventWeight"),
-        #         Weight("zPtReweightWeight", "zPtReweightWeight"),
-        #         Weight(
-        #             "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
-        #             "hadronic_tau_sf"),
-        #         Weight(
-        #             "((((genbosonmass >= 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass >= 50.0 && genbosonmass < 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight))/(numberGeneratedEventsWeight*crossSectionPerEventWeight*sampleStitchingWeight))",
-        #             "z_stitching_weight"), self.era.lumi_weight)
+        else:
+            return Weights(
+                Weight("eventWeight", "eventWeight"),
+                Weight("zPtReweightWeight", "zPtReweightWeight"),
+                Weight(
+                    "(((gen_match_1 == 5)*0.95 + (gen_match_1 != 5))*((gen_match_2 == 5)*0.95 + (gen_match_2 != 5)))",
+                    "hadronic_tau_sf"),
+                Weight(
+                    "((((genbosonmass >= 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass >= 50.0 && genbosonmass < 150.0 && (npartons == 0 || npartons >= 5))*3.95423374e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 1)*1.27486147e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 2)*1.3012785e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 3)*1.33802133e-5) + ((genbosonmass >= 50.0 && genbosonmass < 150.0 && npartons == 4)*1.09698723e-5)+((genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight))/(numberGeneratedEventsWeight*crossSectionPerEventWeight*sampleStitchingWeight))",
+                    "z_stitching_weight"), self.era.lumi_weight)
 
+    # def get_files(self):
+    #     query = {
+    #         "process":
+    #         "(DYJetsToLL_M10to50|DYJetsToLL_M50|DY1JetsToLL_M50|DY2JetsToLL_M50|DY3JetsToLL_M50|DY4JetsToLL_M50)",
+    #         "data":
+    #         False,
+    #         "campaign":
+    #         self._mc_campaign,
+    #         "generator":
+    #         "madgraph\-pythia8"
+    #     }
+    #     query_ewkz = {
+    #         "process": "^EWKZ",
+    #         "data": False,
+    #         "campaign": self._mc_campaign,
+    #         "generator": "madgraph\-pythia8"
+    #     }
+    #     files = self.era.datasets_helper.get_nicks_with_query(
+    #         query) + self.era.datasets_helper.get_nicks_with_query(query_ewkz)
+    #     log_query(self.name, query, files)
+    #     log_query(self.name, query_ewkz, files)
+    #     return self.artus_file_names(files)
     def get_files(self):
-        query = {
-            "process":
-            "(DYJetsToLL_M10to50|DYJetsToLL_M50|DY1JetsToLL_M50|DY2JetsToLL_M50|DY3JetsToLL_M50|DY4JetsToLL_M50)",
-            "data":
-            False,
-            "campaign":
-            self._mc_campaign,
-            "generator":
-            "madgraph\-pythia8"
+        queryM10 = {
+            "process": "DYJetsToLL_M10to50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8",
+            "version": "v2"
         }
-        query_ewkz = {
+        queryM50_inclusive_2_3jet = {
+            "process": "DY(|2|3)JetsToLL_M50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8",
+            "version": "v2"
+        }
+        queryM50_1jet_v1 = {
+            "process": "DY1JetsToLL_M50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8",
+            "extension": "^$",
+            "version": "v1"
+        }
+        queryM50 = {
+            "process": "DYJetsToLL_M50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8",
+            "extension": "^$",
+            "version": "v2"
+        }
+        queryM50_4jet = {
+            "process": "DY4JetsToLL_M50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8",
+            "version": "v2"
+        }
+        queryEWKZ = {
             "process": "^EWKZ",
             "data": False,
             "campaign": self._mc_campaign,
-            "generator": "madgraph\-pythia8"
+            "generator": "madgraph\-pythia8",
         }
-        files = self.era.datasets_helper.get_nicks_with_query(
-            query) + self.era.datasets_helper.get_nicks_with_query(query_ewkz)
-        log_query(self.name, query, files)
-        log_query(self.name, query_ewkz, files)
+        files = self.era.datasets_helper.get_nicks_with_query(queryM50_inclusive_2_3jet) + \
+                self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_v1) + \
+                self.era.datasets_helper.get_nicks_with_query(queryM50) + \
+                self.era.datasets_helper.get_nicks_with_query(queryM50_4jet) + \
+                self.era.datasets_helper.get_nicks_with_query(queryM10) + \
+                self.era.datasets_helper.get_nicks_with_query(queryEWKZ)
+        log_query(self.name, queryM10, files)
         return self.artus_file_names(files)
+
 
 
 class EWKZEstimation(DYJetsToLLEstimation):
@@ -783,7 +836,7 @@ class EWKZEstimation(DYJetsToLLEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_files(self):
         query_ewkz = {
@@ -806,7 +859,7 @@ class ZTTEstimation(DYJetsToLLEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         if "mt" in self.channel.name:
@@ -819,6 +872,7 @@ class ZTTEstimation(DYJetsToLLEstimation):
             ztt_cut = "gen_match_1==3 && gen_match_2==4"
         return Cuts(Cut(ztt_cut, "ztt_cut"))
 
+    
 
 class ZLEstimation(DYJetsToLLEstimation):
     def __init__(self, era, directory, channel, friend_directory=None, folder="nominal"):
@@ -827,9 +881,9 @@ class ZLEstimation(DYJetsToLLEstimation):
             folder=folder,
             era=era,
             directory=directory,
-            friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            friend_directory=friend_directory,
+            mc_campaign="RunIISummer16MiniAODv3")
 
     '''def get_cuts(self):
         ct = ""
@@ -865,7 +919,7 @@ class ZJEstimation(DYJetsToLLEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         ct = ""
@@ -1036,7 +1090,7 @@ class EWKWpEstimation(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_weights(self):
         if self.channel.name=="em":
@@ -1085,7 +1139,7 @@ class EWKWmEstimation(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_weights(self):
         if self.channel.name=="em":
@@ -1134,7 +1188,7 @@ class WEstimationRaw(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_weights(self):
         if self.channel.name=="em":
@@ -1216,7 +1270,7 @@ class WTEstimation(WEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("gen_match_1==3||gen_match_1==4", "wt_genmatch"))
@@ -1231,7 +1285,7 @@ class WLEstimation(WEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         return Cuts(Cut("!(gen_match_1==3||gen_match_1==4)", "wl_genmatch"))
@@ -1246,7 +1300,7 @@ class TTEstimation(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_weights(self):
         if self.channel.name=="em":
@@ -1291,7 +1345,7 @@ class TTLEstimation(TTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         if "mt" in self.channel.name:
@@ -1318,7 +1372,7 @@ class TTTEstimation(TTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         if "mt" in self.channel.name:
@@ -1341,7 +1395,7 @@ class TTJEstimation(TTEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         ct = ""
@@ -1363,7 +1417,7 @@ class VVEstimation(EstimationMethod):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_weights(self):
         if self.channel.name=="em":
@@ -1436,7 +1490,7 @@ class VVLEstimation(VVEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         if "mt" in self.channel.name:
@@ -1462,7 +1516,7 @@ class VVTEstimation(VVEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         if "mt" in self.channel.name:
@@ -1485,7 +1539,7 @@ class VVJEstimation(VVEstimation):
             directory=directory,
             friend_directory=friend_directory,
             channel=channel,
-            mc_campaign="RunIISummer16MiniAODv2")
+            mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
         ct = ""

@@ -48,7 +48,7 @@ class Run2016(Era):
         query = {
             "data": True,
             "campaign": "Run2016(B|C|D|E|F|G|H)",
-            "scenario": "03Feb2017.*"
+            "scenario": "17Jul2018.*"
         }
         if channel.name == "mt":
             query["process"] = "SingleMuon"
