@@ -1258,7 +1258,25 @@ class ZHEstimation(HTTEstimation):
         return self.artus_file_names(files)
 
 
+# Stage 0 and Stage 1.1 binning of ggH chosen by given name. If no name match, default is stage 0
 class ggHEstimation(HTTEstimation):
+    htxs_dict = {
+        "ggH125" : "(htxs_stage1p1cat>=100)&&(htxs_stage1p1cat<=113)",
+        "ggH_GG2H_FWDH125" : "htxs_stage1p1cat == 100",
+        "ggH_GG2H_PTH_GT200125" : "htxs_stage1p1cat == 101",
+        "ggH_GG2H_0J_PTH_0_10125" : "htxs_stage1p1cat == 102",
+        "ggH_GG2H_0J_PTH_GT10125" : "htxs_stage1p1cat == 103",
+        "ggH_GG2H_1J_PTH_0_60125" : "htxs_stage1p1cat == 104",
+        "ggH_GG2H_1J_PTH_60_120125" : "htxs_stage1p1cat == 105",
+        "ggH_GG2H_1J_PTH_120_200125" : "htxs_stage1p1cat == 106",
+        "ggH_GG2H_GE2J_MJJ_0_350_PTH_0_60125" : "htxs_stage1p1cat == 107",
+        "ggH_GG2H_GE2J_MJJ_0_350_PTH_60_120125" : "htxs_stage1p1cat == 108",
+        "ggH_GG2H_GE2J_MJJ_0_350_PTH_120_200125" : "htxs_stage1p1cat == 109",
+        "ggH_GG2H_GE2J_MJJ_350_700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 110",
+        "ggH_GG2H_GE2J_MJJ_350_700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 111",
+        "ggH_GG2H_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 112",
+        "ggH_GG2H_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 113",
+    }
     def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -1286,7 +1304,7 @@ class ggHEstimation(HTTEstimation):
         return weights
 
     def get_cuts(self):
-        return Cuts(Cut("(htxs_stage1p1cat>=100)&&(htxs_stage1p1cat<=113)", "htxs_match"))
+        return Cuts(Cut(self.htxs_dict.get(self.name, self.htxs_dict["ggH125"]), "htxs_match"))
 
     def get_files(self):
         query = {
@@ -1300,7 +1318,22 @@ class ggHEstimation(HTTEstimation):
         return self.artus_file_names(files)
 
 
+# Stage 0 and Stage 1.1 binning of qqH chosen by given name. If no name match, default is stage 0
 class qqHEstimation(HTTEstimation):
+    htxs_dict = {
+        "qqH125" : "(htxs_stage1p1cat>=200)&&(htxs_stage1p1cat<=210)",
+        "qqH_QQ2HQQ_FWDH125" : "htxs_stage1p1cat == 200",
+        "qqH_QQ2HQQ_0J125" : "htxs_stage1p1cat == 201",
+        "qqH_QQ2HQQ_1J125" : "htxs_stage1p1cat == 202",
+        "qqH_QQ2HQQ_GE2J_MJJ_0_60125" : "htxs_stage1p1cat == 203",
+        "qqH_QQ2HQQ_GE2J_MJJ_60_120125" : "htxs_stage1p1cat == 204",
+        "qqH_QQ2HQQ_GE2J_MJJ_120_350125" : "htxs_stage1p1cat == 205",
+        "qqH_QQ2HQQ_GE2J_MJJ_GT350_PTH_GT200125" : "htxs_stage1p1cat == 206",
+        "qqH_QQ2HQQ_GE2J_MJJ_350_700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 207",
+        "qqH_QQ2HQQ_GE2J_MJJ_350_700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 208",
+        "qqH_QQ2HQQ_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 209",
+        "qqH_QQ2HQQ_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 210",
+    }
     def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -1320,7 +1353,7 @@ class qqHEstimation(HTTEstimation):
             mc_campaign="RunIIFall17MiniAODv2")
 
     def get_cuts(self):
-        return Cuts(Cut("(htxs_stage1p1cat>=200)&&(htxs_stage1p1cat<=210)", "htxs_match"))
+        return Cuts(Cut(self.htxs_dict.get(self.name, self.htxs_dict["qqH125"]), "htxs_match"))
 
     def get_files(self):
         query = {
@@ -1332,375 +1365,6 @@ class qqHEstimation(HTTEstimation):
         files = self.era.datasets_helper.get_nicks_with_query(query)
         log_query(self.name, query, files)
         return self.artus_file_names(files)
-
-
-class ggHEstimation_VBFTOPO_JET3VETO(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_VBFTOPO_JET3VETO",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==101", "htxs_match"))
-
-
-class ggHEstimation_VBFTOPO_JET3(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_VBFTOPO_JET3",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==102", "htxs_match"))
-
-
-class ggHEstimation_0J(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_0J",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==103", "htxs_match"))
-
-
-class ggHEstimation_1J_PTH_0_60(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_1J_PTH_0_60",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==104", "htxs_match"))
-
-
-class ggHEstimation_1J_PTH_60_120(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_1J_PTH_60_120",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==105", "htxs_match"))
-
-
-class ggHEstimation_1J_PTH_120_200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_1J_PTH_120_200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==106", "htxs_match"))
-
-
-class ggHEstimation_1J_PTH_GT200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_1J_PTH_GT200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==107", "htxs_match"))
-
-
-class ggHEstimation_GE2J_PTH_0_60(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_GE2J_PTH_0_60",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==108", "htxs_match"))
-
-
-class ggHEstimation_GE2J_PTH_60_120(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_GE2J_PTH_60_120",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==109", "htxs_match"))
-
-
-class ggHEstimation_GE2J_PTH_120_200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_GE2J_PTH_120_200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==110", "htxs_match"))
-
-
-class ggHEstimation_GE2J_PTH_GT200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="ggH_GE2J_PTH_GT200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==111", "htxs_match"))
-
-
-class qqHEstimation_VBFTOPO_JET3VETO(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="qqH_VBFTOPO_JET3VETO",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==201", "htxs_match"))
-
-
-class qqHEstimation_VBFTOPO_JET3(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="qqH_VBFTOPO_JET3",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==202", "htxs_match"))
-
-
-class qqHEstimation_VH2JET(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="qqH_VH2JET",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==203", "htxs_match"))
-
-
-class qqHEstimation_REST(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="qqH_REST",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==204", "htxs_match"))
-
-
-class qqHEstimation_PTJET1_GT200(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
-        super(HTTEstimation, self).__init__(
-            name="qqH_PTJET1_GT200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIIFall17MiniAODv2")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1cat==205", "htxs_match"))
-
 
 class SUSYggHEstimation(EstimationMethod):
     def __init__(self, era, directory, channel, mass, friend_directory=None, folder="nominal",
