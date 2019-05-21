@@ -1277,13 +1277,13 @@ class ggHEstimation(HTTEstimation):
         "ggH_GG2H_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 112",
         "ggH_GG2H_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 113",
     }
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    def __init__(self, name,  era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
         super(HTTEstimation, self).__init__(
-            name="ggH",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -1334,13 +1334,13 @@ class qqHEstimation(HTTEstimation):
         "qqH_QQ2HQQ_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 209",
         "qqH_QQ2HQQ_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 210",
     }
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    def __init__(self, name, era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
         super(HTTEstimation, self).__init__(
-            name="qqH",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
