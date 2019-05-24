@@ -7,6 +7,7 @@ from estimation_methods import EstimationMethod, SStoOSEstimationMethod, ABCDEst
 from estimation_methods_2016 import DataEstimation as DataEstimation2016
 from estimation_methods_2016 import WEstimationWithQCD as WEstimationWithQCD2016
 from estimation_methods_2016 import QCDEstimationWithW as QCDEstimationWithW2016
+from estimation_methods_2016 import ggH_htxs, qqH_htxs
 from systematics import *
 from era import log_query
 from process import *
@@ -1260,23 +1261,7 @@ class ZHEstimation(HTTEstimation):
 
 # Stage 0 and Stage 1.1 binning of ggH chosen by given name. If no name match, default is stage 0
 class ggHEstimation(HTTEstimation):
-    htxs_dict = {
-        "ggH125" : "(htxs_stage1p1cat>=100)&&(htxs_stage1p1cat<=113)",
-        "ggH_GG2H_FWDH125" : "htxs_stage1p1cat == 100",
-        "ggH_GG2H_PTH_GT200125" : "htxs_stage1p1cat == 101",
-        "ggH_GG2H_0J_PTH_0_10125" : "htxs_stage1p1cat == 102",
-        "ggH_GG2H_0J_PTH_GT10125" : "htxs_stage1p1cat == 103",
-        "ggH_GG2H_1J_PTH_0_60125" : "htxs_stage1p1cat == 104",
-        "ggH_GG2H_1J_PTH_60_120125" : "htxs_stage1p1cat == 105",
-        "ggH_GG2H_1J_PTH_120_200125" : "htxs_stage1p1cat == 106",
-        "ggH_GG2H_GE2J_MJJ_0_350_PTH_0_60125" : "htxs_stage1p1cat == 107",
-        "ggH_GG2H_GE2J_MJJ_0_350_PTH_60_120125" : "htxs_stage1p1cat == 108",
-        "ggH_GG2H_GE2J_MJJ_0_350_PTH_120_200125" : "htxs_stage1p1cat == 109",
-        "ggH_GG2H_GE2J_MJJ_350_700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 110",
-        "ggH_GG2H_GE2J_MJJ_350_700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 111",
-        "ggH_GG2H_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 112",
-        "ggH_GG2H_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 113",
-    }
+    htxs_dict = ggH_htxs
     def __init__(self, name,  era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -1320,20 +1305,7 @@ class ggHEstimation(HTTEstimation):
 
 # Stage 0 and Stage 1.1 binning of qqH chosen by given name. If no name match, default is stage 0
 class qqHEstimation(HTTEstimation):
-    htxs_dict = {
-        "qqH125" : "(htxs_stage1p1cat>=200)&&(htxs_stage1p1cat<=210)",
-        "qqH_QQ2HQQ_FWDH125" : "htxs_stage1p1cat == 200",
-        "qqH_QQ2HQQ_0J125" : "htxs_stage1p1cat == 201",
-        "qqH_QQ2HQQ_1J125" : "htxs_stage1p1cat == 202",
-        "qqH_QQ2HQQ_GE2J_MJJ_0_60125" : "htxs_stage1p1cat == 203",
-        "qqH_QQ2HQQ_GE2J_MJJ_60_120125" : "htxs_stage1p1cat == 204",
-        "qqH_QQ2HQQ_GE2J_MJJ_120_350125" : "htxs_stage1p1cat == 205",
-        "qqH_QQ2HQQ_GE2J_MJJ_GT350_PTH_GT200125" : "htxs_stage1p1cat == 206",
-        "qqH_QQ2HQQ_GE2J_MJJ_350_700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 207",
-        "qqH_QQ2HQQ_GE2J_MJJ_350_700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 208",
-        "qqH_QQ2HQQ_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_0_25125" : "htxs_stage1p1cat == 209",
-        "qqH_QQ2HQQ_GE2J_MJJ_GT700_PTH_0_200_PTHJJ_GT25125" : "htxs_stage1p1cat == 210",
-    }
+    htxs_dict = qqH_htxs
     def __init__(self, name, era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
