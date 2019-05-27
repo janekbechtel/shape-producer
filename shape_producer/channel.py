@@ -132,13 +132,14 @@ class MTSM2016(Channel):
             Cut("extramuon_veto<0.5", "extramuon_veto"),
             Cut("dilepton_veto<0.5", "dilepton_veto"),
             Cut("againstMuonTight3_2>0.5", "againstMuonDiscriminator"),
-            Cut("againstElectronVLooseMVA6_2>0.5",
-                "againstElectronDiscriminator"),
+            Cut("againstElectronVLooseMVA6_2>0.5","againstElectronDiscriminator"),
             Cut("byTightIsolationMVArun2017v2DBoldDMwLT2017_2>0.5", "tau_iso"),
-            Cut("iso_1<0.15", "muon_iso"), Cut("q_1*q_2<0", "os"),
+            Cut("iso_1<0.15", "muon_iso"), 
+            Cut("q_1*q_2<0", "os"),
             Cut("mt_1<50", "m_t"),
             Cut("((trg_singlemuon==1 && pt_1>23 && pt_2>30) + (trg_mutaucross==1 && pt_1>20 && pt_1<=23 && pt_2>30))",
-                "trg_singlemuoncross"))
+                "trg_singlemuoncross")
+            )
 
 
 class ET(Channel):
