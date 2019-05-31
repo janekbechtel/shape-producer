@@ -58,18 +58,18 @@ def get_triggerweight_for_channel(channel):
     MCTau_1 = "((byTightIsolationMVArun2017v2DBoldDMwLT2017_1<0.5 && byVLooseIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_vloose_MVA_1 + (byTightIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_tight_MVA_1)"
     MCTau_2 = MCTau_1.replace("_1","_2")
 
-    if "mt" in channel:
-        trig_sL = "(trg_singlemuon)"
-        trig_X = "(pt_1 > 20 && pt_1 < 21 && trg_mutaucross)"
-  #     # Eff = Eff(singleL)*(1 - Eff(xTau)) + Eff(xL)*Eff(xTau)
-        #MuTauMC = "*".join([trig_sL,singleMC,"(1-"+trig_X+"*"+crossMCL+")"])+"+"+"*".join([trig_X,crossMCL,MCTau_2])
-        #MuTauData = MuTauMC.replace("MC","Data")
-        #MuTau = "("+MuTauData+")/("+MuTauMC+")"
+#     if "mt" in channel:
+#         trig_sL = "(trg_singlemuon_raw)"
+#         trig_X = "(pt_1 > 20 && pt_1 < 21 && trg_mutaucross)"
+#   #     # Eff = Eff(singleL)*(1 - Eff(xTau)) + Eff(xL)*Eff(xTau)
+#         #MuTauMC = "*".join([trig_sL,singleMC,"(1-"+trig_X+"*"+crossMCL+")"])+"+"+"*".join([trig_X,crossMCL,MCTau_2])
+#         #MuTauData = MuTauMC.replace("MC","Data")
+#         #MuTau = "("+MuTauData+")/("+MuTauMC+")"
 
-        MuTauMC = "*".join([trig_sL, singleMC]) + "+" + "*".join([trig_X, crossMCL, MCTau_2])
-        MuTauData = MuTauMC.replace("MC","Data")
-        MuTau = "("+MuTauData+")/("+MuTauMC+")"
-        weight = Weight(MuTau,"triggerWeight")
+#         MuTauMC = "*".join([trig_sL, singleMC]) + "+" + "*".join([trig_X, crossMCL, MCTau_2])
+#         MuTauData = MuTauMC.replace("MC","Data")
+#         MuTau = "("+MuTauData+")/("+MuTauMC+")"
+#         weight = Weight(MuTau,"triggerWeight")
 
     # elif "et" in channel:
     #     trig_sL = "(trg_singleelectron_35 || trg_singleelectron_32 || trg_singleelectron_27)"
@@ -100,18 +100,18 @@ def get_triggerweight_for_channel(channel):
 
 
 def get_singlelepton_triggerweight_for_channel(channel):
-    weight = Weight("1.0","triggerweight")
+    weight = Weight("1.0","triggerweight_sl")
 
     MCTau_1 = "((byTightIsolationMVArun2017v2DBoldDMwLT2017_1<0.5 && byMediumIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_medium_MVA_1 + (byTightIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_tight_MVA_1)"
     MCTau_2 = MCTau_1.replace("_1","_2")
 
-    if "mt" in channel or "et" in channel:
-        weight = Weight("singleTriggerDataEfficiencyWeightKIT_1/singleTriggerMCEfficiencyWeightKIT_1","triggerweight")
-    elif "tt" in channel:
-        DiTauMC = "*".join([MCTau_1,MCTau_2])
-        DiTauData = DiTauMC.replace("MC","Data")
-        DiTau = "("+DiTauData+")/("+DiTauMC+")"
-        weight = Weight(DiTau,"triggerweight")
+    # if "mt" in channel or "et" in channel:
+    #     weight = Weight("singleTriggerDataEfficiencyWeightKIT_1/singleTriggerMCEfficiencyWeightKIT_1","triggerweight")
+    # elif "tt" in channel:
+    #     DiTauMC = "*".join([MCTau_1,MCTau_2])
+    #     DiTauData = DiTauMC.replace("MC","Data")
+    #     DiTau = "("+DiTauData+")/("+DiTauMC+")"
+    #     weight = Weight(DiTau,"triggerweight")
 
     return weight
 
@@ -1036,7 +1036,6 @@ class DYJetsToLLEstimation(EstimationMethod):
                 # TODO check difference between idIsoWeight_x is the right one, has to be included as soon as quantity available
                 # TODO add triggerweights etc
 
-                Weight("hltWeight", "hltPrescaleWeight"),
                 Weight("identificationWeight_1*identificationWeight_2","identificationWeight"),
                 #Weight("idIsoWeight_1*idIsoWeight_2","idIsoWeight"),
                 Weight("triggerWeight_1*triggerWeight_2","triggerWeight_dy"),
@@ -1050,7 +1049,6 @@ class DYJetsToLLEstimation(EstimationMethod):
                 Weight("prefiringweight", "prefireWeight"),
                 self.get_tauByIsoIdWeight_for_channel(self.channel.name),
                 Weight("zPtReweightWeight", "zPtReweightWeight"),
-
                 Weight("((genbosonmass >= 50.0) * 4.255812e-05*((npartons == 0 || npartons >= 5)*1.0+(npartons == 1)*0.32123574062076404+(npartons == 2)*0.3314444833963529+(npartons == 3)*0.3389929050626262+(npartons == 4)*0.2785338687268455) + ((genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight))","z_stitching_weight"),
                 # lumi weight
                 self.era.lumi_weight)
@@ -1335,9 +1333,9 @@ class ZTTEmbeddedEstimation(EstimationMethod):
 
     def embedding_tauid(self):
         if self.channel.name == "et" or self.channel.name == "mt":
-            return Weight("(gen_match_2==5)*1.0+(gen_match_2!=5)", "emb_tau_id") # todo measure
+            return Weight("(gen_match_2==5)*0.87+(gen_match_2!=5)", "emb_tau_id") # TODO measure for now MC correction factors
         elif self.channel.name == "tt":
-            return Weight("((gen_match_1==5)*1.00+(gen_match_1!=5))*((gen_match_2==5)*1.00+(gen_match_2!=5))", "emb_tau_id"),
+            return Weight("((gen_match_1==5)*0.87+(gen_match_1!=5))*((gen_match_2==5)*0.870+(gen_match_2!=5))", "emb_tau_id"),
         else:
             return Weight("1.0", "emb_tau_id"),
     
@@ -1345,21 +1343,22 @@ class ZTTEmbeddedEstimation(EstimationMethod):
         emb_weights = Weights(
             self.embedding_tauid(),
             Weight("generatorWeight*(generatorWeight<=1.0)","simulation_sf"),
-            Weight("muonEffTrgWeight", "scale_factor"),
+            Weight("muonEffTrgWeight", "scale_factor"), # TODO put back in with new ntuples *muonEffIDWeight_1*muonEffIDWeight_2
             Weight(self.embedding_stitchingweight(),"2016 stitching weight"),
             Weight("embeddedDecayModeWeight", "decayMode_SF")
             )
         if self.channel.name == "mt":
-            emb_weights.add(
-                Weight("idWeight_1*(triggerWeight_1*(pt_1>23)+((MuTau_TauLeg_DataEfficiencyWeight_2/MuTau_TauLeg_EmbeddedEfficiencyWeight_2)*(pt_1<=23)))*isoWeight_1", "lepton_sf"))
-            emb_weights.add(Weight("1.0", "mutau_crosstriggerweight"))
+            #emb_weights.add(
+            #    Weight("idWeight_1*(triggerWeight_1*(pt_1>23)+((MuTau_TauLeg_DataEfficiencyWeight_2/MuTau_TauLeg_EmbeddedEfficiencyWeight_2)*(pt_1<=23)))*isoWeight_1", "lepton_sf"))
+            #emb_weights.add(Weight("1.0", "mutau_crosstriggerweight"))
+            emb_weights.add(Weight("gen_match_1==4 && gen_match_2==5","emb_veto"))
 
         elif self.channel.name == "et":
-            emb_weights.add(Weight("idWeight_1*triggerWeight_1*isoWeight_1","lepton_sf"))
+            #emb_weights.add(Weight("idWeight_1*triggerWeight_1*isoWeight_1","lepton_sf"))
             emb_weights.add(Weight("gen_match_1==3 && gen_match_2==5","emb_veto"))
                 
         elif self.channel.name == "tt":
-            emb_weights.add(Weight("(TriggerDataEfficiencyWeight_1/TriggerEmbeddedEfficiencyWeight_1)*(TriggerDataEfficiencyWeight_2/TriggerEmbeddedEfficiencyWeight_2)""trg_sf"))
+            #emb_weights.add(Weight("(TriggerDataEfficiencyWeight_1/TriggerEmbeddedEfficiencyWeight_1)*(TriggerDataEfficiencyWeight_2/TriggerEmbeddedEfficiencyWeight_2)""trg_sf"))
             emb_weights.add(Weight("gen_match_1==5 && gen_match_2==5","emb_veto"))
 
         elif self.channel.name == "em":
@@ -1388,6 +1387,9 @@ class ZTTEmbeddedEstimation(EstimationMethod):
         
         log_query(self.name, query, files)
         return self.artus_file_names(files)
+
+    def get_cuts(self):
+        return Cuts(Cut("((gen_match_1>2 && gen_match_1<6) &&  (gen_match_2>2 && gen_match_2<6))", "dy_genuine_tau"))
 
 
 class WEstimation(EstimationMethod):
