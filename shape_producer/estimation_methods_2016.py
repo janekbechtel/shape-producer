@@ -346,13 +346,14 @@ class HTTEstimation(EstimationMethod):
 
 
 class ggHEstimation(HTTEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    htxs_dict = ggH_htxs
+    def __init__(self, name,  era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
         super(HTTEstimation, self).__init__(
-            name="ggH",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -378,13 +379,13 @@ class ggHEstimation(HTTEstimation):
         else:
             weights = super(ggHEstimation, self).get_weights()
             weights.remove("numberGeneratedEventsWeight")
-            weights.add(Weight("8.22976e-8", "numberGeneratedEventsWeight"))
+            weights.add(Weight("8.8384e-8", "numberGeneratedEventsWeight"))
             weights.add(Weight("ggh_NNLO_weight", "gghNNLO"))
             weights.add(Weight("1.01", "bbh_inclusion_weight"))
             return weights
 
     def get_cuts(self):
-        return Cuts(Cut("(htxs_stage1p1cat>=101)&&(htxs_stage1p1cat<=111)", "htxs_match"))
+        return Cuts(Cut(self.htxs_dict.get(self.name, self.htxs_dict["ggH125"]), "htxs_match"))
 
     def get_files(self):
         query = {
@@ -398,267 +399,15 @@ class ggHEstimation(HTTEstimation):
         return self.artus_file_names(files)
 
 
-class ggHEstimation_VBFTOPO_JET3VETO(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_VBFTOPO_JET3VETO",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==101", "htxs_match"))
-
-
-class ggHEstimation_VBFTOPO_JET3(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_VBFTOPO_JET3",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==102", "htxs_match"))
-
-
-class ggHEstimation_0J(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_0J",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==103", "htxs_match"))
-
-
-class ggHEstimation_1J_PTH_0_60(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_1J_PTH_0_60",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==104", "htxs_match"))
-
-
-class ggHEstimation_1J_PTH_60_120(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_1J_PTH_60_120",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==105", "htxs_match"))
-
-
-class ggHEstimation_1J_PTH_120_200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_1J_PTH_120_200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==106", "htxs_match"))
-
-
-class ggHEstimation_1J_PTH_GT200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_1J_PTH_GT200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==107", "htxs_match"))
-
-
-class ggHEstimation_GE2J_PTH_0_60(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_GE2J_PTH_0_60",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==108", "htxs_match"))
-
-
-class ggHEstimation_GE2J_PTH_60_120(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_GE2J_PTH_60_120",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==109", "htxs_match"))
-
-
-class ggHEstimation_GE2J_PTH_120_200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_GE2J_PTH_120_200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==110", "htxs_match"))
-
-
-class ggHEstimation_GE2J_PTH_GT200(ggHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="ggH_GE2J_PTH_GT200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==111", "htxs_match"))
-
-
 class qqHEstimation(HTTEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    htxs_dict = qqH_htxs
+    def __init__(self, name, era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
         super(HTTEstimation, self).__init__(
-            name="qqH",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -671,7 +420,7 @@ class qqHEstimation(HTTEstimation):
             mc_campaign="RunIISummer16MiniAODv3")
 
     def get_cuts(self):
-        return Cuts(Cut("(htxs_stage1p1cat>=201)&&(htxs_stage1p1cat<=205)", "htxs_match"))
+        return Cuts(Cut(self.htxs_dict.get(self.name, self.htxs_dict["qqH125"]), "htxs_match"))
 
     def get_files(self):
         query = {
@@ -683,121 +432,6 @@ class qqHEstimation(HTTEstimation):
         files = self.era.datasets_helper.get_nicks_with_query(query)
         log_query(self.name, query, files)
         return self.artus_file_names(files)
-
-
-class qqHEstimation_VBFTOPO_JET3VETO(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="qqH_VBFTOPO_JET3VETO",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==201", "htxs_match"))
-
-
-class qqHEstimation_VBFTOPO_JET3(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="qqH_VBFTOPO_JET3",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==202", "htxs_match"))
-
-
-class qqHEstimation_VH2JET(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="qqH_VH2JET",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==203", "htxs_match"))
-
-
-class qqHEstimation_REST(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="qqH_REST",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==204", "htxs_match"))
-
-
-class qqHEstimation_PTJET1_GT200(qqHEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-        super(HTTEstimation, self).__init__(
-            name="qqH_PTJET1_GT200",
-            folder=folder,
-            get_triggerweight_for_channel=get_triggerweight_for_channel,
-            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-            era=era,
-            directory=directory,
-            friend_directory=friend_directory,
-            channel=channel,
-            mc_campaign="RunIISummer16MiniAODv3")
-
-    def get_cuts(self):
-        return Cuts(Cut("htxs_stage1p1cat==205", "htxs_match"))
 
 
 class VHEstimation(HTTEstimation):
@@ -2161,506 +1795,506 @@ class QCDEstimationTT(ABCDEstimationMethod):
             ])
 
 
-# class WEstimationWithQCD(EstimationMethod):
-#     def __init__(self,
-#                  era,
-#                  directory,
-#                  channel,
-#                  bg_processes,
-#                  data_process,
-#                  w_process,
-#                  qcd_ss_to_os_extrapolation_factor,
-#                  friend_directory=None,
-#                  folder="nominal",
-#                  get_triggerweight_for_channel=get_triggerweight_for_channel,
-#                 get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-#                 get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-#                 get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel
-#                  ):
-#         super(WEstimationWithQCD, self).__init__(
-#             name="WJets",
-#             folder=folder,
-#             get_triggerweight_for_channel=get_triggerweight_for_channel,
-#             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-#             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-#             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-#             era=era,
-#             directory=directory,
-#             channel=channel,
-#             friend_directory=friend_directory,
-#             mc_campaign=None)
-#         self._bg_processes = bg_processes
-#         self._data_process = data_process
-#         self._w_process = w_process
-#         self._qcd_ss_to_os_extrapolation_factor = qcd_ss_to_os_extrapolation_factor
-
-#     def create_root_objects(self, systematic):
-
-#         # create category for MC WJets shape estimation in the signal region
-#         signal_region = copy.deepcopy(systematic.category)
-#         signal_region.name = (signal_region.name +
-#                               "_for_wjets_mc").lstrip(self.channel.name + "_")
-
-#         # create control regions for W yield estimation
-#         high_mt_ss_control_region = copy.deepcopy(systematic.category)
-#         high_mt_ss_control_region.name = "wjets_high_mt_ss_cr"
-#         high_mt_ss_control_region._variable = None
-
-#         high_mt_ss_control_region.cuts.remove("m_t")
-#         high_mt_ss_control_region.cuts.remove("os")
-
-#         high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "m_t"))
-#         high_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
-
-#         # create control regions for W high mt to low mt extrapolation factor
-#         high_mt_os_control_region = copy.deepcopy(
-#             systematic.category)  # this one also used for W yield estimation
-#         high_mt_os_control_region.name = "wjets_high_mt_os_cr"
-#         high_mt_os_control_region._variable = None
-
-#         high_mt_os_control_region.cuts.remove("m_t")
-
-#         high_mt_os_control_region.cuts.add(Cut("mt_1>70", "m_t"))
-
-#         low_mt_os_control_region = copy.deepcopy(systematic.category)
-#         low_mt_os_control_region.name = "wjets_low_mt_os_cr"
-#         low_mt_os_control_region._variable = None
-
-#         low_mt_ss_control_region = copy.deepcopy(systematic.category)
-#         low_mt_ss_control_region.name = "wjets_low_mt_ss_cr"
-#         low_mt_ss_control_region._variable = None
-
-#         low_mt_ss_control_region.cuts.remove("os")
-
-#         low_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
-
-#         # create control regions for W ss to os extrapolation factor
-#         inclusive_os_control_region = copy.deepcopy(systematic.category)
-#         inclusive_os_control_region.name = "wjets_os_cr"
-#         inclusive_os_control_region._variable = None
-
-#         inclusive_os_control_region.cuts.remove("m_t")
-
-#         inclusive_ss_control_region = copy.deepcopy(systematic.category)
-#         inclusive_ss_control_region.name = "wjets_ss_cr"
-#         inclusive_ss_control_region._variable = None
-
-#         inclusive_ss_control_region.cuts.remove("m_t")
-#         inclusive_ss_control_region.cuts.remove("os")
-
-#         inclusive_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
-
-#         # initialize root objects and systematics
-#         root_objects = []
-#         systematic._WandQCD_systematics = []
-
-#         # for extrapolation factors: only W MC is needed
-#         for category in [
-#                 high_mt_os_control_region, low_mt_os_control_region,
-#                 high_mt_ss_control_region, low_mt_ss_control_region,
-#                 inclusive_os_control_region, inclusive_ss_control_region
-#         ]:
-#             s = Systematic(
-#                 category=category,
-#                 process=self._w_process,
-#                 analysis=systematic.analysis,
-#                 era=self.era,
-#                 variation=systematic.variation,
-#                 mass=125)
-#             systematic._WandQCD_systematics.append(s)
-#             s.create_root_objects()
-#             root_objects += s.root_objects
-
-#         # for yields in high mt control regions: data and other bg processes needed
-#         for process in [self._data_process] + self._bg_processes:
-#             for category in [
-#                     high_mt_os_control_region, high_mt_ss_control_region
-#             ]:
-#                 s = Systematic(
-#                     category=category,
-#                     process=process,
-#                     analysis=systematic.analysis,
-#                     era=self.era,
-#                     variation=systematic.variation,
-#                     mass=125)
-#                 systematic._WandQCD_systematics.append(s)
-#                 s.create_root_objects()
-#                 root_objects += s.root_objects
-
-#         # for signal region shape
-#         s = Systematic(
-#             category=signal_region,
-#             process=self._w_process,
-#             analysis=systematic.analysis,
-#             era=self.era,
-#             variation=systematic.variation,
-#             mass=125)
-#         systematic._WandQCD_systematics.append(s)
-#         s.create_root_objects()
-#         root_objects += s.root_objects
-
-#         return root_objects
-
-#     def do_estimation(self, systematic):
-#         if not hasattr(systematic, "_WandQCD_systematics"):
-#             logger.fatal(
-#                 "Systematic %s does not have attribute _WandQCD_systematics needed for WandQCD estimation.",
-#                 systematic.name)
-#             raise Exception
-
-#         # Sort shapes and counts
-#         wjets_mc_shape = None
-#         wjets_high_mt_ss_cr_counts = {}
-#         wjets_high_mt_os_cr_counts = {}
-#         wjets_low_mt_os_cr_count = None
-#         wjets_low_mt_ss_cr_count = None
-#         wjets_os_cr_count = None
-#         wjets_ss_cr_count = None
-#         for s in systematic._WandQCD_systematics:
-#             s.do_estimation()
-#             if s.category.name.endswith("for_wjets_mc"):
-#                 wjets_mc_shape = s.shape
-#             elif s.category.name.endswith("wjets_high_mt_ss_cr"):
-#                 wjets_high_mt_ss_cr_counts[s.process.name] = s.shape
-#             elif s.category.name.endswith("wjets_high_mt_os_cr"):
-#                 wjets_high_mt_os_cr_counts[s.process.name] = s.shape
-#             elif s.category.name.endswith("wjets_low_mt_os_cr"):
-#                 wjets_low_mt_os_cr_count = s.shape
-#             elif s.category.name.endswith("wjets_low_mt_ss_cr"):
-#                 wjets_low_mt_ss_cr_count = s.shape
-#             elif s.category.name.endswith("wjets_os_cr"):
-#                 wjets_os_cr_count = s.shape
-#             elif s.category.name.endswith("wjets_ss_cr"):
-#                 wjets_ss_cr_count = s.shape
-
-#         # Determine extrapolation factors
-#         R_ss_to_os = wjets_os_cr_count.result / wjets_ss_cr_count.result
-
-#         wjets_integral_low_mt_os = wjets_low_mt_os_cr_count.result
-#         wjets_integral_high_mt_os = wjets_high_mt_os_cr_counts.pop(
-#             self._w_process.name).result
-#         logger.debug("Integral of WJets MC in low mt OS region: %s",
-#                      str(wjets_integral_low_mt_os))
-#         logger.debug("Integral of WJets MC in high mt OS region: %s",
-#                      str(wjets_integral_high_mt_os))
-
-#         R_high_to_low_mt_os = wjets_integral_low_mt_os / wjets_integral_high_mt_os
-#         R_high_to_low_mt_ss = wjets_low_mt_ss_cr_count.result / wjets_high_mt_ss_cr_counts.pop(
-#             self._w_process.name).result
-#         logger.debug("WJets SS to OS extrapolation factor: %s",
-#                      str(R_ss_to_os))
-#         logger.debug("WJets high to low mt os extrapolation factor: %s",
-#                      str(R_high_to_low_mt_os))
-#         logger.debug("WJets high to low mt ss extrapolation factor: %s",
-#                      str(R_high_to_low_mt_ss))
-
-#         # Determine yields in wjets CRs
-#         logger.debug(
-#             "Data yield in ss high mt region: %s",
-#             str(wjets_high_mt_ss_cr_counts[self._data_process.name].result))
-#         high_mt_ss_yield = wjets_high_mt_ss_cr_counts.pop(
-#             self._data_process.name).result - sum(
-#                 [s.result for s in wjets_high_mt_ss_cr_counts.values()])
-#         sum_mc = sum([s.result for s in wjets_high_mt_ss_cr_counts.values()])
-#         logger.debug("MC yield to be subtracted: %s", str(sum_mc))
-#         for name, s in wjets_high_mt_ss_cr_counts.items():
-#             logger.debug(name + " : " + str(s.result / sum_mc))
-
-#         logger.debug(
-#             "Data yield in os high mt region: %s",
-#             str(wjets_high_mt_os_cr_counts[self._data_process.name].result))
-#         high_mt_os_yield = wjets_high_mt_os_cr_counts.pop(
-#             self._data_process.name).result - sum(
-#                 [s.result for s in wjets_high_mt_os_cr_counts.values()])
-#         sum_mc = sum([s.result for s in wjets_high_mt_os_cr_counts.values()])
-#         logger.debug("MC yield to be subtracted: %s", str(sum_mc))
-#         for name, s in wjets_high_mt_os_cr_counts.items():
-#             logger.debug(name + " : " + str(s.result / sum_mc))
-
-#         logger.debug("WJets + QCD yield in ss high mt region: %s",
-#                      str(high_mt_ss_yield))
-#         logger.debug("WJets + QCD yield in os high mt region: %s",
-#                      str(high_mt_os_yield))
-
-#         # Derive and normalize final shape
-#         logger.debug("WJets MC yield in signal region: %s",
-#                      str(wjets_integral_low_mt_os))
-#         sf = R_ss_to_os * (
-#             high_mt_os_yield -
-#             self._qcd_ss_to_os_extrapolation_factor * high_mt_ss_yield) / (
-#                 R_ss_to_os - self._qcd_ss_to_os_extrapolation_factor
-#             ) / wjets_integral_high_mt_os
-#         estimated_yield = R_high_to_low_mt_os * R_ss_to_os * (
-#             high_mt_os_yield -
-#             self._qcd_ss_to_os_extrapolation_factor * high_mt_ss_yield) / (
-#                 R_ss_to_os - self._qcd_ss_to_os_extrapolation_factor)
-#         logger.debug("WJets Estimated yield in signal region: %s",
-#                      str(estimated_yield))
-#         logger.debug("Scale WJets by %s", str(sf))
-#         wjets_shape = copy.deepcopy(wjets_mc_shape)
-#         wjets_shape.result.Scale(sf)
-
-#         # Rename root object accordingly
-#         wjets_shape.name = systematic.name
-
-#         # Replace negative entries by zeros and renormalize shape
-#         wjets_shape.replace_negative_entries_and_renormalize(tolerance=100.5)
-
-#         return wjets_shape
-
-#     # Data-driven estimation, no associated files and weights
-#     def get_files(self):
-#         raise NotImplementedError
-
-#     def get_weights(self):
-#         raise NotImplementedError
-
-
-# class QCDEstimationWithW(EstimationMethod):
-#     def __init__(self,
-#                  era,
-#                  directory,
-#                  channel,
-#                  bg_processes,
-#                  data_process,
-#                  w_process,
-#                  qcd_ss_to_os_extrapolation_factor,
-#                  friend_directory=None,
-#                  folder="nominal",
-#                  get_triggerweight_for_channel=get_triggerweight_for_channel,
-#                 get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-#                 get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-#                 get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel
-#                  ):
-#         super(QCDEstimationWithW, self).__init__(
-#             name="QCD",
-#             folder=folder,
-#             get_triggerweight_for_channel=get_triggerweight_for_channel,
-#             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-#             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-#             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-#             era=era,
-#             directory=directory,
-#             channel=channel,
-#             friend_directory=friend_directory,
-#             mc_campaign=None)
-#         self._bg_processes = bg_processes
-#         self._data_process = data_process
-#         self._w_process = w_process
-#         self._qcd_ss_to_os_extrapolation_factor = qcd_ss_to_os_extrapolation_factor
-
-#     def create_root_objects(self, systematic):
-
-#         # create category for WJets and QCD shape estimation in the qcd control region
-#         qcd_control_region = copy.deepcopy(systematic.category)
-#         qcd_control_region.name = (qcd_control_region.name + "_ss_for_qcd"
-#                                    ).lstrip(self.channel.name + "_")
-
-#         qcd_control_region.cuts.remove("os")
-
-#         qcd_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
-
-#         # create control regions for W yield estimation
-#         high_mt_ss_control_region = copy.deepcopy(systematic.category)
-#         high_mt_ss_control_region.name = "wjets_high_mt_ss_cr"
-#         high_mt_ss_control_region._variable = None
-
-#         high_mt_ss_control_region.cuts.remove("m_t")
-#         high_mt_ss_control_region.cuts.remove("os")
-
-#         high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "m_t"))
-#         high_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
-
-#         # create control regions for W high mt to low mt extrapolation factor
-#         high_mt_os_control_region = copy.deepcopy(
-#             systematic.category)  # this one also used for W yield estimation
-#         high_mt_os_control_region.name = "wjets_high_mt_os_cr"
-#         high_mt_os_control_region._variable = None
-
-#         high_mt_os_control_region.cuts.remove("m_t")
-
-#         high_mt_os_control_region.cuts.add(Cut("mt_1>70", "m_t"))
-
-#         low_mt_os_control_region = copy.deepcopy(systematic.category)
-#         low_mt_os_control_region.name = "wjets_low_mt_os_cr"
-#         low_mt_os_control_region._variable = None
-
-#         low_mt_ss_control_region = copy.deepcopy(systematic.category)
-#         low_mt_ss_control_region.name = "wjets_low_mt_ss_cr"
-#         low_mt_ss_control_region._variable = None
-
-#         low_mt_ss_control_region.cuts.remove("os")
-
-#         low_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
-
-#         # create control regions for W ss to os extrapolation factor
-#         inclusive_os_control_region = copy.deepcopy(systematic.category)
-#         inclusive_os_control_region.name = "wjets_os_cr"
-#         inclusive_os_control_region._variable = None
-
-#         inclusive_os_control_region.cuts.remove("m_t")
-
-#         inclusive_ss_control_region = copy.deepcopy(systematic.category)
-#         inclusive_ss_control_region.name = "wjets_ss_cr"
-#         inclusive_ss_control_region._variable = None
-
-#         inclusive_ss_control_region.cuts.remove("m_t")
-#         inclusive_ss_control_region.cuts.remove("os")
-
-#         inclusive_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
-
-#         # initialize root objects and systematics
-#         root_objects = []
-#         systematic._WandQCD_systematics = []
-
-#         # for extrapolation factors: only W MC is needed
-#         for category in [
-#                 high_mt_os_control_region, low_mt_os_control_region,
-#                 high_mt_ss_control_region, low_mt_ss_control_region,
-#                 inclusive_os_control_region, inclusive_ss_control_region
-#         ]:
-#             s = Systematic(
-#                 category=category,
-#                 process=self._w_process,
-#                 analysis=systematic.analysis,
-#                 era=self.era,
-#                 variation=systematic.variation,
-#                 mass=125)
-#             systematic._WandQCD_systematics.append(s)
-#             s.create_root_objects()
-#             root_objects += s.root_objects
-
-#         # for yields in high mt control regions: data and other bg processes needed
-#         for process in [self._data_process] + self._bg_processes:
-#             for category in [
-#                     high_mt_os_control_region, high_mt_ss_control_region
-#             ]:
-#                 s = Systematic(
-#                     category=category,
-#                     process=process,
-#                     analysis=systematic.analysis,
-#                     era=self.era,
-#                     variation=systematic.variation,
-#                     mass=125)
-#                 systematic._WandQCD_systematics.append(s)
-#                 s.create_root_objects()
-#                 root_objects += s.root_objects
-
-#         # for Wjets and QCD shape
-#         for process in [self._data_process, self._w_process
-#                         ] + self._bg_processes:
-#             s = Systematic(
-#                 category=qcd_control_region,
-#                 process=process,
-#                 analysis=systematic.analysis,
-#                 era=self.era,
-#                 variation=systematic.variation,
-#                 mass=125)
-#             systematic._WandQCD_systematics.append(s)
-#             s.create_root_objects()
-#             root_objects += s.root_objects
-
-#         return root_objects
-
-#     def do_estimation(self, systematic):
-#         if not hasattr(systematic, "_WandQCD_systematics"):
-#             logger.fatal(
-#                 "Systematic %s does not have attribute _WandQCD_systematics needed for WandQCD estimation.",
-#                 systematic.name)
-#             raise Exception
-
-#         # Sort shapes and counts
-#         qcd_control_region_shapes = {}
-#         wjets_high_mt_ss_cr_counts = {}
-#         wjets_high_mt_os_cr_counts = {}
-#         wjets_low_mt_os_cr_count = None
-#         wjets_low_mt_ss_cr_count = None
-#         wjets_os_cr_count = None
-#         wjets_ss_cr_count = None
-#         for s in systematic._WandQCD_systematics:
-#             s.do_estimation()
-#             if s.category.name.endswith("ss_for_qcd"):
-#                 qcd_control_region_shapes[s.process.name] = s.shape
-#             elif s.category.name.endswith("wjets_high_mt_ss_cr"):
-#                 wjets_high_mt_ss_cr_counts[s.process.name] = s.shape
-#             elif s.category.name.endswith("wjets_high_mt_os_cr"):
-#                 wjets_high_mt_os_cr_counts[s.process.name] = s.shape
-#             elif s.category.name.endswith("wjets_low_mt_os_cr"):
-#                 wjets_low_mt_os_cr_count = s.shape
-#             elif s.category.name.endswith("wjets_low_mt_ss_cr"):
-#                 wjets_low_mt_ss_cr_count = s.shape
-#             elif s.category.name.endswith("wjets_os_cr"):
-#                 wjets_os_cr_count = s.shape
-#             elif s.category.name.endswith("wjets_ss_cr"):
-#                 wjets_ss_cr_count = s.shape
-
-#         # Determine extrapolation factors
-#         R_ss_to_os = wjets_os_cr_count.result / wjets_ss_cr_count.result
-
-#         wjets_integral_low_mt_ss = wjets_low_mt_ss_cr_count.result
-#         wjets_integral_high_mt_ss = wjets_high_mt_ss_cr_counts.pop(
-#             self._w_process.name).result
-
-#         R_high_to_low_mt_os = wjets_low_mt_os_cr_count.result / wjets_high_mt_os_cr_counts.pop(
-#             self._w_process.name).result
-#         R_high_to_low_mt_ss = wjets_integral_low_mt_ss / wjets_integral_high_mt_ss
-
-#         # Determine yields in wjets CRs
-#         high_mt_ss_yield = wjets_high_mt_ss_cr_counts.pop(
-#             self._data_process.name).result - sum(
-#                 [s.result for s in wjets_high_mt_ss_cr_counts.values()])
-
-#         high_mt_os_yield = wjets_high_mt_os_cr_counts.pop(
-#             self._data_process.name).result - sum(
-#                 [s.result for s in wjets_high_mt_os_cr_counts.values()])
-
-#         # Derive and normalize final shape for QCD
-#         wjets_shape = qcd_control_region_shapes.pop(self._w_process.name)
-#         logger.debug("WJets MC yield in qcd control region: %s",
-#                      str(wjets_integral_low_mt_ss))
-#         sf = (high_mt_os_yield -
-#               self._qcd_ss_to_os_extrapolation_factor * high_mt_ss_yield) / (
-#                   R_ss_to_os - self._qcd_ss_to_os_extrapolation_factor
-#               ) / wjets_integral_high_mt_ss
-#         estimated_yield = R_high_to_low_mt_ss * (
-#             high_mt_os_yield -
-#             self._qcd_ss_to_os_extrapolation_factor * high_mt_ss_yield) / (
-#                 R_ss_to_os - self._qcd_ss_to_os_extrapolation_factor)
-#         logger.debug("WJets Estimated yield in qcd control region: %s",
-#                      str(estimated_yield))
-#         logger.debug("Scale WJets by %s", str(sf))
-#         wjets_shape.result.Scale(sf)
-#         wjets_shape._result.Write()
-
-#         qcd_shape = copy.deepcopy(
-#             qcd_control_region_shapes.pop(self._data_process.name))
-#         qcd_shape.result.Add(wjets_shape.result, -1.0)
-#         for sh in qcd_control_region_shapes.values():
-#             qcd_shape.result.Add(sh.result, -1.0)
-#         # Saving QCD shape in ss control region
-#         qcd_ss_shape = copy.deepcopy(qcd_shape)
-#         ss_category_name = ""
-#         for s in systematic._WandQCD_systematics:
-#             if s.category.name.endswith("ss_for_qcd"):
-#                 ss_category_name = s.category._name
-#         qcd_ss_shape.name = systematic.name.replace(systematic.category._name,
-#                                                     ss_category_name)
-#         qcd_ss_shape._result.Write()
-
-#         # Rescale QCD shape for signal region
-#         qcd_shape.result.Scale(self._qcd_ss_to_os_extrapolation_factor)
-
-#         # Rename root object accordingly
-#         qcd_shape.name = systematic.name
-
-#         # Replace negative entries by zeros and renormalize shape
-#         qcd_shape.replace_negative_entries_and_renormalize(tolerance=100.5)
-
-#         return qcd_shape
-
-#     # Data-driven estimation, no associated files and weights
-#     def get_files(self):
-#         raise NotImplementedError
-
-#     def get_weights(self):
-#         raise NotImplementedError
+class WEstimationWithQCD(EstimationMethod):
+    def __init__(self,
+                 era,
+                 directory,
+                 channel,
+                 bg_processes,
+                 data_process,
+                 w_process,
+                 qcd_ss_to_os_extrapolation_factor,
+                 friend_directory=None,
+                 folder="nominal",
+                 get_triggerweight_for_channel=get_triggerweight_for_channel,
+                get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+                get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+                get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel
+                 ):
+        super(WEstimationWithQCD, self).__init__(
+            name="WJets",
+            folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
+            era=era,
+            directory=directory,
+            channel=channel,
+            friend_directory=friend_directory,
+            mc_campaign=None)
+        self._bg_processes = bg_processes
+        self._data_process = data_process
+        self._w_process = w_process
+        self._qcd_ss_to_os_extrapolation_factor = qcd_ss_to_os_extrapolation_factor
+
+    def create_root_objects(self, systematic):
+
+        # create category for MC WJets shape estimation in the signal region
+        signal_region = copy.deepcopy(systematic.category)
+        signal_region.name = (signal_region.name +
+                              "_for_wjets_mc").lstrip(self.channel.name + "_")
+
+        # create control regions for W yield estimation
+        high_mt_ss_control_region = copy.deepcopy(systematic.category)
+        high_mt_ss_control_region.name = "wjets_high_mt_ss_cr"
+        high_mt_ss_control_region._variable = None
+
+        high_mt_ss_control_region.cuts.remove("m_t")
+        high_mt_ss_control_region.cuts.remove("os")
+
+        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "m_t"))
+        high_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
+
+        # create control regions for W high mt to low mt extrapolation factor
+        high_mt_os_control_region = copy.deepcopy(
+            systematic.category)  # this one also used for W yield estimation
+        high_mt_os_control_region.name = "wjets_high_mt_os_cr"
+        high_mt_os_control_region._variable = None
+
+        high_mt_os_control_region.cuts.remove("m_t")
+
+        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "m_t"))
+
+        low_mt_os_control_region = copy.deepcopy(systematic.category)
+        low_mt_os_control_region.name = "wjets_low_mt_os_cr"
+        low_mt_os_control_region._variable = None
+
+        low_mt_ss_control_region = copy.deepcopy(systematic.category)
+        low_mt_ss_control_region.name = "wjets_low_mt_ss_cr"
+        low_mt_ss_control_region._variable = None
+
+        low_mt_ss_control_region.cuts.remove("os")
+
+        low_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
+
+        # create control regions for W ss to os extrapolation factor
+        inclusive_os_control_region = copy.deepcopy(systematic.category)
+        inclusive_os_control_region.name = "wjets_os_cr"
+        inclusive_os_control_region._variable = None
+
+        inclusive_os_control_region.cuts.remove("m_t")
+
+        inclusive_ss_control_region = copy.deepcopy(systematic.category)
+        inclusive_ss_control_region.name = "wjets_ss_cr"
+        inclusive_ss_control_region._variable = None
+
+        inclusive_ss_control_region.cuts.remove("m_t")
+        inclusive_ss_control_region.cuts.remove("os")
+
+        inclusive_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
+
+        # initialize root objects and systematics
+        root_objects = []
+        systematic._WandQCD_systematics = []
+
+        # for extrapolation factors: only W MC is needed
+        for category in [
+                high_mt_os_control_region, low_mt_os_control_region,
+                high_mt_ss_control_region, low_mt_ss_control_region,
+                inclusive_os_control_region, inclusive_ss_control_region
+        ]:
+            s = Systematic(
+                category=category,
+                process=self._w_process,
+                analysis=systematic.analysis,
+                era=self.era,
+                variation=systematic.variation,
+                mass=125)
+            systematic._WandQCD_systematics.append(s)
+            s.create_root_objects()
+            root_objects += s.root_objects
+
+        # for yields in high mt control regions: data and other bg processes needed
+        for process in [self._data_process] + self._bg_processes:
+            for category in [
+                    high_mt_os_control_region, high_mt_ss_control_region
+            ]:
+                s = Systematic(
+                    category=category,
+                    process=process,
+                    analysis=systematic.analysis,
+                    era=self.era,
+                    variation=systematic.variation,
+                    mass=125)
+                systematic._WandQCD_systematics.append(s)
+                s.create_root_objects()
+                root_objects += s.root_objects
+
+        # for signal region shape
+        s = Systematic(
+            category=signal_region,
+            process=self._w_process,
+            analysis=systematic.analysis,
+            era=self.era,
+            variation=systematic.variation,
+            mass=125)
+        systematic._WandQCD_systematics.append(s)
+        s.create_root_objects()
+        root_objects += s.root_objects
+
+        return root_objects
+
+    def do_estimation(self, systematic):
+        if not hasattr(systematic, "_WandQCD_systematics"):
+            logger.fatal(
+                "Systematic %s does not have attribute _WandQCD_systematics needed for WandQCD estimation.",
+                systematic.name)
+            raise Exception
+
+        # Sort shapes and counts
+        wjets_mc_shape = None
+        wjets_high_mt_ss_cr_counts = {}
+        wjets_high_mt_os_cr_counts = {}
+        wjets_low_mt_os_cr_count = None
+        wjets_low_mt_ss_cr_count = None
+        wjets_os_cr_count = None
+        wjets_ss_cr_count = None
+        for s in systematic._WandQCD_systematics:
+            s.do_estimation()
+            if s.category.name.endswith("for_wjets_mc"):
+                wjets_mc_shape = s.shape
+            elif s.category.name.endswith("wjets_high_mt_ss_cr"):
+                wjets_high_mt_ss_cr_counts[s.process.name] = s.shape
+            elif s.category.name.endswith("wjets_high_mt_os_cr"):
+                wjets_high_mt_os_cr_counts[s.process.name] = s.shape
+            elif s.category.name.endswith("wjets_low_mt_os_cr"):
+                wjets_low_mt_os_cr_count = s.shape
+            elif s.category.name.endswith("wjets_low_mt_ss_cr"):
+                wjets_low_mt_ss_cr_count = s.shape
+            elif s.category.name.endswith("wjets_os_cr"):
+                wjets_os_cr_count = s.shape
+            elif s.category.name.endswith("wjets_ss_cr"):
+                wjets_ss_cr_count = s.shape
+
+        # Determine extrapolation factors
+        R_ss_to_os = wjets_os_cr_count.result / wjets_ss_cr_count.result
+
+        wjets_integral_low_mt_os = wjets_low_mt_os_cr_count.result
+        wjets_integral_high_mt_os = wjets_high_mt_os_cr_counts.pop(
+            self._w_process.name).result
+        logger.debug("Integral of WJets MC in low mt OS region: %s",
+                     str(wjets_integral_low_mt_os))
+        logger.debug("Integral of WJets MC in high mt OS region: %s",
+                     str(wjets_integral_high_mt_os))
+
+        R_high_to_low_mt_os = wjets_integral_low_mt_os / wjets_integral_high_mt_os
+        R_high_to_low_mt_ss = wjets_low_mt_ss_cr_count.result / wjets_high_mt_ss_cr_counts.pop(
+            self._w_process.name).result
+        logger.debug("WJets SS to OS extrapolation factor: %s",
+                     str(R_ss_to_os))
+        logger.debug("WJets high to low mt os extrapolation factor: %s",
+                     str(R_high_to_low_mt_os))
+        logger.debug("WJets high to low mt ss extrapolation factor: %s",
+                     str(R_high_to_low_mt_ss))
+
+        # Determine yields in wjets CRs
+        logger.debug(
+            "Data yield in ss high mt region: %s",
+            str(wjets_high_mt_ss_cr_counts[self._data_process.name].result))
+        high_mt_ss_yield = wjets_high_mt_ss_cr_counts.pop(
+            self._data_process.name).result - sum(
+                [s.result for s in wjets_high_mt_ss_cr_counts.values()])
+        sum_mc = sum([s.result for s in wjets_high_mt_ss_cr_counts.values()])
+        logger.debug("MC yield to be subtracted: %s", str(sum_mc))
+        for name, s in wjets_high_mt_ss_cr_counts.items():
+            logger.debug(name + " : " + str(s.result / sum_mc))
+
+        logger.debug(
+            "Data yield in os high mt region: %s",
+            str(wjets_high_mt_os_cr_counts[self._data_process.name].result))
+        high_mt_os_yield = wjets_high_mt_os_cr_counts.pop(
+            self._data_process.name).result - sum(
+                [s.result for s in wjets_high_mt_os_cr_counts.values()])
+        sum_mc = sum([s.result for s in wjets_high_mt_os_cr_counts.values()])
+        logger.debug("MC yield to be subtracted: %s", str(sum_mc))
+        for name, s in wjets_high_mt_os_cr_counts.items():
+            logger.debug(name + " : " + str(s.result / sum_mc))
+
+        logger.debug("WJets + QCD yield in ss high mt region: %s",
+                     str(high_mt_ss_yield))
+        logger.debug("WJets + QCD yield in os high mt region: %s",
+                     str(high_mt_os_yield))
+
+        # Derive and normalize final shape
+        logger.debug("WJets MC yield in signal region: %s",
+                     str(wjets_integral_low_mt_os))
+        sf = R_ss_to_os * (
+            high_mt_os_yield -
+            self._qcd_ss_to_os_extrapolation_factor * high_mt_ss_yield) / (
+                R_ss_to_os - self._qcd_ss_to_os_extrapolation_factor
+            ) / wjets_integral_high_mt_os
+        estimated_yield = R_high_to_low_mt_os * R_ss_to_os * (
+            high_mt_os_yield -
+            self._qcd_ss_to_os_extrapolation_factor * high_mt_ss_yield) / (
+                R_ss_to_os - self._qcd_ss_to_os_extrapolation_factor)
+        logger.debug("WJets Estimated yield in signal region: %s",
+                     str(estimated_yield))
+        logger.debug("Scale WJets by %s", str(sf))
+        wjets_shape = copy.deepcopy(wjets_mc_shape)
+        wjets_shape.result.Scale(sf)
+
+        # Rename root object accordingly
+        wjets_shape.name = systematic.name
+
+        # Replace negative entries by zeros and renormalize shape
+        wjets_shape.replace_negative_entries_and_renormalize(tolerance=100.5)
+
+        return wjets_shape
+
+    # Data-driven estimation, no associated files and weights
+    def get_files(self):
+        raise NotImplementedError
+
+    def get_weights(self):
+        raise NotImplementedError
+
+
+class QCDEstimationWithW(EstimationMethod):
+    def __init__(self,
+                 era,
+                 directory,
+                 channel,
+                 bg_processes,
+                 data_process,
+                 w_process,
+                 qcd_ss_to_os_extrapolation_factor,
+                 friend_directory=None,
+                 folder="nominal",
+                 get_triggerweight_for_channel=get_triggerweight_for_channel,
+                get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+                get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+                get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel
+                 ):
+        super(QCDEstimationWithW, self).__init__(
+            name="QCD",
+            folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
+            era=era,
+            directory=directory,
+            channel=channel,
+            friend_directory=friend_directory,
+            mc_campaign=None)
+        self._bg_processes = bg_processes
+        self._data_process = data_process
+        self._w_process = w_process
+        self._qcd_ss_to_os_extrapolation_factor = qcd_ss_to_os_extrapolation_factor
+
+    def create_root_objects(self, systematic):
+
+        # create category for WJets and QCD shape estimation in the qcd control region
+        qcd_control_region = copy.deepcopy(systematic.category)
+        qcd_control_region.name = (qcd_control_region.name + "_ss_for_qcd"
+                                   ).lstrip(self.channel.name + "_")
+
+        qcd_control_region.cuts.remove("os")
+
+        qcd_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
+
+        # create control regions for W yield estimation
+        high_mt_ss_control_region = copy.deepcopy(systematic.category)
+        high_mt_ss_control_region.name = "wjets_high_mt_ss_cr"
+        high_mt_ss_control_region._variable = None
+
+        high_mt_ss_control_region.cuts.remove("m_t")
+        high_mt_ss_control_region.cuts.remove("os")
+
+        high_mt_ss_control_region.cuts.add(Cut("mt_1>70", "m_t"))
+        high_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
+
+        # create control regions for W high mt to low mt extrapolation factor
+        high_mt_os_control_region = copy.deepcopy(
+            systematic.category)  # this one also used for W yield estimation
+        high_mt_os_control_region.name = "wjets_high_mt_os_cr"
+        high_mt_os_control_region._variable = None
+
+        high_mt_os_control_region.cuts.remove("m_t")
+
+        high_mt_os_control_region.cuts.add(Cut("mt_1>70", "m_t"))
+
+        low_mt_os_control_region = copy.deepcopy(systematic.category)
+        low_mt_os_control_region.name = "wjets_low_mt_os_cr"
+        low_mt_os_control_region._variable = None
+
+        low_mt_ss_control_region = copy.deepcopy(systematic.category)
+        low_mt_ss_control_region.name = "wjets_low_mt_ss_cr"
+        low_mt_ss_control_region._variable = None
+
+        low_mt_ss_control_region.cuts.remove("os")
+
+        low_mt_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
+
+        # create control regions for W ss to os extrapolation factor
+        inclusive_os_control_region = copy.deepcopy(systematic.category)
+        inclusive_os_control_region.name = "wjets_os_cr"
+        inclusive_os_control_region._variable = None
+
+        inclusive_os_control_region.cuts.remove("m_t")
+
+        inclusive_ss_control_region = copy.deepcopy(systematic.category)
+        inclusive_ss_control_region.name = "wjets_ss_cr"
+        inclusive_ss_control_region._variable = None
+
+        inclusive_ss_control_region.cuts.remove("m_t")
+        inclusive_ss_control_region.cuts.remove("os")
+
+        inclusive_ss_control_region.cuts.add(Cut("q_1*q_2>0", "ss"))
+
+        # initialize root objects and systematics
+        root_objects = []
+        systematic._WandQCD_systematics = []
+
+        # for extrapolation factors: only W MC is needed
+        for category in [
+                high_mt_os_control_region, low_mt_os_control_region,
+                high_mt_ss_control_region, low_mt_ss_control_region,
+                inclusive_os_control_region, inclusive_ss_control_region
+        ]:
+            s = Systematic(
+                category=category,
+                process=self._w_process,
+                analysis=systematic.analysis,
+                era=self.era,
+                variation=systematic.variation,
+                mass=125)
+            systematic._WandQCD_systematics.append(s)
+            s.create_root_objects()
+            root_objects += s.root_objects
+
+        # for yields in high mt control regions: data and other bg processes needed
+        for process in [self._data_process] + self._bg_processes:
+            for category in [
+                    high_mt_os_control_region, high_mt_ss_control_region
+            ]:
+                s = Systematic(
+                    category=category,
+                    process=process,
+                    analysis=systematic.analysis,
+                    era=self.era,
+                    variation=systematic.variation,
+                    mass=125)
+                systematic._WandQCD_systematics.append(s)
+                s.create_root_objects()
+                root_objects += s.root_objects
+
+        # for Wjets and QCD shape
+        for process in [self._data_process, self._w_process
+                        ] + self._bg_processes:
+            s = Systematic(
+                category=qcd_control_region,
+                process=process,
+                analysis=systematic.analysis,
+                era=self.era,
+                variation=systematic.variation,
+                mass=125)
+            systematic._WandQCD_systematics.append(s)
+            s.create_root_objects()
+            root_objects += s.root_objects
+
+        return root_objects
+
+    def do_estimation(self, systematic):
+        if not hasattr(systematic, "_WandQCD_systematics"):
+            logger.fatal(
+                "Systematic %s does not have attribute _WandQCD_systematics needed for WandQCD estimation.",
+                systematic.name)
+            raise Exception
+
+        # Sort shapes and counts
+        qcd_control_region_shapes = {}
+        wjets_high_mt_ss_cr_counts = {}
+        wjets_high_mt_os_cr_counts = {}
+        wjets_low_mt_os_cr_count = None
+        wjets_low_mt_ss_cr_count = None
+        wjets_os_cr_count = None
+        wjets_ss_cr_count = None
+        for s in systematic._WandQCD_systematics:
+            s.do_estimation()
+            if s.category.name.endswith("ss_for_qcd"):
+                qcd_control_region_shapes[s.process.name] = s.shape
+            elif s.category.name.endswith("wjets_high_mt_ss_cr"):
+                wjets_high_mt_ss_cr_counts[s.process.name] = s.shape
+            elif s.category.name.endswith("wjets_high_mt_os_cr"):
+                wjets_high_mt_os_cr_counts[s.process.name] = s.shape
+            elif s.category.name.endswith("wjets_low_mt_os_cr"):
+                wjets_low_mt_os_cr_count = s.shape
+            elif s.category.name.endswith("wjets_low_mt_ss_cr"):
+                wjets_low_mt_ss_cr_count = s.shape
+            elif s.category.name.endswith("wjets_os_cr"):
+                wjets_os_cr_count = s.shape
+            elif s.category.name.endswith("wjets_ss_cr"):
+                wjets_ss_cr_count = s.shape
+
+        # Determine extrapolation factors
+        R_ss_to_os = wjets_os_cr_count.result / wjets_ss_cr_count.result
+
+        wjets_integral_low_mt_ss = wjets_low_mt_ss_cr_count.result
+        wjets_integral_high_mt_ss = wjets_high_mt_ss_cr_counts.pop(
+            self._w_process.name).result
+
+        R_high_to_low_mt_os = wjets_low_mt_os_cr_count.result / wjets_high_mt_os_cr_counts.pop(
+            self._w_process.name).result
+        R_high_to_low_mt_ss = wjets_integral_low_mt_ss / wjets_integral_high_mt_ss
+
+        # Determine yields in wjets CRs
+        high_mt_ss_yield = wjets_high_mt_ss_cr_counts.pop(
+            self._data_process.name).result - sum(
+                [s.result for s in wjets_high_mt_ss_cr_counts.values()])
+
+        high_mt_os_yield = wjets_high_mt_os_cr_counts.pop(
+            self._data_process.name).result - sum(
+                [s.result for s in wjets_high_mt_os_cr_counts.values()])
+
+        # Derive and normalize final shape for QCD
+        wjets_shape = qcd_control_region_shapes.pop(self._w_process.name)
+        logger.debug("WJets MC yield in qcd control region: %s",
+                     str(wjets_integral_low_mt_ss))
+        sf = (high_mt_os_yield -
+              self._qcd_ss_to_os_extrapolation_factor * high_mt_ss_yield) / (
+                  R_ss_to_os - self._qcd_ss_to_os_extrapolation_factor
+              ) / wjets_integral_high_mt_ss
+        estimated_yield = R_high_to_low_mt_ss * (
+            high_mt_os_yield -
+            self._qcd_ss_to_os_extrapolation_factor * high_mt_ss_yield) / (
+                R_ss_to_os - self._qcd_ss_to_os_extrapolation_factor)
+        logger.debug("WJets Estimated yield in qcd control region: %s",
+                     str(estimated_yield))
+        logger.debug("Scale WJets by %s", str(sf))
+        wjets_shape.result.Scale(sf)
+        wjets_shape._result.Write()
+
+        qcd_shape = copy.deepcopy(
+            qcd_control_region_shapes.pop(self._data_process.name))
+        qcd_shape.result.Add(wjets_shape.result, -1.0)
+        for sh in qcd_control_region_shapes.values():
+            qcd_shape.result.Add(sh.result, -1.0)
+        # Saving QCD shape in ss control region
+        qcd_ss_shape = copy.deepcopy(qcd_shape)
+        ss_category_name = ""
+        for s in systematic._WandQCD_systematics:
+            if s.category.name.endswith("ss_for_qcd"):
+                ss_category_name = s.category._name
+        qcd_ss_shape.name = systematic.name.replace(systematic.category._name,
+                                                    ss_category_name)
+        qcd_ss_shape._result.Write()
+
+        # Rescale QCD shape for signal region
+        qcd_shape.result.Scale(self._qcd_ss_to_os_extrapolation_factor)
+
+        # Rename root object accordingly
+        qcd_shape.name = systematic.name
+
+        # Replace negative entries by zeros and renormalize shape
+        qcd_shape.replace_negative_entries_and_renormalize(tolerance=100.5)
+
+        return qcd_shape
+
+    # Data-driven estimation, no associated files and weights
+    def get_files(self):
+        raise NotImplementedError
+
+    def get_weights(self):
+        raise NotImplementedError
