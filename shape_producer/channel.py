@@ -54,6 +54,17 @@ class MMSM(Channel):
             Cut("(trg_singlemuon==1 && pt_1>25 && pt_2>25)", "trg_singlemuon"))
 
 
+class MMSM2017(Channel):
+    def __init__(self):
+        self._name = "mm"
+        self._cuts = Cuts(
+            Cut("extraelec_veto<0.5", "extraelec_veto"),
+            Cut("extramuon_veto<0.5", "extramuon_veto"),
+            Cut("iso_1<0.15 && iso_2<0.15", "muon_iso"), Cut(
+                "q_1*q_2<0", "os"),
+            Cut("((trg_singlemuon_27==1 || trg_singlemuon_24==1) && pt_1>25 && pt_2>25)", "trg_selection"))
+
+
 class MT(Channel):
     def __init__(self):
         self._name = "mt"
