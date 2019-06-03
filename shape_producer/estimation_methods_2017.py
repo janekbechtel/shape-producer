@@ -60,6 +60,11 @@ def get_triggerweight_for_channel(channel):
             "(trigger_23_data_Weight_2*trigger_12_data_Weight_1*(trg_muonelectron_mu23ele12==1)+trigger_23_data_Weight_1*trigger_8_data_Weight_2*(trg_muonelectron_mu8ele23==1) - trigger_23_data_Weight_2*trigger_23_data_Weight_1*(trg_muonelectron_mu8ele23==1 && trg_muonelectron_mu23ele12==1))/(trigger_23_mc_Weight_2*trigger_12_mc_Weight_1*(trg_muonelectron_mu23ele12==1)+trigger_23_mc_Weight_1*trigger_8_mc_Weight_2*(trg_muonelectron_mu8ele23==1) - trigger_23_mc_Weight_2*trigger_23_mc_Weight_1*(trg_muonelectron_mu8ele23==1 && trg_muonelectron_mu23ele12==1))",
             "trigger_lepton_sf")
 
+    elif "mm" in channel:
+        weight = Weight(
+            "singleTriggerDataEfficiencyWeightKIT_1/singleTriggerMCEfficiencyWeightKIT_1",
+            "trigger_lepton_sf")
+
     return weight
 
 
@@ -387,6 +392,9 @@ class VVLEstimation(VVEstimation):
         elif "em" in self.channel.name:
             emb_veto = "!(gen_match_1==3 && gen_match_2==4)"
             ff_veto = "(1.0)"
+        elif "mm" in self.channel.name:
+            emb_veto = "!(gen_match_1==4 && gen_match_2==4)"
+            ff_veto = "(1.0)"
         return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "vv_emb_and_ff_veto"))
 
 class VVTEstimation(VVEstimation):
@@ -422,6 +430,8 @@ class VVTEstimation(VVEstimation):
             tt_cut = "gen_match_1==5 && gen_match_2==5"
         elif "em" in self.channel.name:
             tt_cut = "gen_match_1==3 && gen_match_2==4"
+        elif "mm" in self.channel.name:
+            tt_cut = "gen_match_1==4 && gen_match_2==4"
         return Cuts(Cut(tt_cut, "vvt_cut"))
 
 class VVJEstimation(VVEstimation):
@@ -639,6 +649,8 @@ class ZTTEstimation(DYJetsToLLEstimation):
             tt_cut = "gen_match_1==5 && gen_match_2==5"
         elif "em" in self.channel.name:
             tt_cut = "gen_match_1==3 && gen_match_2==4"
+        elif "mm" in self.channel.name:
+            tt_cut = "gen_match_1==4 && gen_match_2==4"
         return Cuts(Cut(tt_cut, "ztt_cut"))
 
 class ZJEstimation(DYJetsToLLEstimation):
@@ -711,6 +723,9 @@ class ZLEstimation(DYJetsToLLEstimation):
             ff_veto = "!(gen_match_1 == 6 || gen_match_2 == 6)"
         elif "em" in self.channel.name:
             emb_veto = "!(gen_match_1==3 && gen_match_2==4)"
+            ff_veto = "(1.0)"
+        elif "mm" in self.channel.name:
+            emb_veto = "!(gen_match_1==4 && gen_match_2==4)"
             ff_veto = "(1.0)"
         return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "dy_emb_and_ff_veto"))
 
@@ -1040,6 +1055,9 @@ class TTLEstimation(TTEstimation):
         elif "em" in self.channel.name:
             emb_veto = "!(gen_match_1==3 && gen_match_2==4)"
             ff_veto = "(1.0)"
+        elif "mm" in self.channel.name:
+            emb_veto = "!(gen_match_1==4 && gen_match_2==4)"
+            ff_veto = "(1.0)"
         return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "tt_emb_and_ff_veto"))
 
 
@@ -1071,6 +1089,8 @@ class TTTEstimation(TTEstimation):
             tt_cut = "gen_match_1==5 && gen_match_2==5"
         elif "em" in self.channel.name:
             tt_cut = "gen_match_1==3 && gen_match_2==4"
+        elif "mm" in self.channel.name:
+            tt_cut = "gen_match_1==4 && gen_match_2==4"
         return Cuts(Cut(tt_cut, "ttt_cut"))
 
 class TTJEstimation(TTEstimation):
