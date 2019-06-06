@@ -982,8 +982,8 @@ class ZTTEmbeddedEstimation(EstimationMethod):
             Weight("embeddedDecayModeWeight", "decayMode_SF")
             )
         if self.channel.name == "mt":
-            #emb_weights.add(
-            #    Weight("idWeight_1*(triggerWeight_1*(pt_1>23)+((MuTau_TauLeg_DataEfficiencyWeight_2/MuTau_TauLeg_EmbeddedEfficiencyWeight_2)*(pt_1<=23)))*isoWeight_1", "lepton_sf"))
+            emb_weights.add(
+                Weight("idWeight_1*(triggerWeight_1*(pt_1>23)+((MuTau_TauLeg_DataEfficiencyWeight_2/MuTau_TauLeg_EmbeddedEfficiencyWeight_2)*(pt_1<=23)))*isoWeight_1", "lepton_sf"))
             #emb_weights.add(Weight("1.0", "mutau_crosstriggerweight"))
             emb_weights.add(Weight("gen_match_1==4 && gen_match_2==5","emb_veto"))
 
