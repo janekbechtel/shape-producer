@@ -178,8 +178,8 @@ class Histogram(TTreeContent):
             # TODO: What else?
             pass
 
-    def save(self, output_tree):
-        self._result.Write()
+    def save(self, output_tree, counts):
+        self._result.Write("",ROOT.TObject.kOverwrite)
 
     def has_negative_entries(self):
         if not self.is_present():
@@ -288,7 +288,6 @@ class Count(TTreeContent):
             tree.Draw("1>>" + self._name + "(1)",
                       self._cuts.expand() + "*" + self._weights.extract(),
                       "goff")
-
             self._result = ROOT.gDirectory.Get(self._name).GetBinContent(1)
 
             # reset the chain and friend trees to close the open files explicitely
@@ -298,10 +297,10 @@ class Count(TTreeContent):
 
         return self
 
-    def save(self, output_tree):
-        result_array = array("f", [self._result])
+    def save(self, output_tree, counts):
+        counts.append(array("f", [self._result]))
         name = self._name
-        output_tree.Branch(name, result_array, name + "/F")
+        output_tree.Branch(name, counts[-1], name + "/F")
 
     # TODO: FIXME: What is this?
     def update(self):
@@ -425,7 +424,7 @@ class RootObjects(object):
                     if h.files_folders() == files_folder
             ]:
                 h.update()
-                h.save(self._output_tree)
+                h.save(self._output_tree, self._counts)
 
     def produce_classic(self, num_threads):
         self.create_output_file()
@@ -452,7 +451,7 @@ class RootObjects(object):
                     i_ro]._result
 
         for h in self._root_objects:  # write sequentially to prevent race conditions
-            h.save(self._output_tree)
+            h.save(self._output_tree, self._counts)
         return self
 
     def set_duplicates(self):
@@ -476,6 +475,6 @@ class RootObjects(object):
             logger.fatal("No produce method has been called for %s.", self)
             raise Exception
         self._output_tree.Fill()
-        self._output_file.Write()
+        self._output_tree.Write("",ROOT.TObject.kOverwrite)
         self._output_file.Close()
         logger.info("Output file closed: %s.", self._output_file)

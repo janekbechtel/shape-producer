@@ -240,14 +240,17 @@ class Systematics(object):
     # to the actual estimations. Currently do not run in parallel due to expected very low runtime, can in principle be parallelized
     def do_estimations(self):
         logger.debug('-->do_estimations')
+        produced_objects = [k.GetName() for k in self._root_objects_holder._output_tree.GetListOfLeaves()] + [k.GetName() for k in self._root_objects_holder._output_file.GetListOfKeys() if k.GetName != self._root_objects_holder._output_tree.GetName()]
         for systematic in self._systematics:
             logger.debug('---->Do estimation for systematic %s', systematic.name)
             systematic.do_estimation()
             # systematic.shape.save(self._root_objects_holder)
             if systematic._shape is not None:
-                systematic.shape.save(self._root_objects_holder)
+                if systematic.shape.name not in produced_objects:
+                    systematic.shape.save(self._root_objects_holder._output_tree, self._root_objects_holder._counts)
             else:
                 logger.warning('%s not saved', systematic.name)
+        self._root_objects_holder.save()
 
     def summary(self):
         table = [[

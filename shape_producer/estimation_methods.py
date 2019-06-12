@@ -217,7 +217,10 @@ class SStoOSEstimationMethod(EstimationMethod):
 
         # Subtract MC shapes from data shape
         for s in systematic._qcd_systematics[1:]:
-            shape.result.Add(s.shape.result, -1.0)
+            if not isinstance(shape.result,float):
+                shape.result.Add(s.shape.result, -1.0)
+            else:
+                shape._result -= s.shape.result
 
         final_shape = copy.deepcopy(shape)
         # Saving shape in ss region
@@ -376,8 +379,14 @@ class ABCDEstimationMethod(EstimationMethod):
         # Derive final shape
         derived_shape = copy.deepcopy(B_shapes.pop(self._data_process.name))
         for s in B_shapes.values():
-            derived_shape.result.Add(s.result, -1.0)
-        derived_shape.result.Scale(extrapolation_factor)
+            if not isinstance(derived_shape.result,float):
+                derived_shape.result.Add(s.result, -1.0)
+            else:
+                derived_shape._result -= s.result
+        if not isinstance(derived_shape.result,float):
+            derived_shape.result.Scale(extrapolation_factor)
+        else:
+            derived_shape.result *= extrapolation_factor
 
         # Rename root object accordingly
         derived_shape.name = systematic.name
@@ -445,7 +454,10 @@ class AddHistogramEstimationMethod(EstimationMethod):
 
         # Add/subtract additional shapes from first shape
         for s in systematic._add_systematics[1:]:
-            shape.result.Add(s.shape.result, self._add_weights[-1])
+            if not isinstance(shape.result,float):
+                shape.result.Add(s.shape.result, self._add_weights[-1])
+            else:
+                shape.result += s.shape.result * self._add_weights[-1]
 
         final_shape = copy.deepcopy(shape)
 
@@ -642,7 +654,10 @@ class NewFakeEstimationMethodLT(EstimationMethod):
 
         # Subtract MC shapes from data shape
         for s in systematic._ff_systematics[1:]:
-            shape.result.Add(s.shape.result, -1.0)
+            if not isinstance(shape.result,float):
+                shape.result.Add(s.shape.result, -1.0)
+            else:
+                shape._result -= s.shape.result
 
         # Rename root object accordingly
         shape.name = systematic.name
