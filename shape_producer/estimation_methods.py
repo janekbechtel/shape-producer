@@ -224,19 +224,29 @@ class SStoOSEstimationMethod(EstimationMethod):
 
         final_shape = copy.deepcopy(shape)
         # Saving shape in ss region
-        shape._result = final_shape.result.Clone()
+        if not isinstance(final_shape.result,float):
+            shape._result = final_shape.result.Clone()
+        else:
+            shape._result = final_shape.result
+
         shape.name = systematic.name.replace(
             systematic.category._name,
             systematic._qcd_systematics[0].category._name)
-        shape._result.Write()
-        # Scale shape with extrapolation factor
-        final_shape.result.Scale(self._extrapolation_factor)
+
+        if not isinstance(final_shape.result,float):
+            shape._result.Write()
+            # Scale shape with extrapolation factor
+            final_shape.result.Scale(self._extrapolation_factor)
+        else:
+            # Scale shape with extrapolation factor
+            final_shape._result *= self._extrapolation_factor
 
         # Rename root object accordingly
         final_shape.name = systematic.name
 
         # Replace negative entries by zeros and renormalize shape
-        final_shape.replace_negative_entries_and_renormalize(tolerance=100.05)
+        if not isinstance(final_shape.result,float):
+            final_shape.replace_negative_entries_and_renormalize(tolerance=100.05)
 
         return final_shape
 
