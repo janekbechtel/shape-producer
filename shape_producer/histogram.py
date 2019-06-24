@@ -123,10 +123,6 @@ class Histogram(TTreeContent):
             for inputfile in self._inputfiles:
                 logger.debug("------>inputfile: " + inputfile)
                 folder = self._folder
-                if "EWK" in inputfile and "Recoil" in folder:
-                    folder = folder.replace("metRecoilResponseUp", "nominal").replace("metRecoilResponseDown", "nominal").replace("metRecoilResolutionUp", "nominal").replace("metRecoilResolutionDown", "nominal")
-                if "DY" in inputfile and "Unclustered" in folder:
-                    folder = folder.replace("metUnclusteredEnUp", "nominal").replace("metUnclusteredEnDown", "nominal")
                 logger.debug("------>include:" + inputfile + " / " + self._folder)
 
                 tree.Add(inputfile + "/" + folder)
@@ -139,10 +135,6 @@ class Histogram(TTreeContent):
                     friend_tree = ROOT.TChain()
                     for friend_inputfile in friend_inputfiles:
                         folder = self._folder
-                        if "EWK" in friend_inputfile and "Recoil" in folder:
-                            folder = folder.replace("metRecoilResponseUp", "nominal").replace("metRecoilResponseDown", "nominal").replace("metRecoilResolutionUp", "nominal").replace("metRecoilResolutionDown", "nominal")
-                        if "DY" in friend_inputfile and "Unclustered" in folder:
-                            folder = folder.replace("metUnclusteredEnUp", "nominal").replace("metUnclusteredEnDown", "nominal")
                         friend_tree.Add(friend_inputfile + "/" + folder)
                         logger.debug("-------->Add friend_inputfile:" + friend_inputfile + "/" + self._folder)
                     tree.AddFriend(friend_tree)
