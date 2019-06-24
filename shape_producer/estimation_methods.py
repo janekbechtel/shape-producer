@@ -235,11 +235,19 @@ class SStoOSEstimationMethod(EstimationMethod):
 
         if not isinstance(final_shape.result,float):
             shape._result.Write()
-            # Scale shape with extrapolation factor
-            final_shape.result.Scale(self._extrapolation_factor)
+            if shape._result.Integral() > 0.0:
+                # Scale shape with extrapolation factor
+                final_shape.result.Scale(self._extrapolation_factor)
+            else:
+                logger.warning("No data in same-sign region for systematic %s. Setting extrapolation factor to 0.0", systematic.name)
+                final_shape.result.Scale(0.0)
         else:
-            # Scale shape with extrapolation factor
-            final_shape._result *= self._extrapolation_factor
+            if shape._result.Integral() > 0.0:
+                # Scale shape with extrapolation factor
+                final_shape._result *= self._extrapolation_factor
+            else:
+                logger.warning("No data in same-sign region for systematic %s. Setting extrapolation factor to 0.0", systematic.name)
+                final_shape._result *= 0.0
 
         # Rename root object accordingly
         final_shape.name = systematic.name
@@ -372,17 +380,22 @@ class ABCDEstimationMethod(EstimationMethod):
                 D_shapes[s.process.name] = s.shape
 
         # Determine extrapolation factor
+        data_C = C_shapes[self._data_process.name].result
         C_yield = C_shapes.pop(self._data_process.name).result - sum(
             [s.result for s in C_shapes.values()])
+        data_D = D_shapes[self._data_process.name].result
         D_yield = D_shapes.pop(self._data_process.name).result - sum(
             [s.result for s in D_shapes.values()])
 
-        if not D_yield > 0.0:
+        if data_C == 0.0 and data_D == 0.0:
+            logger.warning("No data in C and D regions in ABCD method for systematic %s. Setting extrapolation factor to 0.0", systematic.name)
+            extrapolation_factor = 0.0
+        elif not D_yield > 0.0:
             logger.fatal("D_yield in ABCD method for systematic %s is %f.",
                          systematic.name, D_yield)
             raise Exception
-
-        extrapolation_factor = C_yield / D_yield
+        else:
+            extrapolation_factor = C_yield / D_yield
         logger.debug("D to C extrapolation factor: %s",
                      str(extrapolation_factor))
 
