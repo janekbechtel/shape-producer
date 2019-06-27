@@ -387,8 +387,8 @@ class ABCDEstimationMethod(EstimationMethod):
         D_yield = D_shapes.pop(self._data_process.name).result - sum(
             [s.result for s in D_shapes.values()])
 
-        if data_C == 0.0 and data_D == 0.0:
-            logger.warning("No data in C and D regions in ABCD method for systematic %s. Setting extrapolation factor to 0.0", systematic.name)
+        if data_C == 0.0 or data_D == 0.0:
+            logger.warning("No data in C or D region in ABCD method for systematic %s. Setting extrapolation factor to 0.0", systematic.name)
             extrapolation_factor = 0.0
         elif not D_yield > 0.0:
             logger.fatal("D_yield in ABCD method for systematic %s is %f.",
