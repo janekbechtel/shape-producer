@@ -736,35 +736,35 @@ class DYJetsToLLEstimation(EstimationMethod):
         return self.artus_file_names(files)
 
 
-# class EWKZEstimation(DYJetsToLLEstimation):
-#     def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
-#             get_triggerweight_for_channel=get_triggerweight_for_channel,
-#             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-#             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-#             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
-#         super(DYJetsToLLEstimation, self).__init__(
-#             name="EWKZ",
-#             folder=folder,
-#             get_triggerweight_for_channel=get_triggerweight_for_channel,
-#             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
-#             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-#             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
-#             era=era,
-#             directory=directory,
-#             friend_directory=friend_directory,
-#             channel=channel,
-#             mc_campaign="RunIISummer16MiniAODv3")
+class EWKZEstimation(DYJetsToLLEstimation):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
+        super(DYJetsToLLEstimation, self).__init__(
+            name="EWKZ",
+            folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
+            era=era,
+            directory=directory,
+            friend_directory=friend_directory,
+            channel=channel,
+            mc_campaign="RunIISummer16MiniAODv3")
 
-#     def get_files(self):
-#         query_ewkz = {
-#             "process": "^EWKZ",
-#             "data": False,
-#             "campaign": self._mc_campaign,
-#             "generator": "madgraph\-pythia8"
-#         }
-#         files = self.era.datasets_helper.get_nicks_with_query(query_ewkz)
-#         log_query(self.name, query_ewkz, files)
-#         return self.artus_file_names(files)
+    def get_files(self):
+        query_ewkz = {
+            "process": "^EWKZ",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8"
+        }
+        files = self.era.datasets_helper.get_nicks_with_query(query_ewkz)
+        log_query(self.name, query_ewkz, files)
+        return self.artus_file_names(files)
 
 
 class ZTTEstimation(DYJetsToLLEstimation):
