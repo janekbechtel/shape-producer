@@ -795,6 +795,8 @@ class ZTTEstimation(DYJetsToLLEstimation):
             ztt_cut = "gen_match_1==5 && gen_match_2==5"
         elif "em" in self.channel.name:
             ztt_cut = "gen_match_1==3 && gen_match_2==4"
+        elif "mm" in self.channel.name:
+            ztt_cut = "gen_match_1==4 && gen_match_2==4"
         return Cuts(Cut(ztt_cut, "ztt_cut"))
 
     
@@ -838,6 +840,9 @@ class ZLEstimation(DYJetsToLLEstimation):
             ff_veto = "!(gen_match_1 == 6 || gen_match_2 == 6)"
         elif "em" in self.channel.name:
             emb_veto = "!(gen_match_1==3 && gen_match_2==4)"
+            ff_veto = "(1.0)"
+        elif "mm" in self.channel.name:
+            emb_veto = "!(gen_match_1==4 && gen_match_2==4)"
             ff_veto = "(1.0)"
         return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "dy_emb_and_ff_veto"))
 
@@ -1457,6 +1462,9 @@ class TTLEstimation(TTEstimation):
         elif "em" in self.channel.name:
             emb_veto = "!(gen_match_1==3 && gen_match_2==4)"
             ff_veto = "(1.0)"
+        elif "mm" in self.channel.name:
+            emb_veto = "!(gen_match_1==4 && gen_match_2==4)"
+            ff_veto = "(1.0)"
         return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "tt_emb_and_ff_veto"))
 
 
@@ -1488,6 +1496,8 @@ class TTTEstimation(TTEstimation):
             tt_cut = "gen_match_1==5 && gen_match_2==5"
         elif "em" in self.channel.name:
             tt_cut = "gen_match_1==3 && gen_match_2==4"
+        elif "mm" in self.channel.name:
+            tt_cut = "gen_match_1==4 && gen_match_2==4"
         return Cuts(Cut(tt_cut, "ttt_cut"))
 
 
@@ -1551,54 +1561,34 @@ class VVEstimation(EstimationMethod):
         #         Weight("prefiringweight", "prefireWeight"),
         #         self.era.lumi_weight)
         # else:
-            return Weights(
-                Weight("isoWeight_1*isoWeight_2","isoWeight"),
-                Weight("idWeight_1*idWeight_2","idWeight"),
-                self.get_tauByIsoIdWeight_for_channel(self.channel.name),
-                Weight("puweight", "puweight"),
-                Weight("trackWeight_1*trackWeight_2","trackweight"),
-                self.get_triggerweight_for_channel(self.channel._name),
-                self.get_singlelepton_triggerweight_for_channel(self.channel.name),
-                Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
-                self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
-                get_eleRecoWeight_for_channel(self.channel.name),
-                Weight("prefiringweight", "prefireWeight"),
-                # MC weights
-                Weight("numberGeneratedEventsWeight","numberGeneratedEventsWeight"),
-                Weight("(1.0+0.56*(abs(crossSectionPerEventWeight-75.769996)<0.00001))", "VV_NNLO_reweight"),
-                Weight("generatorWeight", "generatorWeight"),
-                self.era.lumi_weight)
+        return Weights(
+            Weight("isoWeight_1*isoWeight_2","isoWeight"),
+            Weight("idWeight_1*idWeight_2","idWeight"),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            Weight("puweight", "puweight"),
+            Weight("trackWeight_1*trackWeight_2","trackweight"),
+            self.get_triggerweight_for_channel(self.channel._name),
+            self.get_singlelepton_triggerweight_for_channel(self.channel.name),
+            Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            get_eleRecoWeight_for_channel(self.channel.name),
+            Weight("prefiringweight", "prefireWeight"),
+            # MC weights
+            #TODO doing stitching with cross-section as reference for WW, WZ, ZZ, so WATCH OUT after changing the cross-sections!!!
+            Weight("1.252790591041545e-07*(abs(crossSectionPerEventWeight - 63.21) < 0.01) + 5.029933132068942e-07*(abs(crossSectionPerEventWeight - 10.32) < 0.01) + 2.501519047441559e-07*(abs(crossSectionPerEventWeight - 22.82) < 0.01) + numberGeneratedEventsWeight*(abs(crossSectionPerEventWeight - 63.21) > 0.01 && abs(crossSectionPerEventWeight - 10.32) > 0.01 && abs(crossSectionPerEventWeight - 22.82) > 0.01)","numberGeneratedEventsWeight"),
+            #TODO correct to proper cross-section values. WILL BE DEPRECATED after fixing cross-sections in datasets.json & producing ntuples
+            Weight("118.7*(abs(crossSectionPerEventWeight - 63.21) < 0.01) + crossSectionPerEventWeight*(abs(crossSectionPerEventWeight - 63.21) > 0.01)", "crossSectionPerEventWeight"),
+            Weight("generatorWeight", "generatorWeight"),
+            self.era.lumi_weight)
 
     def get_files(self):
         query = {
-            "process":
-            "(WWTo1L1Nu2Q|" + "WZTo1L1Nu2Q|" + "WZTo1L3Nu|" + "WZTo2L2Q|" +
-            "ZZTo2L2Q" + ")",
-            "data":
-            False,
-            "campaign":
-            self._mc_campaign,
-            "generator":
-            "amcatnlo-pythia8"
-        }
-        files = self.era.datasets_helper.get_nicks_with_query(query)
-
-        query = {
-            "process": "(VVTo2L2Nu|ZZTo4L)",
-            "extension": "ext1",
-            "data": False,
-            "campaign": self._mc_campaign,
-            "generator": "amcatnlo-pythia8"
-        }
-        files += self.era.datasets_helper.get_nicks_with_query(query)
-
-        query = {
-            "process": "WZJToLLLNu",
+            "process": "(WW|ZZ|WZ)$",  # Query for Di-Boson samples
             "data": False,
             "campaign": self._mc_campaign,
             "generator": "pythia8"
         }
-        files += self.era.datasets_helper.get_nicks_with_query(query)
+        files = self.era.datasets_helper.get_nicks_with_query(query)
 
         query = {
             "process":
@@ -1646,6 +1636,9 @@ class VVLEstimation(VVEstimation):
         elif "em" in self.channel.name:
             emb_veto = "!(gen_match_1==3 && gen_match_2==4)"
             ff_veto = "(1.0)"
+        elif "mm" in self.channel.name:
+            emb_veto = "!(gen_match_1==4 && gen_match_2==4)"
+            ff_veto = "(1.0)"
         return Cuts(Cut("%s && %s"%(emb_veto,ff_veto), "vv_emb_and_ff_veto"))
 
 class VVTEstimation(VVEstimation):
@@ -1676,6 +1669,8 @@ class VVTEstimation(VVEstimation):
             tt_cut = "gen_match_1==5 && gen_match_2==5"
         elif "em" in self.channel.name:
             tt_cut = "gen_match_1==3 && gen_match_2==4"
+        elif "mm" in self.channel.name:
+            tt_cut = "gen_match_1==4 && gen_match_2==4"
         return Cuts(Cut(tt_cut, "vvt_cut"))
 
 

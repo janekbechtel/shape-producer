@@ -39,6 +39,18 @@ class MMSM(Channel):
             Cut("(trg_singlemuon==1 && pt_1>25 && pt_2>25)", "trg_singlemuon"))
 
 
+class MMSM2016(Channel):
+    def __init__(self):
+        self._name = "mm"
+        self._cuts = Cuts(
+            Cut("extraelec_veto<0.5", "extraelec_veto"),
+            Cut("extramuon_veto<0.5", "extramuon_veto"),
+            Cut("iso_1<0.15 && iso_2<0.15", "muon_iso"), Cut(
+                "q_1*q_2<0", "os"),
+            Cut("m_vis > 50","m_vis_cut"),
+            Cut("(trg_singlemuon==1)&&(0<1)", "trg_selection"))
+
+
 class MMSM2017(Channel):
     def __init__(self):
         self._name = "mm"
@@ -369,7 +381,7 @@ class EMSM2017(Channel):
             Cut("dilepton_veto<0.5", "dilepton_veto"),
             Cut("iso_1<0.15", "ele_iso"), Cut("iso_2<0.2", "muon_iso"),
             Cut("q_1*q_2<0", "os"),
-            Cut("nbtag==0 && pZetaMissVis>-35 && (sqrt(2*ptvis*met*(1-cos(atan((pt_1*sin(phi_1)+pt_2*sin(phi_2))/(pt_1*cos(phi_1)+pt_2*cos(phi_2)))*((pt_1*cos(phi_1)+pt_2*cos(phi_2))>0)+(pi-atan(abs((pt_1*sin(phi_1)+pt_2*sin(phi_2))/(pt_1*cos(phi_1)+pt_2*cos(phi_2)))))*(((pt_1*cos(phi_1)+pt_2*cos(phi_2))<0))*((pt_1*sin(phi_1)+pt_2*sin(phi_2))>0)+(-pi+atan(abs((pt_1*sin(phi_1)+pt_2*sin(phi_2))/(pt_1*cos(phi_1)+pt_2*cos(phi_2)))))*(((pt_1*cos(phi_1)+pt_2*cos(phi_2))<0))*((pt_1*sin(phi_1)+pt_2*sin(phi_2))<0)-metphi))) < 60)","dzeta"), # Workaround for mTdileptonMET<60 (same thing, just not yet stored as variable in ntuples)
+            Cut("nbtag==0 && pZetaMissVis>-35 && mTdileptonMET < 60","dzeta"),
             Cut("pt_2>10 && ((trg_muonelectron_mu23ele12 == 1) || (trg_muonelectron_mu8ele23 == 1))",
                 "trg_selection"))
 

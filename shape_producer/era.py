@@ -50,14 +50,12 @@ class Run2016(Era):
             "campaign": "Run2016(B|C|D|E|F|G|H)",
             "scenario": "17Jul2018.*"
         }
-        if channel.name == "mt":
+        if channel.name == "mt" or channel.name == "mm":
             query["process"] = "SingleMuon"
         elif channel.name == "et":
             query["process"] = "SingleElectron"
         elif channel.name == "tt":
             query["process"] = "Tau"
-        elif channel.name == "mm":
-            query["process"] = "DoubleMuon"
         elif channel.name == "em":
             query["process"] = "MuonEG"
         elif channel.name == "ee":

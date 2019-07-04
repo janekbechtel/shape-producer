@@ -293,7 +293,6 @@ class VVEstimation(EstimationMethod):
             Weight("generatorWeight", "generatorWeight"),
             Weight("numberGeneratedEventsWeight",
                    "numberGeneratedEventsWeight"),
-            Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
 
             # Weights for corrections
             Weight("puweight", "puweight"),
@@ -301,18 +300,17 @@ class VVEstimation(EstimationMethod):
             Weight("isoWeight_1*isoWeight_2","isoweight"),
             Weight("trackWeight_1*trackWeight_2","trackweight"),
             self.get_triggerweight_for_channel(self.channel.name),
-            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
             Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
             self.get_tauByIsoIdWeight_for_channel(self.channel.name),
             # self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
-            Weight("(1.0+0.56*(abs(crossSectionPerEventWeight-75.769996)<0.00001))", "VV_NNLO_reweight"),
+            Weight("118.7*(abs(crossSectionPerEventWeight - 63.21) < 0.01) + crossSectionPerEventWeight*(abs(crossSectionPerEventWeight - 63.21) > 0.01)", "crossSectionPerEventWeight"),
 
             # Data related scale-factors
             self.era.lumi_weight)
 
     def get_files(self):
         query = {
-            "process": "(WW|ZZ|WZ)",  # Query for Di-Boson samples
+            "process": "(WW|ZZ|WZ)$",  # Query for Di-Boson samples
             "data": False,
             "generator": "^pythia8",
             "campaign": self._mc_campaign
