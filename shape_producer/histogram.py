@@ -142,7 +142,7 @@ class Histogram(TTreeContent):
 
             # create unfilled template histogram
             logger.debug("------>create unfilled template histogram")
-            hist = ROOT.TH1F(self._name, self._name,
+            hist = ROOT.TH1D(self._name, self._name,
                              self._variable.binning.nbinsx,
                              self._variable.binning.bin_borders)
             # draw histogram and pipe result in the template histogram
@@ -277,10 +277,11 @@ class Count(TTreeContent):
                     tree.AddFriend(friend_tree)
                     friend_trees.append(friend_tree)
 
-            tree.Draw("1>>" + self._name + "(1)",
+            counthist = ROOT.TH1D(self._name, self._name, 1, 0.0,2.0)
+            tree.Draw("1>>" + self._name,
                       self._cuts.expand() + "*" + self._weights.extract(),
                       "goff")
-            self._result = ROOT.gDirectory.Get(self._name).GetBinContent(1)
+            self._result = counthist.GetBinContent(1)
 
             # reset the chain and friend trees to close the open files explicitely
             tree.Reset()

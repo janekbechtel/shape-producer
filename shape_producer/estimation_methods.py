@@ -242,7 +242,7 @@ class SStoOSEstimationMethod(EstimationMethod):
                 logger.warning("No data in same-sign region for systematic %s. Setting extrapolation factor to 0.0", systematic.name)
                 final_shape.result.Scale(0.0)
         else:
-            if shape._result.Integral() > 0.0:
+            if shape._result > 0.0:
                 # Scale shape with extrapolation factor
                 final_shape._result *= self._extrapolation_factor
             else:
