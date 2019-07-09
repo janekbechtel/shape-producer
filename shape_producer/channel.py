@@ -48,7 +48,7 @@ class MMSM2016(Channel):
             Cut("iso_1<0.15 && iso_2<0.15", "muon_iso"), Cut(
                 "q_1*q_2<0", "os"),
             Cut("m_vis > 50","m_vis_cut"),
-            Cut("(trg_singlemuon==1)&&(0<1)", "trg_selection"))
+            Cut("(pt_1 > 23 && trg_singlemuon==1)&&(0<1)", "trg_selection"))
 
 
 class MMSM2017(Channel):

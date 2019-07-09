@@ -521,13 +521,15 @@ class EWKZEstimation(EstimationMethod):
         return self.artus_file_names(files)
 
 class DYJetsToLLEstimation(EstimationMethod):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", atNLO=False,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
-            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel):
+        self.atNLO = atNLO
+        name = "DYJetsToLLNLO" if self.atNLO else "DYJetsToLL"
         super(DYJetsToLLEstimation, self).__init__(
-            name="DYJetsToLL",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -540,14 +542,15 @@ class DYJetsToLLEstimation(EstimationMethod):
             mc_campaign="RunIIFall17MiniAODv2")
 
     def get_weights(self):
+        if self.atNLO:
+            z_stitching_weight = Weight("((genbosonmass >= 50.0) * 2.9688e-05 + (genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight)","z_stitching_weight") # xsec_NNLO [pb] = 2075.14*3, N_inclusive_NLO = 209694262, xsec_NNLO/N_inclusive_NLO = 2.9688e-05; fraction of negative events in 'generatorWeight'
+        else:
+            z_stitching_weight = Weight("((genbosonmass >= 50.0)*6.3654e-05*((npartons == 0 || npartons >= 5)*1.0 + (npartons == 1)*0.1743 + (npartons == 2)*0.3556 + (npartons == 3)*0.2273 + (npartons == 4)*0.2104) + (genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight)","z_stitching_weight")
+              # xsec_NNLO [pb] = 2075.14*3, N_inclusive = 97800939, xsec_NNLO/N_inclusive = 6.3654e-05 [pb] weights: [1.0, 0.1743347690195873, 0.3556373947627093, 0.22728901609456784, 0.21040417678899315]
         return Weights(
             # MC related weights
             Weight("generatorWeight", "generatorWeight"),
-            #Weight("numberGeneratedEventsWeight","numberGeneratedEventsWeight"), # to be used only for one inclusive sample
-            #Weight("crossSectionPerEventWeight","crossSectionPerEventWeight"), # to be used only for one inclusive sample
-            Weight("((genbosonmass >= 50.0)*6.3654e-05*((npartons == 0 || npartons >= 5)*1.0 + (npartons == 1)*0.1743 + (npartons == 2)*0.3556 + (npartons == 3)*0.2273 + (npartons == 4)*0.2104) + (genbosonmass < 50.0)*numberGeneratedEventsWeight*crossSectionPerEventWeight)",
-                "z_stitching_weight"),
-              # xsec_NNLO [pb] = 2075.14*3, N_inclusive = 97800939, xsec_NNLO/N_inclusive = 6.3654e-05 [pb] weights: [1.0, 0.1743347690195873, 0.3556373947627093, 0.22728901609456784, 0.21040417678899315]
+            z_stitching_weight,
 
             # Weights for corrections
             Weight("puweight", "puweight"),
@@ -609,24 +612,37 @@ class DYJetsToLLEstimation(EstimationMethod):
             "campaign": self._mc_campaign,
             "generator": "madgraph\-pythia8",
         }
-        files = self.era.datasets_helper.get_nicks_with_query(queryM50_inclusive_2_3jet) + \
-                self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_v1) + \
-                self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_ext1_v2) + \
-                self.era.datasets_helper.get_nicks_with_query(queryM50_4jet) + \
-                self.era.datasets_helper.get_nicks_with_query(queryM10) + \
-                self.era.datasets_helper.get_nicks_with_query(queryEWKZ)
-        log_query(self.name, queryM10, files)
+        queryM50NLO_inc = {
+            "process": "DYJetsToLL_M50",
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "amcatnlo\-pythia8",
+        }
+        if self.atNLO:
+            files = self.era.datasets_helper.get_nicks_with_query(queryM50NLO_inc) + \
+                    self.era.datasets_helper.get_nicks_with_query(queryEWKZ)
+            log_query(self.name, queryM50NLO_inc, files)
+        else:
+            files = self.era.datasets_helper.get_nicks_with_query(queryM50_inclusive_2_3jet) + \
+                    self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_v1) + \
+                    self.era.datasets_helper.get_nicks_with_query(queryM50_1jet_ext1_v2) + \
+                    self.era.datasets_helper.get_nicks_with_query(queryM50_4jet) + \
+                    self.era.datasets_helper.get_nicks_with_query(queryM10) + \
+                    self.era.datasets_helper.get_nicks_with_query(queryEWKZ)
+            log_query(self.name, queryM10, files)
         return self.artus_file_names(files)
 
 
 class ZTTEstimation(DYJetsToLLEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", atNLO=False,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
+        self.atNLO = atNLO
+        name = "ZTTNLO" if self.atNLO else "ZTT"
         super(DYJetsToLLEstimation, self).__init__(
-            name="ZTT",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -652,13 +668,15 @@ class ZTTEstimation(DYJetsToLLEstimation):
         return Cuts(Cut(tt_cut, "ztt_cut"))
 
 class ZJEstimation(DYJetsToLLEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", atNLO=False,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
+        self.atNLO = atNLO
+        name = "ZJNLO" if self.atNLO else "ZJ"
         super(DYJetsToLLEstimation, self).__init__(
-            name="ZJ",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -682,13 +700,15 @@ class ZJEstimation(DYJetsToLLEstimation):
 
 
 class ZLEstimation(DYJetsToLLEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", atNLO=False,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
+        self.atNLO = atNLO
+        name = "ZLNLO" if self.atNLO else "ZL"
         super(DYJetsToLLEstimation, self).__init__(
-            name="ZL",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
