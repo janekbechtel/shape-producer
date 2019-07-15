@@ -17,7 +17,7 @@ def get_triggerweight_for_channel(channel):
 
     singleMC = "singleTriggerMCEfficiencyWeightKIT_1"
     crossMCL = "crossTriggerMCEfficiencyWeight_1"
-    MCTau_1 = "((byTightIsolationMVArun2017v2DBoldDMwLT2017_1<0.5 && byVLooseIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_vloose_MVA_1 + (byTightIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_tight_MVA_1)"
+    MCTau_1 = "((byTightIsolationMVArun2017v2DBoldDMwLT2017_1<0.5 && byVLooseIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_vloose_MVAv2_1 + (byTightIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_tight_MVAv2_1)"
     MCTau_2 = MCTau_1.replace("_1","_2")
 
     if "mt" in channel:
@@ -64,7 +64,7 @@ def get_triggerweight_for_channel(channel):
 def get_singlelepton_triggerweight_for_channel(channel):
     weight = Weight("1.0","triggerweight")
 
-    MCTau_1 = "((byTightIsolationMVArun2017v2DBoldDMwLT2017_1<0.5 && byMediumIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_medium_MVA_1 + (byTightIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_tight_MVA_1)"
+    MCTau_1 = "((byTightIsolationMVArun2017v2DBoldDMwLT2017_1<0.5 && byMediumIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_medium_MVAv2_1 + (byTightIsolationMVArun2017v2DBoldDMwLT2017_1>0.5)*crossTriggerMCEfficiencyWeight_tight_MVAv2_1)"
     MCTau_2 = MCTau_1.replace("_1","_2")
 
     if "mt" in channel or "et" in channel:
@@ -749,16 +749,16 @@ class ZTTEmbeddedEstimation(EstimationMethod):
     def get_weights(self):
         if self.channel.name in ["mt"]:
             return Weights(
-                Weight("59.7/28.04*generatorWeight",
+                Weight("generatorWeight",
                        "simulation_sf"),
                 Weight("muonEffTrgWeight*muonEffIDWeight_1*muonEffIDWeight_2", "scale_factor"),
-                Weight("idWeight_1*((pt_1>=25)*(trigger_24_27_Weight_1*(trigger_24_27_Weight_1<2.0)+(trigger_24_27_Weight_1>2.0))+(pt_1<25)*(crossTriggerEmbeddedWeight_2*(crossTriggerEmbeddedWeight_1*(crossTriggerEmbeddingEfficiencyWeightKIT_1>0.1)+(crossTriggerEmbeddingEfficiencyWeightKIT_1<0.1))))*isoWeight_1", "lepton_sf"),
+                Weight("isoWeight_1*idWeight_1*((pt_1>=25)*(trigger_24_27_Weight_1*(trigger_24_27_Weight_1<2.0)+(trigger_24_27_Weight_1>2.0))+(pt_1<25)*(crossTriggerEmbeddedWeight_2*crossTriggerEmbeddedWeight_1))", "lepton_sf"),
                 Weight("(gen_match_2==5)*0.97+(gen_match_2!=5)", "emb_tau_id"),
                 Weight("embeddedDecayModeWeight", "decayMode_SF"),
                 Weight("gen_match_1==4 && gen_match_2==5","emb_veto"))
         elif self.channel.name in ["et"]:
             return Weights(
-                Weight("59.7/14.04*generatorWeight",
+                Weight("generatorWeight",
                        "simulation_sf"),
                 Weight("muonEffTrgWeight*muonEffIDWeight_1*muonEffIDWeight_2", "scale_factor"),
                 Weight("idWeight_1*((crossTriggerEmbeddedWeight_2*(crossTriggerEmbeddedWeight_2<1)+(crossTriggerEmbeddedWeight_2>1))*(crossTriggerEmbeddedWeight_1*(crossTriggerEmbeddedWeight_1<10)+(crossTriggerEmbeddedWeight_1>10))*(pt_1<33)+(pt_1>=33)*trigger_32_35_Weight_1)*isoWeight_1", "lepton_sf"),
@@ -767,7 +767,7 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                 Weight("embeddedDecayModeWeight", "decayMode_SF"))
         elif self.channel.name == "tt":
             return Weights(
-                Weight("59.7/28.04*generatorWeight",
+                Weight("generatorWeight",
                        "simulation_sf"),
                 Weight("muonEffTrgWeight*muonEffIDWeight_1*muonEffIDWeight_2", "scale_factor"),
                 Weight("(triggerWeight_1+triggerWeight_2)/2.0","tau1_leg_weight"),
@@ -777,7 +777,7 @@ class ZTTEmbeddedEstimation(EstimationMethod):
                 Weight("embeddedDecayModeWeight", "decayMode_SF"))
         elif self.channel.name == "em":
             return Weights(
-                Weight("59.7/6.9*generatorWeight", "simulation_sf"),
+                Weight("generatorWeight", "simulation_sf"),
                 Weight("muonEffTrgWeight*muonEffIDWeight_1*muonEffIDWeight_2", "scale_factor"),
                 Weight("idWeight_1*isoWeight_1*idWeight_2*isoWeight_2",
                        "idiso_lepton_sf"),
@@ -787,16 +787,16 @@ class ZTTEmbeddedEstimation(EstimationMethod):
 
 
     def get_files(self):
-        query = {"process": "Embedding2018(A|B|C)", "embedded": True}
+        query = {"process": "Embedding2018", "embedded": True}
         if self.channel.name == "mt":
             query["campaign"] = "MuTauFinalState"
         elif self.channel.name == "et":
             query["campaign"] = "ElTauFinalState"
-            query["process"] = "Embedding2018(B|C)"
+            query["process"] = "Embedding2018"
         elif self.channel.name == "tt":
             query["campaign"] = "TauTauFinalState"
         elif self.channel.name == "em":
-            query["process"] = "Embedding2018C"
+            query["process"] = "Embedding2018"
             query["campaign"] = "ElMuFinalState"
         files = self.era.datasets_helper.get_nicks_with_query(query)
         log_query(self.name, query, files)
