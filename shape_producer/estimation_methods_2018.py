@@ -7,6 +7,7 @@ from estimation_methods import EstimationMethod, SStoOSEstimationMethod, ABCDEst
 from estimation_methods_2016 import DataEstimation as DataEstimation2016
 from estimation_methods_2016 import WEstimationWithQCD as WEstimationWithQCD2016
 from estimation_methods_2016 import QCDEstimationWithW as QCDEstimationWithW2016
+from estimation_methods_2016 import ggH_htxs, qqH_htxs
 from systematics import *
 from era import log_query
 from process import *
@@ -1205,13 +1206,14 @@ class ZHEstimation(HTTEstimation):
 
 
 class ggHEstimation(HTTEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    htxs_dict = ggH_htxs
+    def __init__(self, name, era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
         super(HTTEstimation, self).__init__(
-            name="ggH",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
@@ -1247,13 +1249,14 @@ class ggHEstimation(HTTEstimation):
 
 
 class qqHEstimation(HTTEstimation):
-    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal",
+    htxs_dict = qqH_htxs
+    def __init__(self, name, era, directory, channel, friend_directory=None, folder="nominal",
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
             get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
             get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
         super(HTTEstimation, self).__init__(
-            name="qqH",
+            name=name,
             folder=folder,
             get_triggerweight_for_channel=get_triggerweight_for_channel,
             get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
