@@ -1072,7 +1072,7 @@ class HTTEstimation(EstimationMethod):
     def get_weights(self):
         return Weights(
             # MC related weights
-            Weight("20.0*generatorWeight", "generatorWeight"),
+            Weight("generatorWeight", "generatorWeight"),
             Weight("numberGeneratedEventsWeight",
                    "numberGeneratedEventsWeight"),
             Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
