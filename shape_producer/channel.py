@@ -139,7 +139,7 @@ class MTSM2018(Channel):
             Cut("byTightIsolationMVArun2017v2DBoldDMwLT2017_2>0.5", "tau_iso"),
             Cut("iso_1<0.15", "muon_iso"), Cut("q_1*q_2<0", "os"),
             Cut("mt_1<50", "m_t"),
-            Cut("pt_2>30 && ((trg_singlemuon_27 == 1) || (trg_singlemuon_24 == 1)) || (pt_1 < 25 && (trg_crossmuon_mu20tau27_hps == 1 || trg_crossmuon_mu20tau27_hps == 1))",
+            Cut("pt_2>30 && ((trg_singlemuon_27 == 1) || (trg_singlemuon_24 == 1)) || (pt_1 < 25 && (trg_crossmuon_mu20tau27_hps == 1 || trg_crossmuon_mu20tau27 == 1))",
                 "trg_selection"))
 
 class MTSM2016(Channel):
