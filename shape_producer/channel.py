@@ -154,7 +154,7 @@ class MTSM2016(Channel):
             Cut("iso_1<0.15", "muon_iso"), 
             Cut("q_1*q_2<0", "os"),
             Cut("mt_1<50", "m_t"),
-            Cut("pt_2>30 && ((trg_singlemuon== 1) || (trg_mutaucross == 1 && pt_1 <= 23 && pt_1 > 20))","trg_singlemuoncross")
+            Cut("pt_2>30 && ((trg_singlemuon == 1) || (trg_mutaucross == 1 && pt_1 <= 23 && pt_1 > 20))","trg_selection")
             )
 
 class ET(Channel):
