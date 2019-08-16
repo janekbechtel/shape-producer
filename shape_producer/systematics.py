@@ -267,7 +267,7 @@ class Systematics(object):
     # Enable application of multiple variations at once
     def add_systematic_variation(self, variation, **properties):
         if self._skip_systematic_variations:
-            print "\tadd_systematic_variation: SKIP SYST VAR"
+            #print "\tadd_systematic_variation: SKIP SYST VAR"
             return
 
         new_systematics = []

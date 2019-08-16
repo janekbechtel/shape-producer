@@ -148,7 +148,6 @@ class Histogram(TTreeContent):
             # draw histogram and pipe result in the template histogram
             logger.debug("------>draw histogram and pipe result in the template histogram: " )
             logger.debug(self._variable.expression + ">>" + self._name + ' ; \n' + self._cuts.expand() + "*" + self._weights.extract())
-
             tree.Draw(self._variable.expression + ">>" + self._name,
                       self._cuts.expand() + "*" + self._weights.extract(),
                       "goff")
