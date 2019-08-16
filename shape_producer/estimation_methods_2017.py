@@ -1539,14 +1539,12 @@ class NMSSMEstimation(EstimationMethod):
             self.era.lumi_weight)
 
     def get_files(self):
-        print self._heavy_mass, self._light_mass
         query = {
             "process": "NMSSMM{}h1M125tautauh2M{}".format(self._heavy_mass, self._light_mass),
             "data": False,
             "campaign": self._mc_campaign,
             "generator": "madgraph\-pythia8"
-        }
-        print query
+        } 
         files = self.era.datasets_helper.get_nicks_with_query(query)
         log_query(self.name, query, files)
         return self.artus_file_names(files)
