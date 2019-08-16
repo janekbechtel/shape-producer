@@ -1452,7 +1452,6 @@ class ZHEstimation(HTTEstimation):
         return self.artus_file_names(files)
 
 
-# Stage 0 and Stage 1.1 binning of ggH chosen by given name. If no name match, default is stage 0
 class ggHEstimation(HTTEstimation):
     htxs_dict = ggH_htxs
     def __init__(self, name,  era, directory, channel, friend_directory=None, folder="nominal",
@@ -1495,6 +1494,62 @@ class ggHEstimation(HTTEstimation):
         log_query(self.name, query, files)
         return self.artus_file_names(files)
 
+class NMSSMEstimation(EstimationMethod):
+    def __init__(self, era, directory, channel, friend_directory=None, folder="nominal", heavy_mass = -1, light_mass= -1,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,):
+        super(NMSSMEstimation, self).__init__(
+            name="NMSSM",
+            folder=folder,
+            get_triggerweight_for_channel=get_triggerweight_for_channel,
+            get_singlelepton_triggerweight_for_channel=get_singlelepton_triggerweight_for_channel,
+            get_tauByIsoIdWeight_for_channel=get_tauByIsoIdWeight_for_channel,
+            get_eleHLTZvtxWeight_for_channel=get_eleHLTZvtxWeight_for_channel,
+            era=era,
+            heavy_mass = heavy_mass,
+            light_mass = light_mass,
+            directory=directory,
+            channel=channel,
+            friend_directory=friend_directory,
+            mc_campaign="RunIIFall17MiniAODv2")
+
+    def get_weights(self):
+        return Weights(
+            # MC related weights
+            Weight("generatorWeight", "generatorWeight"),
+            Weight("numberGeneratedEventsWeight",
+                   "numberGeneratedEventsWeight"),
+            Weight("crossSectionPerEventWeight", "crossSectionPerEventWeight"),
+
+            # Weights for corrections
+            Weight("puweight", "puweight"),
+            Weight("idWeight_1*idWeight_2","idweight"),
+            Weight("isoWeight_1*isoWeight_2","isoweight"),
+            Weight("trackWeight_1*trackWeight_2","trackweight"),
+            self.get_triggerweight_for_channel(self.channel._name),
+            # self.get_singlelepton_triggerweight_for_channel(self.channel.name),
+            Weight("eleTauFakeRateWeight*muTauFakeRateWeight", "leptonTauFakeRateWeight"),
+            self.get_tauByIsoIdWeight_for_channel(self.channel.name),
+            self.get_eleHLTZvtxWeight_for_channel(self.channel.name),
+            Weight("prefiringweight", "prefireWeight"),
+
+            # Data related scale-factors
+            self.era.lumi_weight)
+
+    def get_files(self):
+        print self._heavy_mass, self._light_mass
+        query = {
+            "process": "NMSSMM{}h1M125tautauh2M{}".format(self._heavy_mass, self._light_mass),
+            "data": False,
+            "campaign": self._mc_campaign,
+            "generator": "madgraph\-pythia8"
+        }
+        print query
+        files = self.era.datasets_helper.get_nicks_with_query(query)
+        log_query(self.name, query, files)
+        return self.artus_file_names(files)
 
 # Stage 0 and Stage 1.1 binning of qqH chosen by given name. If no name match, default is stage 0
 class qqHEstimation(HTTEstimation):

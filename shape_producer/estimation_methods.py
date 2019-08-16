@@ -19,6 +19,8 @@ class EstimationMethod(object):
                  directory,
                  channel,
                  mc_campaign,
+                 heavy_mass = -1,
+                 light_mass = -1,
                  friend_directory=None,
                  get_triggerweight_for_channel=None,
                  get_singlelepton_triggerweight_for_channel=None,
@@ -26,6 +28,8 @@ class EstimationMethod(object):
                  get_eleHLTZvtxWeight_for_channel=None,):
         self._directory = directory
         self._folder = folder
+        self._heavy_mass = heavy_mass
+        self._light_mass = light_mass
         self._name = name
         self._mc_campaign = mc_campaign
         self._channel = channel
